@@ -3,7 +3,7 @@
 	"package": "me.julionxn.cinematiccreeper.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
-		"ExampleMixin"
+      "MobEntityMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

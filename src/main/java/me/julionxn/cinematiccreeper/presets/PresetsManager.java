@@ -12,7 +12,6 @@ import java.util.Map;
 
 public class PresetsManager {
 
-
     private final Map<String, EntityType<?>> loadedEntityTypes = new HashMap<>();
     private final List<Preset> presets = new ArrayList<>();
 
@@ -43,7 +42,6 @@ public class PresetsManager {
 
     public void addPreset(Preset preset) {
         presets.add(preset);
-        System.out.println(preset.toString());
     }
 
     public List<Preset> getPresets() {

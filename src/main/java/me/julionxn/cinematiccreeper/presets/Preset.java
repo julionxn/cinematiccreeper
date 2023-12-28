@@ -1,12 +1,15 @@
 package me.julionxn.cinematiccreeper.presets;
 
+import org.jetbrains.annotations.Nullable;
+
 public class Preset {
 
     private final String entityType;
     private final String id;
-    private String skin;
+    @Nullable
+    private final String skin;
 
-    public Preset(String entityType, String id, String skin){
+    public Preset(String entityType, String id, @Nullable String skin){
         this.entityType = entityType;
         this.id = id;
         this.skin = skin;
@@ -18,6 +21,14 @@ public class Preset {
 
     public String getId(){
         return id;
+    }
+
+    public String getEntityType(){
+        return entityType;
+    }
+
+    public @Nullable String getSkin(){
+        return skin;
     }
 
     @Override

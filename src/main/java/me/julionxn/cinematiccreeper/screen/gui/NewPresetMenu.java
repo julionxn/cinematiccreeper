@@ -16,6 +16,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RotationAxis;
 
 import java.util.ArrayList;
@@ -27,8 +28,9 @@ public class NewPresetMenu extends ExtendedScreen {
     private final List<ScrollItem> items = new ArrayList<>();
     private final int buttonsPerPage = 10;
     private String selectedEntity;
+    private final BlockPos blockPos;
 
-    public NewPresetMenu() {
+    public NewPresetMenu(BlockPos blockPos) {
         super(Text.of("NewPresetMenu"));
         types = PresetsManager.getInstance().getLoadedEntityTypes();
         for (String type : types) {
@@ -38,6 +40,7 @@ public class NewPresetMenu extends ExtendedScreen {
             });
             items.add(scrollItem);
         }
+        this.blockPos = blockPos;
     }
 
     @Override
@@ -65,6 +68,11 @@ public class NewPresetMenu extends ExtendedScreen {
         addDrawableChild(searchButton);
 
         if (selectedEntity == null) return;
+        addPresetOptions(startingX, startingY);
+    }
+
+    private void addPresetOptions(int startingX, int startingY){
+        if (client == null) return;
         TextFieldWidget nameTextField = new TextFieldWidget(client.textRenderer,
                 startingX + 180, client.getWindow().getScaledHeight() / 2 - 85, 150, 20, Text.of("Nombre"));
         addDrawableChild(nameTextField);
@@ -75,14 +83,14 @@ public class NewPresetMenu extends ExtendedScreen {
             ButtonWidget createPreset = ButtonWidget.builder(Text.of("Crear"), button -> {
                 Preset preset = new Preset(selectedEntity, nameTextField.getText(), skinBase64Field.getText());
                 PresetsManager.getInstance().addPreset(preset);
-                client.setScreen(new PresetsMenu());
+                client.setScreen(new PresetsMenu(blockPos));
             }).dimensions(startingX + 180, client.getWindow().getScaledHeight() / 2 + 95, 150, 20).build();
             addDrawableChild(createPreset);
         } else {
             ButtonWidget createPreset = ButtonWidget.builder(Text.of("Crear"), button -> {
                 Preset preset = new Preset(selectedEntity, nameTextField.getText());
                 PresetsManager.getInstance().addPreset(preset);
-                client.setScreen(new PresetsMenu());
+                client.setScreen(new PresetsMenu(blockPos));
             }).dimensions(startingX + 180, client.getWindow().getScaledHeight() / 2 + 95, 150, 20).build();
             addDrawableChild(createPreset);
         }
@@ -118,6 +126,12 @@ public class NewPresetMenu extends ExtendedScreen {
         context.draw();
         dispatcher.setRenderShadows(true);
         stack.pop();
+    }
+
+    @Override
+    public void close() {
+        if (client == null) super.close();
+        client.setScreen(new PresetsMenu(blockPos));
     }
 }
 
