@@ -16,7 +16,7 @@ public class Preset {
         this(entityType, id, null);
     }
 
-    public String id(){
+    public String getId(){
         return id;
     }
 

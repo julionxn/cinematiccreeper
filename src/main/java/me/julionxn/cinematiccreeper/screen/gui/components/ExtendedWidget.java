@@ -1,4 +1,4 @@
-package me.julionxn.cinematiccreeper.screen.gui.widgets;
+package me.julionxn.cinematiccreeper.screen.gui.components;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -34,8 +34,8 @@ public abstract class ExtendedWidget {
     public void mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
     }
 
-    protected void clearAndInit(){
-        screen.clearChildrenS();
+    protected void clear(){
+        screen.clear();
     }
 
 }

@@ -1,4 +1,4 @@
-package me.julionxn.cinematiccreeper.screen.gui.widgets;
+package me.julionxn.cinematiccreeper.screen.gui.components.widgets;
 
 import net.minecraft.client.gui.widget.ButtonWidget;
 

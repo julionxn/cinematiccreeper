@@ -1,4 +1,4 @@
-package me.julionxn.cinematiccreeper.screen.gui.widgets;
+package me.julionxn.cinematiccreeper.screen.gui.components;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -85,7 +85,7 @@ public abstract class ExtendedScreen extends Screen {
         return client;
     }
 
-    public void clearChildrenS(){
+    public void clear(){
         clearChildren();
         for (ExtendedWidget widget : widgets) {
             widget.init();

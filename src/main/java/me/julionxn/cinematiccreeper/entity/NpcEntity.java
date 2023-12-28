@@ -12,6 +12,8 @@ import net.minecraft.world.World;
 
 public class NpcEntity extends PathAwareEntity {
 
+    public static final String ENTITY_ID = "cinematiccreeper:npc_entity";
+
     public NpcEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
         super(entityType, world);
     }

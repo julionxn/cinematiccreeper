@@ -1,6 +1,8 @@
-package me.julionxn.cinematiccreeper.screen.gui.widgets;
+package me.julionxn.cinematiccreeper.screen.gui.components.widgets;
 
 import me.julionxn.cinematiccreeper.CinematicCreeper;
+import me.julionxn.cinematiccreeper.screen.gui.components.ExtendedScreen;
+import me.julionxn.cinematiccreeper.screen.gui.components.ExtendedWidget;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
@@ -40,22 +42,18 @@ public class ScrollWidget extends ExtendedWidget {
             ScrollItem scrollItem = scrollItems.get(i);
             ButtonWidget option = ButtonWidget.builder(
                             Text.of(scrollItem.text()),
-                            button -> {
-                                scrollItem.runnable().accept(button);
-                            }).dimensions(x, y + (current++ * itemsHeight), itemsWidth, itemsHeight)
-                    .build();
+                            button -> scrollItem.runnable().accept(button))
+                    .dimensions(x, y + (current++ * itemsHeight), itemsWidth, itemsHeight).build();
             addDrawableChild(option);
         }
-        if (isScroll){
-            ButtonWidget upList = ButtonWidget.builder(Text.of("⮝"), button -> {
-                changePage(-1);
-            }).dimensions(x + itemsWidth, y, 20, 20).build();
-            ButtonWidget downList = ButtonWidget.builder(Text.of("⮟"), button -> {
-                changePage(1);
-            }).dimensions(x + itemsWidth, y + ((itemsPerPage - 1) * itemsHeight), 20, 20).build();
-            addDrawableChild(upList);
-            addDrawableChild(downList);
-        }
+        if (!isScroll) return;
+
+        ButtonWidget upList = ButtonWidget.builder(Text.of("⮝"), button -> changePage(-1))
+                .dimensions(x + itemsWidth, y, 20, 20).build();
+        ButtonWidget downList = ButtonWidget.builder(Text.of("⮟"), button -> changePage(1))
+                .dimensions(x + itemsWidth, y + ((itemsPerPage - 1) * itemsHeight), 20, 20).build();
+        addDrawableChild(upList);
+        addDrawableChild(downList);
     }
 
     private void changePage(int in){
@@ -63,7 +61,7 @@ public class ScrollWidget extends ExtendedWidget {
         if (showingFrom + in < 0) return;
         if (showingFrom + itemsPerPage + in > scrollItems.size()) return;
         showingFrom += in;
-        clearAndInit();
+        clear();
     }
 
 
@@ -93,24 +91,21 @@ public class ScrollWidget extends ExtendedWidget {
 
     @Override
     public void mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-        if (isScroll){
-            if (mouseX > x && mouseX < x + itemsWidth && mouseY > y && mouseY < y + (itemsPerPage * itemsHeight)){
-                changePage((int) -verticalAmount);
-            }
+        if (!isScroll) return;
+        if (mouseX > x && mouseX < x + itemsWidth && mouseY > y && mouseY < y + (itemsPerPage * itemsHeight)){
+            changePage((int) -verticalAmount);
         }
         super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
     }
 
     private void handleMouse(double mouseX, double mouseY){
         if (!isScroll) return;
-        if (client != null){
-            int scrollY = y + 20;
-            if (mouseX > x + itemsWidth && mouseX < x + itemsWidth + 20 && mouseY > scrollY - 5 && mouseY < scrollY + ((scrollItems.size() - 2) * itemsHeight) + 5) {
-                int totalHeight = 20 * (itemsPerPage - 2) - 10;
-                float dif = (float) (mouseY - scrollY) / totalHeight ;
-                showingFrom = Math.max(0, Math.min((int) (scrollItems.size() * dif), scrollItems.size() - itemsPerPage));
-                clearAndInit();
-            }
+        int scrollY = y + 20;
+        if (mouseX > x + itemsWidth && mouseX < x + itemsWidth + 20 && mouseY > scrollY - 5 && mouseY < scrollY + ((scrollItems.size() - 2) * itemsHeight) + 5) {
+            int totalHeight = 20 * (itemsPerPage - 2) - 10;
+            float dif = (float) (mouseY - scrollY) / totalHeight ;
+            showingFrom = Math.max(0, Math.min((int) (scrollItems.size() * dif), scrollItems.size() - itemsPerPage));
+            clear();
         }
     }
 

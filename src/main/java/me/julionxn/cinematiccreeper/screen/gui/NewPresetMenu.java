@@ -1,11 +1,12 @@
 package me.julionxn.cinematiccreeper.screen.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import me.julionxn.cinematiccreeper.entity.NpcEntity;
 import me.julionxn.cinematiccreeper.presets.Preset;
 import me.julionxn.cinematiccreeper.presets.PresetsManager;
-import me.julionxn.cinematiccreeper.screen.gui.widgets.ExtendedScreen;
-import me.julionxn.cinematiccreeper.screen.gui.widgets.ScrollItem;
-import me.julionxn.cinematiccreeper.screen.gui.widgets.ScrollWidget;
+import me.julionxn.cinematiccreeper.screen.gui.components.ExtendedScreen;
+import me.julionxn.cinematiccreeper.screen.gui.components.widgets.ScrollItem;
+import me.julionxn.cinematiccreeper.screen.gui.components.widgets.ScrollWidget;
 import me.julionxn.cinematiccreeper.util.TextUtils;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -33,7 +34,7 @@ public class NewPresetMenu extends ExtendedScreen {
         for (String type : types) {
             ScrollItem scrollItem = new ScrollItem(TextUtils.idToLegibleText(type), buttonWidget -> {
                 selectedEntity = type;
-                clearChildrenS();
+                clear();
             });
             items.add(scrollItem);
         }
@@ -62,29 +63,29 @@ public class NewPresetMenu extends ExtendedScreen {
             }
         }).dimensions(startingX + 150, startingY, 20, 20).build();
         addDrawableChild(searchButton);
+
         if (selectedEntity == null) return;
         TextFieldWidget nameTextField = new TextFieldWidget(client.textRenderer,
                 startingX + 180, client.getWindow().getScaledHeight() / 2 - 85, 150, 20, Text.of("Nombre"));
         addDrawableChild(nameTextField);
-        TextFieldWidget skinBase64Field;
-        if (selectedEntity.equals("cinematiccreeper:npc_entity")) {
-            skinBase64Field = new TextFieldWidget(client.textRenderer,
+        if (selectedEntity.equals(NpcEntity.ENTITY_ID)) {
+            TextFieldWidget skinBase64Field = new TextFieldWidget(client.textRenderer,
                     startingX + 180, client.getWindow().getScaledHeight() / 2 + 55, 150, 20, Text.of("Skin"));
             addDrawableChild(skinBase64Field);
+            ButtonWidget createPreset = ButtonWidget.builder(Text.of("Crear"), button -> {
+                Preset preset = new Preset(selectedEntity, nameTextField.getText(), skinBase64Field.getText());
+                PresetsManager.getInstance().addPreset(preset);
+                client.setScreen(new PresetsMenu());
+            }).dimensions(startingX + 180, client.getWindow().getScaledHeight() / 2 + 95, 150, 20).build();
+            addDrawableChild(createPreset);
         } else {
-            skinBase64Field = null;
+            ButtonWidget createPreset = ButtonWidget.builder(Text.of("Crear"), button -> {
+                Preset preset = new Preset(selectedEntity, nameTextField.getText());
+                PresetsManager.getInstance().addPreset(preset);
+                client.setScreen(new PresetsMenu());
+            }).dimensions(startingX + 180, client.getWindow().getScaledHeight() / 2 + 95, 150, 20).build();
+            addDrawableChild(createPreset);
         }
-        ButtonWidget createPreset = ButtonWidget.builder(Text.of("Crear"), button -> {
-            Preset preset;
-            if (selectedEntity.equals("cinematiccreeper:npc_entity")) {
-                preset = new Preset(selectedEntity, nameTextField.getText(), skinBase64Field.getText());
-            } else {
-                preset = new Preset(selectedEntity, nameTextField.getText());
-            }
-            PresetsManager.getInstance().addPreset(preset);
-            client.setScreen(new NpcsMenu());
-        }).dimensions(startingX + 180, client.getWindow().getScaledHeight() / 2 + 95, 150, 20).build();
-        addDrawableChild(createPreset);
     }
 
     @Override
@@ -113,9 +114,7 @@ public class NewPresetMenu extends ExtendedScreen {
         stack.translate(0, -dimensions.height / 2, 0);
         EntityRenderDispatcher dispatcher = client.getEntityRenderDispatcher();
         dispatcher.setRenderShadows(false);
-        RenderSystem.runAsFancy(() -> {
-            dispatcher.render(entity, 0, 0, 0, 0, delta, stack, context.getVertexConsumers(), 0xF000F0);
-        });
+        RenderSystem.runAsFancy(() -> dispatcher.render(entity, 0, 0, 0, 0, delta, stack, context.getVertexConsumers(), 0xF000F0));
         context.draw();
         dispatcher.setRenderShadows(true);
         stack.pop();

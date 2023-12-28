@@ -2,25 +2,23 @@ package me.julionxn.cinematiccreeper.screen.gui;
 
 import me.julionxn.cinematiccreeper.presets.Preset;
 import me.julionxn.cinematiccreeper.presets.PresetsManager;
-import me.julionxn.cinematiccreeper.screen.gui.widgets.ExtendedScreen;
-import me.julionxn.cinematiccreeper.screen.gui.widgets.ScrollItem;
-import me.julionxn.cinematiccreeper.screen.gui.widgets.ScrollWidget;
+import me.julionxn.cinematiccreeper.screen.gui.components.ExtendedScreen;
+import me.julionxn.cinematiccreeper.screen.gui.components.widgets.ScrollItem;
+import me.julionxn.cinematiccreeper.screen.gui.components.widgets.ScrollWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class NpcsMenu extends ExtendedScreen {
+public class PresetsMenu extends ExtendedScreen {
 
     private final List<ScrollItem> scrollItems = new ArrayList<>();
 
-    public NpcsMenu() {
+    public PresetsMenu() {
         super(Text.of("NpcsMenu"));
         for (Preset preset : PresetsManager.getInstance().getPresets()) {
-            scrollItems.add(new ScrollItem(preset.id(), buttonWidget -> {
-                System.out.println(preset.id());
-            }));
+            scrollItems.add(new ScrollItem(preset.getId(), buttonWidget -> System.out.println(preset.getId())));
         }
     }
 

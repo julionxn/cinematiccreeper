@@ -11,7 +11,7 @@ import net.minecraft.util.Identifier;
 
 public class AllEntities {
 
-    public static final EntityType<NpcEntity> TEST_ENTITY = Registry.register(
+    public static final EntityType<NpcEntity> NPC_ENTITY = Registry.register(
             Registries.ENTITY_TYPE,
             new Identifier(CinematicCreeper.MOD_ID, "npc_entity"),
             FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, NpcEntity::new)

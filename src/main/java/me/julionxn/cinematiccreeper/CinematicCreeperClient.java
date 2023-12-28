@@ -9,7 +9,7 @@ public class CinematicCreeperClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        EntityRendererRegistry.register(AllEntities.TEST_ENTITY, NpcEntityRenderer::new);
+        EntityRendererRegistry.register(AllEntities.NPC_ENTITY, NpcEntityRenderer::new);
     }
 
 }
