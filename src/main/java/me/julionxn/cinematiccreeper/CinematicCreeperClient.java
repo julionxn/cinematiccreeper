@@ -16,7 +16,7 @@ public class CinematicCreeperClient implements ClientModInitializer {
         PresetsManager.getInstance().load();
         EntityRendererRegistry.register(AllEntities.NPC_ENTITY, NpcEntityRenderer::new);
         AllPackets.registerS2CPackets();
-        ClientPlayConnectionEvents.DISCONNECT.register(((handler, client) -> PresetsManager.getInstance().save()));
+        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> PresetsManager.getInstance().save());
         ClientLifecycleEvents.CLIENT_STOPPING.register(client -> PresetsManager.getInstance().save());
     }
 

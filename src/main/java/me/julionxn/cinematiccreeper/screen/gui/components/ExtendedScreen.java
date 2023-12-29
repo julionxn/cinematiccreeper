@@ -14,7 +14,7 @@ import java.util.Set;
 
 public abstract class ExtendedScreen extends Screen {
 
-    private final Set<ExtendedWidget> widgets = new HashSet<>();
+    protected final Set<ExtendedWidget> widgets = new HashSet<>();
     protected int windowWidth = 0;
     protected int windowHeight = 0;
 
@@ -43,10 +43,7 @@ public abstract class ExtendedScreen extends Screen {
         windowHeight = window.getScaledHeight();
         widgets.clear();
         addWidgets();
-        for (ExtendedWidget widget : widgets) {
-            widget.init();
-        }
-        addDrawables();
+        clear();
     }
 
     @Override

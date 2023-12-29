@@ -5,8 +5,11 @@ import me.julionxn.cinematiccreeper.entity.AllEntities;
 import me.julionxn.cinematiccreeper.entity.NpcEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.registry.Registries;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.world.World;
 
 import java.util.*;
 
@@ -16,12 +19,12 @@ public class NpcsManager extends SerializableJsonManager<NpcsManager>{
     @Expose
     private Map<String, List<UUID>> trackedEntities = new HashMap<>();
 
-    private <K extends Class<NpcsManager>> NpcsManager(String path, K clazz) {
-        super(path, clazz);
+    private NpcsManager() {
+        super("cc_tracked.json", NpcsManager.class);
     }
 
     private static final class SingletonHolder {
-        public static final NpcsManager INSTANCE = new NpcsManager("cc_tracked.json", NpcsManager.class);
+        public static final NpcsManager INSTANCE = new NpcsManager();
     }
 
     public static NpcsManager getInstance() {
@@ -55,6 +58,18 @@ public class NpcsManager extends SerializableJsonManager<NpcsManager>{
 
     public static String worldIdentifier(ServerWorld world){
         return world.worldProperties.getLevelName();
+    }
+
+    public boolean isMobEntity(World world, String sEntityType){
+        EntityType<?> entityType = loadedEntityTypes.get(sEntityType);
+        Entity entity = entityType.create(world);
+        return entity instanceof MobEntity;
+    }
+
+    public boolean isPathAwareEntity(World world, String sEntityType){
+        EntityType<?> entityType = loadedEntityTypes.get(sEntityType);
+        Entity entity = entityType.create(world);
+        return entity instanceof PathAwareEntity;
     }
 
 }

@@ -1,8 +1,8 @@
-package me.julionxn.cinematiccreeper.screen.gui;
+package me.julionxn.cinematiccreeper.screen.gui.screens;
 
 import me.julionxn.cinematiccreeper.entity.NpcEntity;
-import me.julionxn.cinematiccreeper.managers.Preset;
 import me.julionxn.cinematiccreeper.managers.PresetsManager;
+import me.julionxn.cinematiccreeper.managers.presets.Preset;
 import me.julionxn.cinematiccreeper.networking.AllPackets;
 import me.julionxn.cinematiccreeper.screen.gui.components.ExtendedScreen;
 import me.julionxn.cinematiccreeper.screen.gui.components.widgets.ScrollItem;
@@ -30,7 +30,7 @@ public class PresetsMenu extends ExtendedScreen {
                 PacketByteBuf buf = PacketByteBufs.create();
                 buf.writeBlockPos(blockPos).writeString(preset.getId());
                 if (entityType.equals(NpcEntity.ENTITY_ID)){
-                    buf.writeString(preset.getSkin());
+                    buf.writeString(preset.getOptions().getSkinUrl());
                     ClientPlayNetworking.send(AllPackets.C2S_SPAWN_NPC_PRESET, buf);
                 } else {
                     buf.writeString(entityType);

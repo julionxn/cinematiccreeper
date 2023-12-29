@@ -1,6 +1,7 @@
 package me.julionxn.cinematiccreeper.managers;
 
 import com.google.gson.annotations.Expose;
+import me.julionxn.cinematiccreeper.managers.presets.Preset;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -13,12 +14,12 @@ public class PresetsManager extends SerializableJsonManager<PresetsManager> {
     @Expose
     private List<Preset> presets = new ArrayList<>();
 
-    private <K extends Class<PresetsManager>> PresetsManager(String path, K clazz) {
-        super(path, clazz);
+    private PresetsManager() {
+        super("cc_presets.json", PresetsManager.class);
     }
 
     private static final class SingletonHolder {
-        public static final PresetsManager INSTANCE = new PresetsManager("cc_presets.json", PresetsManager.class);
+        public static final PresetsManager INSTANCE = new PresetsManager();
     }
 
     public static PresetsManager getInstance() {

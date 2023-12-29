@@ -15,12 +15,13 @@ public abstract class SerializableJsonManager<T> {
 
     private final String path;
     private final Class<T> clazz;
-    private final Gson GSON = new GsonBuilder().setPrettyPrinting()
+    private static final Gson GSON = new GsonBuilder()
+            .setPrettyPrinting()
             .disableHtmlEscaping()
             .excludeFieldsWithoutExposeAnnotation()
             .create();
 
-    protected <K extends Class<T>> SerializableJsonManager(String path, K clazz){
+    protected SerializableJsonManager(String path, Class<T> clazz){
         this.path = path;
         this.clazz = clazz;
     }
@@ -34,7 +35,7 @@ public abstract class SerializableJsonManager<T> {
                 save();
             }
         } catch (IOException e) {
-            CinematicCreeper.LOGGER.error("Something went wrong loading config.", e);
+            CinematicCreeper.LOGGER.error("Something went wrong while loading the config.", e);
         }
     }
 
@@ -45,7 +46,7 @@ public abstract class SerializableJsonManager<T> {
         try(FileWriter fileWriter = new FileWriter(configFile)){
             GSON.toJson(this, fileWriter);
         } catch (IOException e) {
-            CinematicCreeper.LOGGER.error("Something went wrong saving config.");
+            CinematicCreeper.LOGGER.error("Something went wrong while saving the config.");
         }
     }
 
