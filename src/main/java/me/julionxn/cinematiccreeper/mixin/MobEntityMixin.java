@@ -18,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(MobEntity.class)
 public abstract class MobEntityMixin extends LivingEntity implements NpcData {
 
+    @SuppressWarnings("all")
     @Unique
     private static final TrackedData<Boolean> NPC = DataTracker.registerData(MobEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
@@ -43,5 +44,10 @@ public abstract class MobEntityMixin extends LivingEntity implements NpcData {
     @Override
     public boolean cinematiccreeper$isNpc() {
         return dataTracker.get(NPC);
+    }
+
+    @Override
+    public void cinematiccreeper$setNpc(boolean npc) {
+        dataTracker.set(NPC, npc);
     }
 }

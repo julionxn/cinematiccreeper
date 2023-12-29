@@ -42,12 +42,14 @@ public class NpcEntity extends PathAwareEntity {
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
         dataTracker.set(SKIN_URL, nbt.getString("SkinUrl"));
+        dataTracker.set(NPC_ID, nbt.getString("NpcId"));
     }
 
     @Override
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
         nbt.putString("SkinUrl", dataTracker.get(SKIN_URL));
+        nbt.putString("NpcId", dataTracker.get(NPC_ID));
     }
 
     public static DefaultAttributeContainer.Builder createPlayerAttributes() {

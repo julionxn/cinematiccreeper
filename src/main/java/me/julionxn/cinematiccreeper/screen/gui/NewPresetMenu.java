@@ -2,8 +2,9 @@ package me.julionxn.cinematiccreeper.screen.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import me.julionxn.cinematiccreeper.entity.NpcEntity;
-import me.julionxn.cinematiccreeper.presets.Preset;
-import me.julionxn.cinematiccreeper.presets.PresetsManager;
+import me.julionxn.cinematiccreeper.managers.NpcsManager;
+import me.julionxn.cinematiccreeper.managers.Preset;
+import me.julionxn.cinematiccreeper.managers.PresetsManager;
 import me.julionxn.cinematiccreeper.screen.gui.components.ExtendedScreen;
 import me.julionxn.cinematiccreeper.screen.gui.components.widgets.ScrollItem;
 import me.julionxn.cinematiccreeper.screen.gui.components.widgets.ScrollWidget;
@@ -32,7 +33,7 @@ public class NewPresetMenu extends ExtendedScreen {
 
     public NewPresetMenu(BlockPos blockPos) {
         super(Text.of("NewPresetMenu"));
-        types = PresetsManager.getInstance().getLoadedEntityTypes();
+        types = NpcsManager.getInstance().getLoadedEntityTypes();
         for (String type : types) {
             ScrollItem scrollItem = new ScrollItem(TextUtils.idToLegibleText(type), buttonWidget -> {
                 selectedEntity = type;
@@ -111,7 +112,7 @@ public class NewPresetMenu extends ExtendedScreen {
 
     public void renderEntity(DrawContext context, float delta) {
         if (client == null || selectedEntity == null || client.player == null) return;
-        Entity entity = PresetsManager.getInstance().getEntityTypeFromId(selectedEntity).create(client.player.clientWorld);
+        Entity entity = NpcsManager.getInstance().getEntityTypeFromId(selectedEntity).create(client.player.clientWorld);
         if (entity == null) return;
         EntityDimensions dimensions = entity.getDimensions(entity.getPose());
         MatrixStack stack = context.getMatrices();

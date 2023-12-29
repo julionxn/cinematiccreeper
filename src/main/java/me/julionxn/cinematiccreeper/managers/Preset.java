@@ -1,12 +1,18 @@
-package me.julionxn.cinematiccreeper.presets;
+package me.julionxn.cinematiccreeper.managers;
 
+import com.google.gson.annotations.Expose;
 import org.jetbrains.annotations.Nullable;
 
-public class Preset {
+import java.io.Serializable;
 
+public class Preset implements Serializable {
+
+    @Expose
     private final String entityType;
+    @Expose
     private final String id;
     @Nullable
+    @Expose
     private final String skin;
 
     public Preset(String entityType, String id, @Nullable String skin){
