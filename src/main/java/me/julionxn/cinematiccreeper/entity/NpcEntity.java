@@ -1,5 +1,6 @@
 package me.julionxn.cinematiccreeper.entity;
 
+import me.julionxn.cinematiccreeper.managers.presets.PresetOptions;
 import me.julionxn.cinematiccreeper.util.SkinHelper;
 import net.minecraft.client.util.DefaultSkinHelper;
 import net.minecraft.entity.EntityType;
@@ -16,6 +17,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -26,6 +28,7 @@ public class NpcEntity extends PathAwareEntity {
     private static final TrackedData<String> SKIN_URL = DataTracker.registerData(NpcEntity.class, TrackedDataHandlerRegistry.STRING);
     private static final TrackedData<String> NPC_ID = DataTracker.registerData(NpcEntity.class, TrackedDataHandlerRegistry.STRING);
     private Identifier skin = DefaultSkinHelper.getTexture();
+    private PresetOptions presetOptions;
 
     public NpcEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
         super(entityType, world);
@@ -98,6 +101,15 @@ public class NpcEntity extends PathAwareEntity {
 
     public Identifier getSkin(){
         return skin;
+    }
+
+    public void setPresetOptions(PresetOptions presetOptions){
+        this.presetOptions = presetOptions;
+    }
+
+    @Nullable
+    public PresetOptions getPresetOptions(){
+        return presetOptions;
     }
 
 }

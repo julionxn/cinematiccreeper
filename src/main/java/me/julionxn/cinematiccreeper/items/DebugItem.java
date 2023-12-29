@@ -1,6 +1,8 @@
 package me.julionxn.cinematiccreeper.items;
 
+import me.julionxn.cinematiccreeper.managers.presets.PresetOptions;
 import me.julionxn.cinematiccreeper.screen.gui.screens.PresetsMenu;
+import me.julionxn.cinematiccreeper.screen.gui.screens.npc_options.BasicTypeMenu;
 import me.julionxn.cinematiccreeper.util.mixins.NpcData;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.client.MinecraftClient;
@@ -10,6 +12,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -23,7 +26,16 @@ public class DebugItem extends Item {
     public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
         if (entity instanceof MobEntity mobEntity && ((NpcData) mobEntity).cinematiccreeper$isNpc()){
             if (user.getWorld().isClient){
-                //todo: open menu
+                PresetOptions presetOptions = PresetOptions.fromEntity(entity);
+                MinecraftClient.getInstance().setScreen(new BasicTypeMenu(
+                        Registries.ENTITY_TYPE.getId(entity.getType()).toString(),
+                        presetOptions1 -> {
+                            PresetOptions.applyPresetOptions(entity, presetOptions1);
+                            MinecraftClient.getInstance().setScreen(null);
+                        },
+                        () -> MinecraftClient.getInstance().setScreen(null),
+                        presetOptions
+                ));
             }
         }
         return super.useOnEntity(stack, user, entity, hand);

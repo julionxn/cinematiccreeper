@@ -6,6 +6,7 @@ import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.model.EntityModelLayers;
 import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class NpcEntityRenderer extends LivingEntityRenderer<NpcEntity, PlayerEntityModel<NpcEntity>> {
@@ -28,8 +29,14 @@ public class NpcEntityRenderer extends LivingEntityRenderer<NpcEntity, PlayerEnt
             playerEntityModel.hat.visible = true;
         } else {
             playerEntityModel.setVisible(true);
-            playerEntityModel.sneaking = player.isInSneakingPose();
+            playerEntityModel.sneaking = player.isSneaking();
         }
+    }
+
+    @Override
+    protected void renderLabelIfPresent(NpcEntity entity, Text text, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+        if (!entity.shouldRenderName()) return;
+        super.renderLabelIfPresent(entity, text, matrices, vertexConsumers, light);
     }
 
     @Override

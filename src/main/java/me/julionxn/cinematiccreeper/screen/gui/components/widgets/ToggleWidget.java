@@ -45,7 +45,11 @@ public class ToggleWidget extends ClickableWidget {
 
     @Override
     public void onClick(double mouseX, double mouseY) {
-        active = !active;
+        setActive(!active);
+    }
+
+    public void setActive(boolean state){
+        active = state;
         if (active) {
             onActive.run();
         } else {

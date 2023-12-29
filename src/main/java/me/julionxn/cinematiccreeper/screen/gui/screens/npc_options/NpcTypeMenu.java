@@ -3,14 +3,16 @@ package me.julionxn.cinematiccreeper.screen.gui.screens.npc_options;
 import me.julionxn.cinematiccreeper.managers.NpcsManager;
 import me.julionxn.cinematiccreeper.managers.presets.PresetOptions;
 import me.julionxn.cinematiccreeper.screen.gui.components.ExtendedScreen;
+import me.julionxn.cinematiccreeper.screen.gui.components.widgets.ToggleWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 
 import java.util.function.Consumer;
 
-public class NpcTypeMenu extends ExtendedScreen {
+public abstract class NpcTypeMenu extends ExtendedScreen {
 
     protected int x;
     protected int y;
@@ -31,13 +33,18 @@ public class NpcTypeMenu extends ExtendedScreen {
 
     @Override
     public void addWidgets() {
-
+        x = (windowWidth / 2) - width / 2;
+        y = (windowHeight / 2) - height / 2;
     }
 
     @Override
     public void addDrawables() {
         x = (windowWidth / 2) - width / 2;
         y = (windowHeight / 2) - height / 2;
+        addBasicButtons(x, y);
+    }
+
+    private void addBasicButtons(int x, int y){
         ButtonWidget cancelButton = ButtonWidget.builder(Text.of("Cancelar"), button -> {
             onCancel.run();
         }).dimensions(x + 20, y + height, 100, 20).build();
@@ -46,13 +53,13 @@ public class NpcTypeMenu extends ExtendedScreen {
             onReady.accept(presetOptions);
         }).dimensions(x + width - 120, y + height, 100, 20).build();
         addDrawableChild(saveButton);
-
         ButtonWidget commonButton = ButtonWidget.builder(Text.of("Básico"), button -> {
             if (client == null || client.currentScreen == null) return;
-            if (client.currentScreen.getClass() == NpcTypeMenu.class) return;
-            client.setScreen(new NpcTypeMenu(entityType, onReady, onCancel, presetOptions));
+            if (client.currentScreen.getClass() == BasicTypeMenu.class) return;
+            client.setScreen(new BasicTypeMenu(entityType, onReady, onCancel, presetOptions));
         }).dimensions(x + 25, y - 20, 60, 20).build();
         addDrawableChild(commonButton);
+
         int nextX = x + 25 + 60;
         if (client == null) return;
         PlayerEntity player = client.player;

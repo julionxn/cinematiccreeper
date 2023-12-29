@@ -9,6 +9,7 @@ import me.julionxn.cinematiccreeper.managers.presets.PresetOptions;
 import me.julionxn.cinematiccreeper.screen.gui.components.ExtendedScreen;
 import me.julionxn.cinematiccreeper.screen.gui.components.widgets.ScrollItem;
 import me.julionxn.cinematiccreeper.screen.gui.components.widgets.ScrollWidget;
+import me.julionxn.cinematiccreeper.screen.gui.screens.npc_options.BasicTypeMenu;
 import me.julionxn.cinematiccreeper.screen.gui.screens.npc_options.NpcTypeMenu;
 import me.julionxn.cinematiccreeper.util.TextUtils;
 import net.minecraft.client.gui.DrawContext;
@@ -97,7 +98,7 @@ public class NewPresetMenu extends ExtendedScreen {
             textName = nameTextField.getText();
             urlLink = skinUrlField.getText();
             System.out.println(textName);
-            client.setScreen(new NpcTypeMenu(selectedEntity, presetOptions1 -> {
+            client.setScreen(new BasicTypeMenu(selectedEntity, presetOptions1 -> {
                 presetOptions = presetOptions1;
                 client.setScreen(this);
             }, () -> client.setScreen(this), new PresetOptions().setDisplayName(nameTextField.getText())));
@@ -111,7 +112,8 @@ public class NewPresetMenu extends ExtendedScreen {
                 Preset preset = new Preset(selectedEntity, nameTextField.getText(),
                         presetOptions == null ? new PresetOptions()
                                 .setDisplayName(nameTextField.getText())
-                                .setSkinUrl(skinUrlField.getText()) : presetOptions);
+                                .setSkinUrl(skinUrlField.getText()) : presetOptions.setSkinUrl(skinUrlField.getText()));
+                System.out.println(preset.getOptions());
                 PresetsManager.getInstance().addPreset(preset);
                 client.setScreen(new PresetsMenu(blockPos));
             }).dimensions(startingX + 180, client.getWindow().getScaledHeight() / 2 + 95, 150, 20).build();
