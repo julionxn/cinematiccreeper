@@ -10,7 +10,6 @@ import me.julionxn.cinematiccreeper.screen.gui.components.ExtendedScreen;
 import me.julionxn.cinematiccreeper.screen.gui.components.widgets.ScrollItem;
 import me.julionxn.cinematiccreeper.screen.gui.components.widgets.ScrollWidget;
 import me.julionxn.cinematiccreeper.screen.gui.screens.npc_options.BasicTypeMenu;
-import me.julionxn.cinematiccreeper.screen.gui.screens.npc_options.NpcTypeMenu;
 import me.julionxn.cinematiccreeper.util.TextUtils;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;

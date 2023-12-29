@@ -2,7 +2,6 @@ package me.julionxn.cinematiccreeper.managers.presets;
 
 import com.google.gson.annotations.Expose;
 import me.julionxn.cinematiccreeper.entity.NpcEntity;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.PathAwareEntity;

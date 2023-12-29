@@ -2,19 +2,15 @@ package me.julionxn.cinematiccreeper.networking.packets;
 
 import me.julionxn.cinematiccreeper.managers.NpcsManager;
 import me.julionxn.cinematiccreeper.managers.presets.PresetOptions;
-import me.julionxn.cinematiccreeper.networking.AllPackets;
 import me.julionxn.cinematiccreeper.util.mixins.NpcData;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.packet.Packet;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
