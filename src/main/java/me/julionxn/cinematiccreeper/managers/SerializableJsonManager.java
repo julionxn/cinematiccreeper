@@ -13,20 +13,20 @@ import java.io.IOException;
 
 public abstract class SerializableJsonManager<T> {
 
-    private final String path;
-    private final Class<T> clazz;
     private static final Gson GSON = new GsonBuilder()
             .setPrettyPrinting()
             .disableHtmlEscaping()
             .excludeFieldsWithoutExposeAnnotation()
             .create();
+    private final String path;
+    private final Class<T> clazz;
 
-    protected SerializableJsonManager(String path, Class<T> clazz){
+    protected SerializableJsonManager(String path, Class<T> clazz) {
         this.path = path;
         this.clazz = clazz;
     }
 
-    public void load(){
+    public void load() {
         File configFile = FabricLoader.getInstance().getConfigDir().resolve(path).toFile();
         try {
             T data = configFile.exists() ? GSON.fromJson(new FileReader(configFile), clazz) : null;
@@ -41,9 +41,9 @@ public abstract class SerializableJsonManager<T> {
 
     protected abstract void onLoad(@Nullable T data);
 
-    public void save(){
+    public void save() {
         File configFile = FabricLoader.getInstance().getConfigDir().resolve(path).toFile();
-        try(FileWriter fileWriter = new FileWriter(configFile)){
+        try (FileWriter fileWriter = new FileWriter(configFile)) {
             GSON.toJson(this, fileWriter);
         } catch (IOException e) {
             CinematicCreeper.LOGGER.error("Something went wrong while saving the config.");

@@ -9,23 +9,24 @@ import org.jetbrains.annotations.Nullable;
 
 public abstract class ExtendedWidget {
 
-    private final ExtendedScreen screen;
     @Nullable
     protected final MinecraftClient client;
+    private final ExtendedScreen screen;
 
-    public ExtendedWidget(ExtendedScreen screen){
+    public ExtendedWidget(ExtendedScreen screen) {
         this.screen = screen;
         this.client = screen.getClient();
     }
 
     public abstract void init();
+
     public abstract void render(DrawContext context, int mouseX, int mouseY, float delta);
 
-    protected <T extends Drawable & Element & Selectable> void addDrawableChild(T drawable){
+    protected <T extends Drawable & Element & Selectable> void addDrawableChild(T drawable) {
         screen.addItemDrawable(drawable);
     }
 
-    public void mouseClicked(double mouseX, double mouseY, int button){
+    public void mouseClicked(double mouseX, double mouseY, int button) {
     }
 
     public void mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
@@ -34,7 +35,7 @@ public abstract class ExtendedWidget {
     public void mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
     }
 
-    protected void clear(){
+    protected void clear() {
         screen.clear();
     }
 

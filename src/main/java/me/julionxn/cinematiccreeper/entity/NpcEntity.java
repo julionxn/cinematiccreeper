@@ -33,6 +33,12 @@ public class NpcEntity extends PathAwareEntity {
         super(entityType, world);
     }
 
+    public static DefaultAttributeContainer.Builder createPlayerAttributes() {
+        return PlayerEntity.createPlayerAttributes()
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.3111D)
+                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 48.0);
+    }
+
     @Override
     protected void initDataTracker() {
         super.initDataTracker();
@@ -53,12 +59,6 @@ public class NpcEntity extends PathAwareEntity {
         nbt.putBoolean("Sneaking", getFlag(1));
     }
 
-    public static DefaultAttributeContainer.Builder createPlayerAttributes() {
-        return PlayerEntity.createPlayerAttributes()
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.3111D)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 48.0);
-    }
-
     @Override
     public void tickMovement() {
         super.tickMovement();
@@ -76,36 +76,36 @@ public class NpcEntity extends PathAwareEntity {
     @Override
     public void onDataTrackerUpdate(List<DataTracker.SerializedEntry<?>> dataEntries) {
         dataEntries.forEach(entry -> {
-            if (entry.id() == SKIN_URL.getId()){
+            if (entry.id() == SKIN_URL.getId()) {
                 NpcSkinManager.getInstance().updateSkinOf(this);
             }
         });
         super.onDataTrackerUpdate(dataEntries);
     }
 
-    public void setSkinUrl(String skinUrl){
-        dataTracker.set(SKIN_URL, skinUrl);
-    }
-
-    public String getSkinUrl(){
+    public String getSkinUrl() {
         return dataTracker.get(SKIN_URL);
     }
 
-    public void setSkin(Identifier identifier){
-        skin = identifier;
+    public void setSkinUrl(String skinUrl) {
+        dataTracker.set(SKIN_URL, skinUrl);
     }
 
-    public Identifier getSkin(){
+    public Identifier getSkin() {
         return skin;
     }
 
-    public void setPresetOptions(PresetOptions presetOptions){
-        this.presetOptions = presetOptions;
+    public void setSkin(Identifier identifier) {
+        skin = identifier;
     }
 
     @Nullable
-    public PresetOptions getPresetOptions(){
+    public PresetOptions getPresetOptions() {
         return presetOptions;
+    }
+
+    public void setPresetOptions(PresetOptions presetOptions) {
+        this.presetOptions = presetOptions;
     }
 
 }

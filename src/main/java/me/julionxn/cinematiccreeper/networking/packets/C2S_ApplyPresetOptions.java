@@ -28,7 +28,7 @@ public class C2S_ApplyPresetOptions {
             Entity entity = serverWorld.getEntity(uuid);
             if (entity == null) return;
             PresetOptionsHandlers.applyPresetOptions(entity, presetOptions);
-            if (reset && entity instanceof MobEntity mob){
+            if (reset && entity instanceof MobEntity mob) {
                 Vector3f position = ((MobNpcData) mob).cinematiccreeper$getSpawnPosition();
                 mob.setPosition(new Vec3d(position));
             }

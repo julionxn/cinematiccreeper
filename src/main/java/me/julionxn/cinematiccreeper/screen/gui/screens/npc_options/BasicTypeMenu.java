@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public class BasicTypeMenu extends NpcTypeMenu{
+public class BasicTypeMenu extends NpcTypeMenu {
 
     public BasicTypeMenu(String entityType, Consumer<PresetOptions> onReady, Runnable onCancel, PresetOptions presetOptions, @Nullable Entity entity) {
         super(entityType, onReady, onCancel, presetOptions, entity);
@@ -25,7 +25,7 @@ public class BasicTypeMenu extends NpcTypeMenu{
         customNameField.setText(presetOptions.getDisplayName());
         addDrawableChild(customNameField);
 
-        ToggleWidget showNameWidget = new ToggleWidget( x + 130, y + 20, 150, 20, Text.of("Mostrar nombre"),
+        ToggleWidget showNameWidget = new ToggleWidget(x + 130, y + 20, 150, 20, Text.of("Mostrar nombre"),
                 () -> presetOptions.setShowDisplayName(true),
                 () -> presetOptions.setShowDisplayName(false));
         showNameWidget.setActive(presetOptions.showDisplayName());

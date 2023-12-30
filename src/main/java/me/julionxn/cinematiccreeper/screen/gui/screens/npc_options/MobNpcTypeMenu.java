@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public class MobNpcTypeMenu extends NpcTypeMenu{
+public class MobNpcTypeMenu extends NpcTypeMenu {
 
     public MobNpcTypeMenu(String entityType, Consumer<PresetOptions> onReady, Runnable onCancel, PresetOptions presetOptions, @Nullable Entity entity) {
         super(entityType, onReady, onCancel, presetOptions, entity);

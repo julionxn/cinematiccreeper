@@ -19,7 +19,7 @@ public class AllEntities {
                     .build()
     );
 
-    public static void register(){
+    public static void register() {
         CinematicCreeper.LOGGER.info("xd");
     }
 

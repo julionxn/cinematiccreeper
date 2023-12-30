@@ -22,12 +22,12 @@ public abstract class ExtendedScreen extends Screen {
         super(title);
     }
 
-    public void addWidget(ExtendedWidget widget){
+    public void addWidget(ExtendedWidget widget) {
         if (widgets.contains(widget)) return;
         widgets.add(widget);
     }
 
-    public <T extends Drawable & Element & Selectable> void addItemDrawable(T drawable){
+    public <T extends Drawable & Element & Selectable> void addItemDrawable(T drawable) {
         addDrawableChild(drawable);
     }
 
@@ -78,11 +78,11 @@ public abstract class ExtendedScreen extends Screen {
         return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
     }
 
-    public MinecraftClient getClient(){
+    public MinecraftClient getClient() {
         return client;
     }
 
-    public void clear(){
+    public void clear() {
         clearChildren();
         for (ExtendedWidget widget : widgets) {
             widget.init();

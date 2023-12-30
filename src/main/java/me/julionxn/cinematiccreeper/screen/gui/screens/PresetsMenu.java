@@ -30,7 +30,7 @@ public class PresetsMenu extends ExtendedScreen {
             scrollItems.add(new ScrollItem(preset.getId(), buttonWidget -> {
                 PacketByteBuf buf = PacketByteBufs.create();
                 buf.writeBlockPos(blockPos).writeString(preset.getId());
-                if (entityType.equals(NpcEntity.ENTITY_ID)){
+                if (entityType.equals(NpcEntity.ENTITY_ID)) {
                     buf.writeString(preset.getOptions().getSkinUrl());
                     PresetOptionsHandlers.addToBuf(buf, preset.getOptions());
                     ClientPlayNetworking.send(AllPackets.C2S_SPAWN_NPC_PRESET, buf);

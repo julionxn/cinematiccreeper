@@ -27,12 +27,12 @@ import java.util.List;
 
 public class NewPresetMenu extends ExtendedScreen {
 
-    private PresetOptions presetOptions;
     private final List<String> types;
     private final List<ScrollItem> items = new ArrayList<>();
     private final int buttonsPerPage = 10;
-    private String selectedEntity;
     private final BlockPos blockPos;
+    private PresetOptions presetOptions;
+    private String selectedEntity;
     private String textName = "";
     private String urlLink = "";
 
@@ -76,7 +76,7 @@ public class NewPresetMenu extends ExtendedScreen {
         addPresetOptions(startingX);
     }
 
-    private void addPresetOptions(int startingX){
+    private void addPresetOptions(int startingX) {
         if (client == null) return;
 
 

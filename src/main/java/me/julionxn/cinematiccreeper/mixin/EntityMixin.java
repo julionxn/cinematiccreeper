@@ -21,23 +21,25 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Entity.class)
 public class EntityMixin implements NpcData {
 
-    @Shadow @Final protected DataTracker dataTracker;
-    @SuppressWarnings("all") @Unique
+    @SuppressWarnings("all")
+    @Unique
     private static final TrackedData<String> NPC_ID = DataTracker.registerData(Entity.class, TrackedDataHandlerRegistry.STRING);
+    @Shadow
+    @Final
+    protected DataTracker dataTracker;
 
-
-    @Inject(method = "<init>" , at = @At("TAIL"))
-    private void init(EntityType type, World world, CallbackInfo ci){
+    @Inject(method = "<init>", at = @At("TAIL"))
+    private void init(EntityType type, World world, CallbackInfo ci) {
         dataTracker.startTracking(NPC_ID, "");
     }
 
     @Inject(method = "readNbt", at = @At("TAIL"))
-    private void readNbtI(NbtCompound nbt, CallbackInfo ci){
+    private void readNbtI(NbtCompound nbt, CallbackInfo ci) {
         dataTracker.set(NPC_ID, nbt.getString("NpcId"));
     }
 
     @Inject(method = "writeNbt", at = @At("TAIL"))
-    private void writeNbtI(NbtCompound nbt, CallbackInfoReturnable<NbtCompound> cir){
+    private void writeNbtI(NbtCompound nbt, CallbackInfoReturnable<NbtCompound> cir) {
         nbt.putString("NpcId", dataTracker.get(NPC_ID));
     }
 

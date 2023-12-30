@@ -28,23 +28,23 @@ public class DebugItem extends Item {
 
     @Override
     public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
-        if (((NpcData) entity).cinematiccreeper$isNpc()){
-            if (user.getWorld().isClient){
+        if (((NpcData) entity).cinematiccreeper$isNpc()) {
+            if (user.getWorld().isClient) {
                 PresetOptions presetOptions = PresetOptionsHandlers.fromEntity(entity);
                 MinecraftClient.getInstance().setScreen(
-                    new BasicTypeMenu(
-                        Registries.ENTITY_TYPE.getId(entity.getType()).toString(),
-                        presetOptions1 -> {
-                            PacketByteBuf buf = PacketByteBufs.create();
-                            buf.writeUuid(entity.getUuid());
-                            buf.writeBoolean(false);
-                            PresetOptionsHandlers.addToBuf(buf, presetOptions1);
-                            ClientPlayNetworking.send(AllPackets.C2S_APPLY_PRESET_OPTIONS, buf);
-                            MinecraftClient.getInstance().setScreen(null);
-                        },
-                        () -> MinecraftClient.getInstance().setScreen(null),
-                        presetOptions, entity
-                ));
+                        new BasicTypeMenu(
+                                Registries.ENTITY_TYPE.getId(entity.getType()).toString(),
+                                presetOptions1 -> {
+                                    PacketByteBuf buf = PacketByteBufs.create();
+                                    buf.writeUuid(entity.getUuid());
+                                    buf.writeBoolean(false);
+                                    PresetOptionsHandlers.addToBuf(buf, presetOptions1);
+                                    ClientPlayNetworking.send(AllPackets.C2S_APPLY_PRESET_OPTIONS, buf);
+                                    MinecraftClient.getInstance().setScreen(null);
+                                },
+                                () -> MinecraftClient.getInstance().setScreen(null),
+                                presetOptions, entity
+                        ));
             }
         }
         return super.useOnEntity(stack, user, entity, hand);
@@ -52,14 +52,14 @@ public class DebugItem extends Item {
 
     @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
-        if (context.getWorld().isClient){
+        if (context.getWorld().isClient) {
             BlockPos blockPos = context.getBlockPos().offset(context.getSide());
             openPresetsMenu(blockPos);
         }
         return super.useOnBlock(context);
     }
 
-    private void openPresetsMenu(BlockPos blockPos){
+    private void openPresetsMenu(BlockPos blockPos) {
         MinecraftClient client = MinecraftClient.getInstance();
         client.setScreen(new PresetsMenu(blockPos));
     }

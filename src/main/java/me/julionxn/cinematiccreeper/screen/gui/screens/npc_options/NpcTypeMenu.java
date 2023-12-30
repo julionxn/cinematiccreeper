@@ -25,15 +25,15 @@ import java.util.function.Consumer;
 public abstract class NpcTypeMenu extends ExtendedScreen {
 
     private static final Identifier BACKGROUND = new Identifier(CinematicCreeper.MOD_ID, "textures/gui/npc_type_bg.png");
+    protected final PresetOptions presetOptions;
+    protected final Entity entity;
+    private final Consumer<PresetOptions> onReady;
+    private final Runnable onCancel;
+    private final String entityType;
     protected int x;
     protected int y;
     protected int width = 300;
     protected int height = 200;
-    protected final PresetOptions presetOptions;
-    private final Consumer<PresetOptions> onReady;
-    private final Runnable onCancel;
-    private final String entityType;
-    protected final Entity entity;
 
     public NpcTypeMenu(String entityType, Consumer<PresetOptions> onReady, Runnable onCancel, PresetOptions presetOptions, @Nullable Entity entity) {
         super(Text.of("NpcTypeMenu"));
@@ -57,7 +57,7 @@ public abstract class NpcTypeMenu extends ExtendedScreen {
         addBasicButtons(x, y);
     }
 
-    private void addBasicButtons(int x, int y){
+    private void addBasicButtons(int x, int y) {
         ButtonWidget cancelButton = ButtonWidget.builder(Text.of("Cancelar"), button -> {
             onCancel.run();
         }).dimensions(x + 20, y + height, 100, 20).build();
@@ -77,7 +77,7 @@ public abstract class NpcTypeMenu extends ExtendedScreen {
         PlayerEntity player = client.player;
         if (player == null) return;
         World world = player.getWorld();
-        if (NpcsManager.getInstance().isMobEntity(world, entityType)){
+        if (NpcsManager.getInstance().isMobEntity(world, entityType)) {
             ButtonWidget mobButton = ButtonWidget.builder(Text.of("Mob"), button -> {
                 if (client == null || client.currentScreen == null) return;
                 if (client.currentScreen.getClass() == MobNpcTypeMenu.class) return;
@@ -86,7 +86,7 @@ public abstract class NpcTypeMenu extends ExtendedScreen {
             addDrawableChild(mobButton);
             nextX += 60;
         }
-        if (NpcsManager.getInstance().isPathAwareEntity(world, entityType)){
+        if (NpcsManager.getInstance().isPathAwareEntity(world, entityType)) {
             ButtonWidget pathAwareButton = ButtonWidget.builder(Text.of("Path"), button -> {
                 if (client == null || client.currentScreen == null) return;
                 if (client.currentScreen.getClass() == PathAwareNpcTypeMenu.class) return;

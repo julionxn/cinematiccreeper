@@ -13,21 +13,21 @@ public class Preset implements Serializable {
     @Expose
     private final PresetOptions options;
 
-    public Preset(String entityType, String id, PresetOptions presetOptions){
+    public Preset(String entityType, String id, PresetOptions presetOptions) {
         this.entityType = entityType;
         this.id = id;
         options = presetOptions;
     }
 
-    public String getId(){
+    public String getId() {
         return id;
     }
 
-    public String getEntityType(){
+    public String getEntityType() {
         return entityType;
     }
 
-    public PresetOptions getOptions(){
+    public PresetOptions getOptions() {
         return options;
     }
 

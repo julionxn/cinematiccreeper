@@ -20,21 +20,17 @@ import java.util.regex.Pattern;
 @Environment(EnvType.CLIENT)
 public class NpcSkinManager {
 
-    private File cachedSkinsFolder;
     private final HashMap<String, CachedSkin> cachedSkins = new HashMap<>();
+    private File cachedSkinsFolder;
 
     private NpcSkinManager() {
     }
 
-    private static class SingletonHolder {
-        private static final NpcSkinManager INSTANCE = new NpcSkinManager();
-    }
-
-    public static NpcSkinManager getInstance(){
+    public static NpcSkinManager getInstance() {
         return SingletonHolder.INSTANCE;
     }
 
-    public void load(){
+    public void load() {
         cachedSkinsFolder = FabricLoader.getInstance().getConfigDir().resolve("cache").toFile();
         if (cachedSkinsFolder.mkdir()) return;
         File[] skinFiles = cachedSkinsFolder.listFiles();
@@ -48,14 +44,14 @@ public class NpcSkinManager {
         }
     }
 
-    public void save(){
+    public void save() {
         cachedSkinsFolder.mkdir();
         for (CachedSkin cachedSkin : cachedSkins.values()) {
             CachedSkin.save(cachedSkin, cachedSkinsFolder.toPath().resolve(cachedSkin.getId().hashCode() + ".skin").toFile());
         }
     }
 
-    public void updateSkinOf(NpcEntity entity){
+    public void updateSkinOf(NpcEntity entity) {
         String npcId = ((NpcData) entity).cinematiccreeper$getId();
         try {
             URL url = new URL(entity.getSkinUrl());
@@ -72,6 +68,10 @@ public class NpcSkinManager {
         Pattern pattern = Pattern.compile("[^a-z0-9_]");
         Matcher matcher = pattern.matcher(string.toLowerCase());
         return matcher.replaceAll("_");
+    }
+
+    private static class SingletonHolder {
+        private static final NpcSkinManager INSTANCE = new NpcSkinManager();
     }
 
 }

@@ -57,7 +57,7 @@ public class ScrollWidget extends ExtendedWidget {
         addDrawableChild(downList);
     }
 
-    private void changePage(int in){
+    private void changePage(int in) {
         if (in == 0) return;
         if (showingFrom + in < 0) return;
         if (showingFrom + itemsPerPage + in > scrollItems.size()) return;
@@ -93,18 +93,18 @@ public class ScrollWidget extends ExtendedWidget {
     @Override
     public void mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
         if (!isScroll) return;
-        if (mouseX > x && mouseX < x + itemsWidth && mouseY > y && mouseY < y + (itemsPerPage * itemsHeight)){
+        if (mouseX > x && mouseX < x + itemsWidth && mouseY > y && mouseY < y + (itemsPerPage * itemsHeight)) {
             changePage((int) -verticalAmount);
         }
         super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
     }
 
-    private void handleMouse(double mouseX, double mouseY){
+    private void handleMouse(double mouseX, double mouseY) {
         if (!isScroll) return;
         int scrollY = y + 20;
         if (mouseX > x + itemsWidth && mouseX < x + itemsWidth + 20 && mouseY > scrollY - 5 && mouseY < scrollY + ((scrollItems.size() - 2) * itemsHeight) + 5) {
             int totalHeight = 20 * (itemsPerPage - 2) - 10;
-            float dif = (float) (mouseY - scrollY) / totalHeight ;
+            float dif = (float) (mouseY - scrollY) / totalHeight;
             showingFrom = Math.max(0, Math.min((int) (scrollItems.size() * dif), scrollItems.size() - itemsPerPage));
             clear();
         }

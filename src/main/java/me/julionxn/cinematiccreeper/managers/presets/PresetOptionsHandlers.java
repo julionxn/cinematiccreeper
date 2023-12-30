@@ -19,15 +19,11 @@ import java.util.function.BiConsumer;
 
 public class PresetOptionsHandlers {
 
-    private enum ValueType {
-        STRING, BOOLEAN
-    }
-
-    public static void addToBuf(PacketByteBuf buf, PresetOptions presetOptions){
+    public static void addToBuf(PacketByteBuf buf, PresetOptions presetOptions) {
         processFields((valueType, field) -> {
             try {
                 Object value = field.get(presetOptions);
-                switch (valueType){
+                switch (valueType) {
                     case STRING -> buf.writeString((String) value);
                     case BOOLEAN -> buf.writeBoolean((Boolean) value);
                 }
@@ -37,11 +33,11 @@ public class PresetOptionsHandlers {
         });
     }
 
-    public static PresetOptions fromBuf(PacketByteBuf buf){
+    public static PresetOptions fromBuf(PacketByteBuf buf) {
         PresetOptions presetOptions = new PresetOptions();
         processFields((valueType, field) -> {
             try {
-                switch (valueType){
+                switch (valueType) {
                     case STRING -> field.set(presetOptions, buf.readString());
                     case BOOLEAN -> field.set(presetOptions, buf.readBoolean());
                 }
@@ -52,7 +48,7 @@ public class PresetOptionsHandlers {
         return presetOptions;
     }
 
-    private static void processFields(BiConsumer<ValueType, Field> valueTypeConsumer){
+    private static void processFields(BiConsumer<ValueType, Field> valueTypeConsumer) {
         Field[] fields = PresetOptions.class.getDeclaredFields();
         for (Field field : fields) {
             field.setAccessible(true);
@@ -62,49 +58,53 @@ public class PresetOptionsHandlers {
         }
     }
 
-    private static Optional<ValueType> getValueType(Class<?> clazz){
+    private static Optional<ValueType> getValueType(Class<?> clazz) {
         String nameType = clazz.getSimpleName().toUpperCase();
         try {
             return Optional.of(ValueType.valueOf(nameType));
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return Optional.empty();
         }
     }
 
-    public static PresetOptions fromEntity(Entity entity){
+    public static PresetOptions fromEntity(Entity entity) {
         PresetOptions presetOptions = new PresetOptions();
         presetOptions.displayName = entity.getDisplayName().getString();
         presetOptions.showDisplayName = entity.isCustomNameVisible();
         presetOptions.sneaking = entity.isSneaking();
-        if (entity instanceof MobEntity mobEntity){
+        if (entity instanceof MobEntity mobEntity) {
             presetOptions.holdingItem = Registries.ITEM.getId(mobEntity.getMainHandStack().getItem()).toString();
         }
-        if (entity instanceof PathAwareEntity){
+        if (entity instanceof PathAwareEntity) {
 
         }
-        if (entity instanceof NpcEntity){
+        if (entity instanceof NpcEntity) {
             presetOptions.skinUrl = ((NpcEntity) entity).getSkinUrl();
         }
         return presetOptions;
     }
 
-    public static void applyPresetOptions(Entity entity, PresetOptions presetOptions){
+    public static void applyPresetOptions(Entity entity, PresetOptions presetOptions) {
         entity.setCustomNameVisible(presetOptions.showDisplayName);
         entity.setCustomName(Text.of(presetOptions.displayName));
         entity.setSneaking(presetOptions.sneaking);
-        if (entity instanceof MobEntity mobEntity){
+        if (entity instanceof MobEntity mobEntity) {
             setStackInHand(mobEntity, presetOptions.holdingItem);
         }
-        if (entity instanceof PathAwareEntity){
+        if (entity instanceof PathAwareEntity) {
 
         }
     }
 
-    private static void setStackInHand(MobEntity mobEntity, String id){
+    private static void setStackInHand(MobEntity mobEntity, String id) {
         Identifier identifier = Identifier.tryParse(id);
         if (identifier == null) return;
         Item item = Registries.ITEM.get(identifier);
         mobEntity.setStackInHand(Hand.MAIN_HAND, new ItemStack(item));
+    }
+
+    private enum ValueType {
+        STRING, BOOLEAN
     }
 
 }

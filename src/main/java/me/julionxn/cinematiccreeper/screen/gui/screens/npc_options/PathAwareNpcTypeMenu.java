@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public class PathAwareNpcTypeMenu extends NpcTypeMenu{
+public class PathAwareNpcTypeMenu extends NpcTypeMenu {
 
     public PathAwareNpcTypeMenu(String entityType, Consumer<PresetOptions> onReady, Runnable onCancel, PresetOptions presetOptions, @Nullable Entity entity) {
         super(entityType, onReady, onCancel, presetOptions, entity);
@@ -21,7 +21,7 @@ public class PathAwareNpcTypeMenu extends NpcTypeMenu{
         y += 20;
         if (entity == null) return;
         ButtonWidget addPath = ButtonWidget.builder(Text.of("Añadir path"), button -> {
-            
+
         }).dimensions(x, y, 150, 20).build();
     }
 }

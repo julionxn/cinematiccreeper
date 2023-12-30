@@ -10,16 +10,12 @@ import java.util.*;
 @Environment(EnvType.CLIENT)
 public class PresetsManager extends SerializableJsonManager<PresetsManager> {
 
+    private final Map<String, Integer> presetsIndex = new HashMap<>();
     @Expose
     private List<Preset> presets = new ArrayList<>();
-    private final Map<String, Integer> presetsIndex = new HashMap<>();
 
     private PresetsManager() {
         super("cc_presets.json", PresetsManager.class);
-    }
-
-    private static final class SingletonHolder {
-        public static final PresetsManager INSTANCE = new PresetsManager();
     }
 
     public static PresetsManager getInstance() {
@@ -43,9 +39,13 @@ public class PresetsManager extends SerializableJsonManager<PresetsManager> {
         return presets;
     }
 
-    public Optional<Preset> getPresetWithId(String id){
+    public Optional<Preset> getPresetWithId(String id) {
         if (!presetsIndex.containsKey(id)) return Optional.empty();
         return Optional.of(presets.get(presetsIndex.get(id)));
+    }
+
+    private static final class SingletonHolder {
+        public static final PresetsManager INSTANCE = new PresetsManager();
     }
 
 }

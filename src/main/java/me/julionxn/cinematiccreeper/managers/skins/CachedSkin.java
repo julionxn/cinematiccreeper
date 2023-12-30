@@ -32,11 +32,29 @@ public class CachedSkin implements Serializable {
         this.url = url;
     }
 
-    public String getId(){
+    public static void save(CachedSkin cachedSkin, File file) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
+            oos.writeObject(cachedSkin);
+        } catch (Exception e) {
+            CinematicCreeper.LOGGER.error("Failed to save cached skin with id: " + cachedSkin.id, e);
+        }
+    }
+
+    public static Optional<CachedSkin> load(File file) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+            CachedSkin cachedSkin = (CachedSkin) ois.readObject();
+            return Optional.of(cachedSkin);
+        } catch (Exception e) {
+            CinematicCreeper.LOGGER.error("Failed to load cached skin with path: " + file.toPath(), e);
+            return Optional.empty();
+        }
+    }
+
+    public String getId() {
         return id;
     }
 
-    public Identifier loadAndGetTexture(){
+    public Identifier loadAndGetTexture() {
         if (loaded) return texture;
         getSkinTextureFromUrlAsync(url).thenAccept(idText -> {
                     loaded = true;
@@ -74,24 +92,6 @@ public class CachedSkin implements Serializable {
                 throw new RuntimeException("Something failed while retrieving a skin with Url: " + url, e);
             }
         }, client);
-    }
-
-    public static void save(CachedSkin cachedSkin, File file){
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
-            oos.writeObject(cachedSkin);
-        } catch (Exception e) {
-            CinematicCreeper.LOGGER.error("Failed to save cached skin with id: " + cachedSkin.id, e);
-        }
-    }
-
-    public static Optional<CachedSkin> load(File file){
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-            CachedSkin cachedSkin = (CachedSkin) ois.readObject();;
-            return Optional.of(cachedSkin);
-        } catch (Exception e) {
-            CinematicCreeper.LOGGER.error("Failed to load cached skin with path: " + file.toPath(), e);
-            return Optional.empty();
-        }
     }
 
 }

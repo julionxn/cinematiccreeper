@@ -5,6 +5,6 @@ import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(PathAwareEntity.class)
 public class PathAwareEntityMixin {
-    
+
 
 }

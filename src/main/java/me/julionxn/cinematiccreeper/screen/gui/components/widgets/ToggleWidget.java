@@ -14,9 +14,9 @@ public class ToggleWidget extends ClickableWidget {
 
     private static final Identifier OFF_TOGGLE_TEXTURE = new Identifier(CinematicCreeper.MOD_ID, "textures/gui/toggle_off.png");
     private static final Identifier ON_TOGGLE_TEXTURE = new Identifier(CinematicCreeper.MOD_ID, "textures/gui/toggle_on.png");
-    private boolean active;
     private final Runnable onActive;
     private final Runnable onDisabled;
+    private boolean active;
 
     public ToggleWidget(int x, int y, int width, int height, Text message, Runnable onActive, Runnable onDisabled) {
         super(x, y, width, height, message);
@@ -36,7 +36,7 @@ public class ToggleWidget extends ClickableWidget {
         RenderSystem.disableBlend();
     }
 
-    private void drawText(DrawContext context, TextRenderer textRenderer){
+    private void drawText(DrawContext context, TextRenderer textRenderer) {
         int i = this.getX() + 2;
         int j = this.getX() + this.getWidth() - 2 - 50;
         drawScrollableText(context, textRenderer, this.getMessage(),
@@ -50,7 +50,7 @@ public class ToggleWidget extends ClickableWidget {
         setActive(!active);
     }
 
-    public void setActive(boolean state){
+    public void setActive(boolean state) {
         active = state;
         if (active) {
             onActive.run();

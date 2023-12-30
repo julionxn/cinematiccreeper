@@ -10,11 +10,11 @@ public class AllItems {
 
     public static final Item DEBUG_STICK = registerItem("debug_item", new DebugItem());
 
-    private static Item registerItem(String id, Item item){
+    private static Item registerItem(String id, Item item) {
         return Registry.register(Registries.ITEM, new Identifier(CinematicCreeper.MOD_ID, id), item);
     }
 
-    public static void register(){
+    public static void register() {
         CinematicCreeper.LOGGER.info("Registering items.");
     }
 

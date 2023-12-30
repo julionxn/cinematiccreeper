@@ -19,19 +19,21 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(MobEntity.class)
 public abstract class MobEntityMixin extends LivingEntity implements MobNpcData {
 
-    @SuppressWarnings("all") @Unique private static final TrackedData<Vector3f> SPAWN_POSITION = DataTracker.registerData(MobEntity.class, TrackedDataHandlerRegistry.VECTOR3F);
+    @SuppressWarnings("all")
+    @Unique
+    private static final TrackedData<Vector3f> SPAWN_POSITION = DataTracker.registerData(MobEntity.class, TrackedDataHandlerRegistry.VECTOR3F);
 
     protected MobEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
     }
 
     @Inject(method = "initDataTracker", at = @At("TAIL"))
-    private void dataTrackerI(CallbackInfo ci){
+    private void dataTrackerI(CallbackInfo ci) {
         dataTracker.startTracking(SPAWN_POSITION, new Vector3f());
     }
 
     @Inject(method = "readCustomDataFromNbt", at = @At("TAIL"))
-    private void readDataI(NbtCompound nbt, CallbackInfo ci){
+    private void readDataI(NbtCompound nbt, CallbackInfo ci) {
         NbtCompound compound = nbt.getCompound("SpawnPosition");
         Vector3f position = new Vector3f(compound.getFloat("x"),
                 compound.getFloat("y"),
@@ -40,7 +42,7 @@ public abstract class MobEntityMixin extends LivingEntity implements MobNpcData 
     }
 
     @Inject(method = "writeCustomDataToNbt", at = @At("TAIL"))
-    private void writeDataI(NbtCompound nbt, CallbackInfo ci){
+    private void writeDataI(NbtCompound nbt, CallbackInfo ci) {
         Vector3f spawnPosition = cinematiccreeper$getSpawnPosition();
         NbtCompound nbtCompound = new NbtCompound();
         nbtCompound.putFloat("x", spawnPosition.x);

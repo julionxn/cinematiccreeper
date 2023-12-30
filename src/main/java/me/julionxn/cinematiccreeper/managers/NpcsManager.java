@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 
 import java.util.*;
 
-public class NpcsManager extends SerializableJsonManager<NpcsManager>{
+public class NpcsManager extends SerializableJsonManager<NpcsManager> {
 
     private final Map<String, EntityType<?>> loadedEntityTypes = new HashMap<>();
     @Expose
@@ -23,12 +23,12 @@ public class NpcsManager extends SerializableJsonManager<NpcsManager>{
         super("cc_tracked.json", NpcsManager.class);
     }
 
-    private static final class SingletonHolder {
-        public static final NpcsManager INSTANCE = new NpcsManager();
-    }
-
     public static NpcsManager getInstance() {
         return NpcsManager.SingletonHolder.INSTANCE;
+    }
+
+    public static String worldIdentifier(ServerWorld world) {
+        return world.worldProperties.getLevelName();
     }
 
     @Override
@@ -51,25 +51,25 @@ public class NpcsManager extends SerializableJsonManager<NpcsManager>{
         return loadedEntityTypes.get(id);
     }
 
-    public void trackEntity(ServerWorld serverWorld, Entity entity){
+    public void trackEntity(ServerWorld serverWorld, Entity entity) {
         String worldHash = worldIdentifier(serverWorld);
         trackedEntities.computeIfAbsent(worldHash, k -> new ArrayList<>()).add(entity.getUuid());
     }
 
-    public static String worldIdentifier(ServerWorld world){
-        return world.worldProperties.getLevelName();
-    }
-
-    public boolean isMobEntity(World world, String sEntityType){
+    public boolean isMobEntity(World world, String sEntityType) {
         EntityType<?> entityType = loadedEntityTypes.get(sEntityType);
         Entity entity = entityType.create(world);
         return entity instanceof MobEntity;
     }
 
-    public boolean isPathAwareEntity(World world, String sEntityType){
+    public boolean isPathAwareEntity(World world, String sEntityType) {
         EntityType<?> entityType = loadedEntityTypes.get(sEntityType);
         Entity entity = entityType.create(world);
         return entity instanceof PathAwareEntity;
+    }
+
+    private static final class SingletonHolder {
+        public static final NpcsManager INSTANCE = new NpcsManager();
     }
 
 }
