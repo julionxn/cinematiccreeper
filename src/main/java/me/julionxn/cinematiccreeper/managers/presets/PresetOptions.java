@@ -1,20 +1,8 @@
 package me.julionxn.cinematiccreeper.managers.presets;
 
 import com.google.gson.annotations.Expose;
-import me.julionxn.cinematiccreeper.entity.NpcEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.mob.PathAwareEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.registry.Registries;
-import net.minecraft.text.Text;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
 
 import java.io.Serializable;
-import java.lang.reflect.Field;
 
 public class PresetOptions implements Serializable {
 

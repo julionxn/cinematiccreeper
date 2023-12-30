@@ -1,9 +1,8 @@
 package me.julionxn.cinematiccreeper.entity;
 
 import me.julionxn.cinematiccreeper.managers.presets.PresetOptions;
-import me.julionxn.cinematiccreeper.util.SkinHelper;
+import me.julionxn.cinematiccreeper.managers.skins.NpcSkinManager;
 import net.minecraft.client.util.DefaultSkinHelper;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -82,7 +81,7 @@ public class NpcEntity extends PathAwareEntity {
     public void onDataTrackerUpdate(List<DataTracker.SerializedEntry<?>> dataEntries) {
         dataEntries.forEach(entry -> {
             if (entry.id() == SKIN_URL.getId()){
-                SkinHelper.updateSkinOf(getWorld(), this);
+                NpcSkinManager.getInstance().updateSkinOf(this);
             }
         });
         super.onDataTrackerUpdate(dataEntries);

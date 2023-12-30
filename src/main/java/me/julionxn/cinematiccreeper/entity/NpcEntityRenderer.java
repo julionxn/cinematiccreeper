@@ -5,6 +5,7 @@ import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.model.EntityModelLayers;
 import net.minecraft.client.render.entity.model.PlayerEntityModel;
+import net.minecraft.client.util.DefaultSkinHelper;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -41,6 +42,8 @@ public class NpcEntityRenderer extends LivingEntityRenderer<NpcEntity, PlayerEnt
 
     @Override
     public Identifier getTexture(NpcEntity entity) {
-        return entity.getSkin();
+        Identifier texture = entity.getSkin();
+        if (texture == null) return DefaultSkinHelper.getTexture();
+        return texture;
     }
 }
