@@ -96,11 +96,10 @@ public class NewPresetMenu extends ExtendedScreen {
         ButtonWidget optionsButton = ButtonWidget.builder(Text.of("Opciones"), button -> {
             textName = nameTextField.getText();
             urlLink = skinUrlField.getText();
-            System.out.println(textName);
             client.setScreen(new BasicTypeMenu(selectedEntity, presetOptions1 -> {
                 presetOptions = presetOptions1;
                 client.setScreen(this);
-            }, () -> client.setScreen(this), new PresetOptions().setDisplayName(nameTextField.getText())));
+            }, () -> client.setScreen(this), new PresetOptions().setDisplayName(nameTextField.getText()), null));
         }).dimensions(startingX + 180, client.getWindow().getScaledHeight() / 2 + 75, 150, 20).build();
         addDrawableChild(optionsButton);
 
@@ -112,7 +111,6 @@ public class NewPresetMenu extends ExtendedScreen {
                         presetOptions == null ? new PresetOptions()
                                 .setDisplayName(nameTextField.getText())
                                 .setSkinUrl(skinUrlField.getText()) : presetOptions.setSkinUrl(skinUrlField.getText()));
-                System.out.println(preset.getOptions());
                 PresetsManager.getInstance().addPreset(preset);
                 client.setScreen(new PresetsMenu(blockPos));
             }).dimensions(startingX + 180, client.getWindow().getScaledHeight() / 2 + 95, 150, 20).build();

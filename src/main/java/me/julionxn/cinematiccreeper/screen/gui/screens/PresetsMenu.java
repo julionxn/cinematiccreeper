@@ -3,7 +3,7 @@ package me.julionxn.cinematiccreeper.screen.gui.screens;
 import me.julionxn.cinematiccreeper.entity.NpcEntity;
 import me.julionxn.cinematiccreeper.managers.PresetsManager;
 import me.julionxn.cinematiccreeper.managers.presets.Preset;
-import me.julionxn.cinematiccreeper.managers.presets.PresetOptions;
+import me.julionxn.cinematiccreeper.managers.presets.PresetOptionsHandlers;
 import me.julionxn.cinematiccreeper.networking.AllPackets;
 import me.julionxn.cinematiccreeper.screen.gui.components.ExtendedScreen;
 import me.julionxn.cinematiccreeper.screen.gui.components.widgets.ScrollItem;
@@ -32,11 +32,11 @@ public class PresetsMenu extends ExtendedScreen {
                 buf.writeBlockPos(blockPos).writeString(preset.getId());
                 if (entityType.equals(NpcEntity.ENTITY_ID)){
                     buf.writeString(preset.getOptions().getSkinUrl());
-                    PresetOptions.addToBuf(buf, preset.getOptions());
+                    PresetOptionsHandlers.addToBuf(buf, preset.getOptions());
                     ClientPlayNetworking.send(AllPackets.C2S_SPAWN_NPC_PRESET, buf);
                 } else {
                     buf.writeString(entityType);
-                    PresetOptions.addToBuf(buf, preset.getOptions());
+                    PresetOptionsHandlers.addToBuf(buf, preset.getOptions());
                     ClientPlayNetworking.send(AllPackets.C2S_SPAWN_PRESET, buf);
                 }
                 close();
@@ -47,16 +47,16 @@ public class PresetsMenu extends ExtendedScreen {
 
     @Override
     public void addWidgets() {
-        ScrollWidget scrollWidget = new ScrollWidget(this, windowWidth / 2 - 85, windowHeight / 2 - 40, 150, 20, 5, scrollItems);
+        ScrollWidget scrollWidget = new ScrollWidget(this, windowWidth / 2 - 75, windowHeight / 2 - 40, 150, 20, 5, scrollItems);
         addWidget(scrollWidget);
     }
 
     @Override
     public void addDrawables() {
-        ButtonWidget addPresetButton = ButtonWidget.builder(Text.of("Nuevo Preset"), button -> {
+        ButtonWidget addPresetButton = ButtonWidget.builder(Text.of("Nuevo"), button -> {
             if (client == null) return;
             client.setScreen(new NewPresetMenu(blockPos));
-        }).dimensions(windowWidth / 2 - 85, windowHeight / 2 - 60, 150, 20).build();
+        }).dimensions(windowWidth / 2 - 30, windowHeight / 2 - 60, 60, 20).build();
         addDrawableChild(addPresetButton);
     }
 

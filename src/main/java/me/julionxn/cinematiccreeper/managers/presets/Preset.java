@@ -19,11 +19,6 @@ public class Preset implements Serializable {
         options = presetOptions;
     }
 
-    public Preset(String entityType, String id){
-        this(entityType, id, new PresetOptions()
-                .setDisplayName(id));
-    }
-
     public String getId(){
         return id;
     }

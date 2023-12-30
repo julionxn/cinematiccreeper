@@ -2,7 +2,8 @@ package me.julionxn.cinematiccreeper.util.mixins;
 
 public interface NpcData {
 
+    void cinematiccreeper$setNpc(String id);
     boolean cinematiccreeper$isNpc();
-    void cinematiccreeper$setNpc(boolean npc);
+    String cinematiccreeper$getId();
 
 }

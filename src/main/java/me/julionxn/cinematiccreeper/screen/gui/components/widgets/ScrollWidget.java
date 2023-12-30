@@ -13,6 +13,7 @@ import java.util.Objects;
 
 public class ScrollWidget extends ExtendedWidget {
 
+    private static final Identifier SCROLLBAR_TEXTURE = new Identifier(CinematicCreeper.MOD_ID, "textures/gui/scrollbar.png");
     private final int x;
     private final int y;
     private final int itemsWidth;
@@ -73,8 +74,8 @@ public class ScrollWidget extends ExtendedWidget {
         totalHeight -= barHeight;
         float dif = ((float) showingFrom / (scrollItems.size() - itemsPerPage));
         int actualY = (int) (y + 20 + (totalHeight * dif));
-        context.drawTexture(new Identifier(CinematicCreeper.MOD_ID, "icon.png"),
-                x + itemsWidth, actualY, 0, 0, 0, 20, barHeight, 20, barHeight);
+        context.drawTexture(SCROLLBAR_TEXTURE, x + itemsWidth, actualY,
+                0, 0, 0, 20, barHeight, 20, barHeight);
     }
 
     @Override

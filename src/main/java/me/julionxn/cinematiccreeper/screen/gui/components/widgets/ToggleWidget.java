@@ -1,5 +1,6 @@
 package me.julionxn.cinematiccreeper.screen.gui.components.widgets;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import me.julionxn.cinematiccreeper.CinematicCreeper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -12,7 +13,8 @@ import net.minecraft.util.math.MathHelper;
 
 public class ToggleWidget extends ClickableWidget {
 
-    private static final Identifier TOGGLER_TEXTURE = new Identifier(CinematicCreeper.MOD_ID, "icon.png");
+    private static final Identifier OFF_TOGGLE_TEXTURE = new Identifier(CinematicCreeper.MOD_ID, "textures/gui/toggle_off.png");
+    private static final Identifier ON_TOGGLE_TEXTURE = new Identifier(CinematicCreeper.MOD_ID, "textures/gui/toggle_on.png");
     private boolean active;
     private final Runnable onActive;
     private final Runnable onDisabled;
@@ -28,19 +30,20 @@ public class ToggleWidget extends ClickableWidget {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client == null) return;
         drawText(context, client.textRenderer);
-        int offset = active ? 20 : 0;
-        context.drawTexture(TOGGLER_TEXTURE, getX() + getWidth() - 40 + offset, getY(),
-                0, 0, 0, 20, 20, 20, 20);
+        Identifier identifier = active ? ON_TOGGLE_TEXTURE : OFF_TOGGLE_TEXTURE;
+        RenderSystem.enableBlend();
+        context.drawTexture(identifier, getX() + getWidth() - 40, getY(),
+                0, 0, 0, 40, 20, 40, 20);
+        RenderSystem.disableBlend();
     }
 
     private void drawText(DrawContext context, TextRenderer textRenderer){
         int i = this.getX() + 2;
         int j = this.getX() + this.getWidth() - 2 - 50;
-        int c = this.active ? 16777215 : 10526880;
         drawScrollableText(context, textRenderer, this.getMessage(),
                 i, this.getY(),
                 j, this.getY() + this.getHeight(),
-                c | MathHelper.ceil(this.alpha * 255.0F) << 24);
+                0xffffff);
     }
 
     @Override

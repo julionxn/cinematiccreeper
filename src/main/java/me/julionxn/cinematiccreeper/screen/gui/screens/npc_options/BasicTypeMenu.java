@@ -3,14 +3,16 @@ package me.julionxn.cinematiccreeper.screen.gui.screens.npc_options;
 import me.julionxn.cinematiccreeper.managers.presets.PresetOptions;
 import me.julionxn.cinematiccreeper.screen.gui.components.widgets.ToggleWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.entity.Entity;
 import net.minecraft.text.Text;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
 public class BasicTypeMenu extends NpcTypeMenu{
 
-    public BasicTypeMenu(String entityType, Consumer<PresetOptions> onReady, Runnable onCancel, PresetOptions presetOptions) {
-        super(entityType, onReady, onCancel, presetOptions);
+    public BasicTypeMenu(String entityType, Consumer<PresetOptions> onReady, Runnable onCancel, PresetOptions presetOptions, @Nullable Entity entity) {
+        super(entityType, onReady, onCancel, presetOptions, entity);
     }
 
     @Override

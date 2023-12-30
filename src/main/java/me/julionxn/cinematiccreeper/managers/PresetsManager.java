@@ -5,14 +5,14 @@ import me.julionxn.cinematiccreeper.managers.presets.Preset;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Environment(EnvType.CLIENT)
 public class PresetsManager extends SerializableJsonManager<PresetsManager> {
 
     @Expose
     private List<Preset> presets = new ArrayList<>();
+    private final Map<String, Integer> presetsIndex = new HashMap<>();
 
     private PresetsManager() {
         super("cc_presets.json", PresetsManager.class);
@@ -30,6 +30,9 @@ public class PresetsManager extends SerializableJsonManager<PresetsManager> {
     protected void onLoad(PresetsManager data) {
         if (data == null) return;
         presets = data.presets;
+        for (int i = 0; i < presets.size(); i++) {
+            presetsIndex.put(presets.get(i).getId(), i);
+        }
     }
 
     public void addPreset(Preset preset) {
@@ -40,5 +43,9 @@ public class PresetsManager extends SerializableJsonManager<PresetsManager> {
         return presets;
     }
 
+    public Optional<Preset> getPresetWithId(String id){
+        if (!presetsIndex.containsKey(id)) return Optional.empty();
+        return Optional.of(presets.get(presetsIndex.get(id)));
+    }
 
 }

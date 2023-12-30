@@ -3,6 +3,7 @@ package me.julionxn.cinematiccreeper.entity;
 import me.julionxn.cinematiccreeper.managers.presets.PresetOptions;
 import me.julionxn.cinematiccreeper.util.SkinHelper;
 import net.minecraft.client.util.DefaultSkinHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -46,6 +47,7 @@ public class NpcEntity extends PathAwareEntity {
         super.readCustomDataFromNbt(nbt);
         dataTracker.set(SKIN_URL, nbt.getString("SkinUrl"));
         dataTracker.set(NPC_ID, nbt.getString("NpcId"));
+        setFlag(1, nbt.getBoolean("Sneaking"));
     }
 
     @Override
@@ -53,6 +55,7 @@ public class NpcEntity extends PathAwareEntity {
         super.writeCustomDataToNbt(nbt);
         nbt.putString("SkinUrl", dataTracker.get(SKIN_URL));
         nbt.putString("NpcId", dataTracker.get(NPC_ID));
+        nbt.putBoolean("Sneaking", getFlag(1));
     }
 
     public static DefaultAttributeContainer.Builder createPlayerAttributes() {
@@ -62,10 +65,16 @@ public class NpcEntity extends PathAwareEntity {
     }
 
     @Override
+    public void tickMovement() {
+        super.tickMovement();
+    }
+
+    @Override
     protected ActionResult interactMob(PlayerEntity player, Hand hand) {
         if (hand == Hand.OFF_HAND) return ActionResult.PASS;
         Vec3d target = player.getPos();
-        getNavigation().startMovingTo(target.x, target.y, target.z, 1.0D);
+        float mult = isSneaking() ? 0.5f : 1.0f;
+        getNavigation().startMovingTo(target.x, target.y, target.z, 1.0D * mult);
         return super.interactMob(player, hand);
     }
 
