@@ -29,11 +29,10 @@ public class C2S_SpawnNpcPreset {
         server.execute(() -> {
             World world = player.getWorld();
             NpcEntity entity = new NpcEntity(AllEntities.NPC_ENTITY, world);
-            entity.setNpcId(id);
             Vec3d spawnPosition = blockPos.toCenterPos();
             entity.setPosition(spawnPosition);
             entity.setSkinUrl(skin);
-            ((NpcData) entity).cinematiccreeper$setNpc(id);
+            ((NpcData) entity).cinematiccreeper$setId(id);
             ((MobNpcData) entity).cinematiccreeper$setSpawnPosition(spawnPosition.toVector3f());
             PresetOptionsHandlers.applyPresetOptions(entity, presetOptions);
             world.spawnEntity(entity);

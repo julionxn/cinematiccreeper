@@ -46,7 +46,7 @@ public class CachedSkin implements Serializable {
                 .handle((identifier, throwable) -> {
                     if (throwable != null) {
                         texture = DefaultSkinHelper.getTexture();
-                        CinematicCreeper.LOGGER.error("Something failed while retrieving a skin with Url: " + url, throwable);
+                        CinematicCreeper.LOGGER.error("Failed to load skin texture from Url:" + url, throwable);
                         return null;
                     }
                     return identifier;
@@ -71,7 +71,7 @@ public class CachedSkin implements Serializable {
                 out.close();
                 return identifier;
             } catch (IOException e) {
-                throw new RuntimeException("Failed to load skin texture from url: " + url, e);
+                throw new RuntimeException("Something failed while retrieving a skin with Url: " + url, e);
             }
         }, client);
     }

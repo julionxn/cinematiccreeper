@@ -32,7 +32,7 @@ public class C2S_SpawnPreset {
             if (entity == null) return;
             Vec3d spawnPosition = blockPos.toCenterPos().subtract(0, 0.5, 0);
             entity.setPosition(spawnPosition);
-            ((NpcData) entity).cinematiccreeper$setNpc(id);
+            ((NpcData) entity).cinematiccreeper$setId(id);
             if (entity instanceof MobEntity mobEntity){
                 mobEntity.setAiDisabled(true);
                 ((MobNpcData) mobEntity).cinematiccreeper$setSpawnPosition(spawnPosition.toVector3f());

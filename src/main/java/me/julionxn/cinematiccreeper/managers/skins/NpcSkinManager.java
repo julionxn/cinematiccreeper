@@ -2,6 +2,7 @@ package me.julionxn.cinematiccreeper.managers.skins;
 
 import me.julionxn.cinematiccreeper.CinematicCreeper;
 import me.julionxn.cinematiccreeper.entity.NpcEntity;
+import me.julionxn.cinematiccreeper.util.mixins.NpcData;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
@@ -55,7 +56,7 @@ public class NpcSkinManager {
     }
 
     public void updateSkinOf(NpcEntity entity){
-        String npcId = entity.getNpcId();
+        String npcId = ((NpcData) entity).cinematiccreeper$getId();
         try {
             URL url = new URL(entity.getSkinUrl());
             String id = cleanURL(url);

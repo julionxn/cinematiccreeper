@@ -26,7 +26,6 @@ public class NpcEntity extends PathAwareEntity {
     public static final String ENTITY_ID = "cinematiccreeper:npc_entity";
 
     private static final TrackedData<String> SKIN_URL = DataTracker.registerData(NpcEntity.class, TrackedDataHandlerRegistry.STRING);
-    private static final TrackedData<String> NPC_ID = DataTracker.registerData(NpcEntity.class, TrackedDataHandlerRegistry.STRING);
     private Identifier skin = DefaultSkinHelper.getTexture();
     private PresetOptions presetOptions;
 
@@ -38,14 +37,12 @@ public class NpcEntity extends PathAwareEntity {
     protected void initDataTracker() {
         super.initDataTracker();
         dataTracker.startTracking(SKIN_URL, "");
-        dataTracker.startTracking(NPC_ID, "npc");
     }
 
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
         dataTracker.set(SKIN_URL, nbt.getString("SkinUrl"));
-        dataTracker.set(NPC_ID, nbt.getString("NpcId"));
         setFlag(1, nbt.getBoolean("Sneaking"));
     }
 
@@ -53,7 +50,6 @@ public class NpcEntity extends PathAwareEntity {
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
         nbt.putString("SkinUrl", dataTracker.get(SKIN_URL));
-        nbt.putString("NpcId", dataTracker.get(NPC_ID));
         nbt.putBoolean("Sneaking", getFlag(1));
     }
 
@@ -85,14 +81,6 @@ public class NpcEntity extends PathAwareEntity {
             }
         });
         super.onDataTrackerUpdate(dataEntries);
-    }
-
-    public void setNpcId(String id){
-        dataTracker.set(NPC_ID, id);
-    }
-
-    public String getNpcId(){
-        return dataTracker.get(NPC_ID);
     }
 
     public void setSkinUrl(String skinUrl){
