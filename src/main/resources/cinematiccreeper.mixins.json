@@ -5,9 +5,14 @@
   "mixins": [
     "EntityMixin",
     "MobEntityMixin",
-    "PathAwareEntityMixin"
+    "PathAwareEntityMixin",
+    "PlayerEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "client": [
+    "KeyboardMixin",
+    "MinecraftClientMixin"
+  ]
 }

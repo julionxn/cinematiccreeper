@@ -1,5 +1,10 @@
 package me.julionxn.cinematiccreeper.util;
 
+import net.minecraft.client.option.KeyBinding;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class TextUtils {
 
     public static String idToLegibleText(String id) {
@@ -11,6 +16,16 @@ public class TextUtils {
                     .append(' ');
         }
         return builder.toString().trim();
+    }
+
+    public static String parseKeybind(KeyBinding keyBinding){
+        String text = keyBinding.getBoundKeyTranslationKey();
+        Pattern pattern = Pattern.compile("key\\.keyboard\\.(\\w)");
+        Matcher matcher = pattern.matcher(text);
+        if (matcher.matches()) {
+            return matcher.group(1);
+        }
+        return text;
     }
 
 }

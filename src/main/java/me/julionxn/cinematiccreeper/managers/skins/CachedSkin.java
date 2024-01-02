@@ -56,11 +56,8 @@ public class CachedSkin implements Serializable {
 
     public Identifier loadAndGetTexture() {
         if (loaded) return texture;
-        getSkinTextureFromUrlAsync(url).thenAccept(idText -> {
-                    loaded = true;
-                    texture = idText;
-                })
-                .orTimeout(30, TimeUnit.SECONDS)
+        getSkinTextureFromUrlAsync(url)
+                .orTimeout(10, TimeUnit.SECONDS)
                 .handle((identifier, throwable) -> {
                     if (throwable != null) {
                         texture = DefaultSkinHelper.getTexture();
@@ -68,6 +65,10 @@ public class CachedSkin implements Serializable {
                         return null;
                     }
                     return identifier;
+                })
+                .thenAccept(idText -> {
+                    loaded = true;
+                    texture = idText;
                 });
         return texture;
     }

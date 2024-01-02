@@ -11,8 +11,9 @@ import net.minecraft.util.Identifier;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
-public class ScrollWidget extends ExtendedWidget {
+public class RemovableItemsScrollWidget extends ExtendedWidget {
 
     protected static final Identifier SCROLLBAR_TEXTURE = new Identifier(CinematicCreeper.MOD_ID, "textures/gui/scrollbar.png");
     protected final int x;
@@ -20,21 +21,27 @@ public class ScrollWidget extends ExtendedWidget {
     protected final int itemsWidth;
     protected final int itemsHeight;
     protected final int itemsPerPage;
-    protected final List<ScrollItem> scrollItems;
-    protected final int size;
+    protected final Supplier<List<RemovableScrollItem>> itemsSupplier;
+    protected List<RemovableScrollItem> scrollItems;
+    protected int size;
     protected final boolean isScroll;
     protected int showingFrom = 0;
 
-    public ScrollWidget(ExtendedScreen screen, int x, int y, int itemsWidth, int itemsHeight, int itemsPerPage, List<ScrollItem> scrollItems) {
+    public RemovableItemsScrollWidget(ExtendedScreen screen, int x, int y, int itemsWidth, int itemsHeight, int itemsPerPage, Supplier<List<RemovableScrollItem>> supplier) {
         super(screen);
         this.x = x;
         this.y = y;
         this.itemsWidth = itemsWidth;
         this.itemsHeight = itemsHeight;
         this.itemsPerPage = itemsPerPage;
-        this.scrollItems = scrollItems;
-        this.size = scrollItems.size();
+        this.itemsSupplier = supplier;
+        retreiveItems();
         this.isScroll = size > itemsPerPage;
+    }
+
+    private void retreiveItems(){
+        scrollItems = itemsSupplier.get();
+        size = scrollItems.size();
     }
 
     @Override
@@ -42,9 +49,9 @@ public class ScrollWidget extends ExtendedWidget {
         addItems();
         if (!isScroll) return;
         ButtonWidget upList = ButtonWidget.builder(Text.of("⮝"), button -> changePage(-1))
-                .dimensions(x + itemsWidth, y, 20, 20).build();
+                .dimensions(x + 20 + itemsWidth, y, 20, 20).build();
         ButtonWidget downList = ButtonWidget.builder(Text.of("⮟"), button -> changePage(1))
-                .dimensions(x + itemsWidth, y + ((itemsPerPage - 1) * itemsHeight), 20, 20).build();
+                .dimensions(x + 20 + itemsWidth, y + ((itemsPerPage - 1) * itemsHeight), 20, 20).build();
         addDrawableChild(upList);
         addDrawableChild(downList);
     }
@@ -52,12 +59,22 @@ public class ScrollWidget extends ExtendedWidget {
     protected void addItems(){
         int current = 0;
         for (int i = showingFrom; i - showingFrom < Math.min(itemsPerPage, size); i++) {
-            ScrollItem scrollItem = scrollItems.get(i);
+            RemovableScrollItem scrollItem = scrollItems.get(i);
             ButtonWidget option = ButtonWidget.builder(
                             Text.of(scrollItem.text()),
-                            button -> scrollItem.runnable().accept(button))
-                    .dimensions(x, y + (current++ * itemsHeight), itemsWidth, itemsHeight).build();
+                            scrollItem.runnable::accept
+                    )
+                    .dimensions(x, y + (current * itemsHeight), itemsWidth, itemsHeight).build();
             addDrawableChild(option);
+            ButtonWidget remove = ButtonWidget.builder(
+                    Text.of("R"),
+                    button -> {
+                        scrollItem.onRemove.accept(button);
+                        retreiveItems();
+                        clear();
+                    }
+            ).dimensions(x + itemsWidth, y + (current++ * itemsHeight), 20, 20).build();
+            addDrawableChild(remove);
         }
     }
 
@@ -82,7 +99,7 @@ public class ScrollWidget extends ExtendedWidget {
         totalHeight -= barHeight;
         float dif = ((float) showingFrom / (scrollItems.size() - itemsPerPage));
         int actualY = (int) (y + 20 + (totalHeight * dif));
-        context.drawTexture(SCROLLBAR_TEXTURE, x + itemsWidth, actualY,
+        context.drawTexture(SCROLLBAR_TEXTURE, x + 20 + itemsWidth, actualY,
                 0, 0, 0, 20, barHeight, 20, barHeight);
     }
 
@@ -122,7 +139,7 @@ public class ScrollWidget extends ExtendedWidget {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ScrollWidget that = (ScrollWidget) o;
+        RemovableItemsScrollWidget that = (RemovableItemsScrollWidget) o;
         return itemsWidth == that.itemsWidth && itemsHeight == that.itemsHeight && Objects.equals(scrollItems, that.scrollItems);
     }
 
@@ -131,6 +148,6 @@ public class ScrollWidget extends ExtendedWidget {
         return Objects.hash(x, y, itemsPerPage, itemsWidth, itemsHeight, scrollItems);
     }
 
-    public record ScrollItem(String text, Consumer<ButtonWidget> runnable) {
+    public record RemovableScrollItem(String text, Consumer<ButtonWidget> runnable, Consumer<ButtonWidget> onRemove) {
     }
 }

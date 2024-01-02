@@ -6,7 +6,7 @@ import me.julionxn.cinematiccreeper.managers.presets.Preset;
 import me.julionxn.cinematiccreeper.managers.presets.PresetOptionsHandlers;
 import me.julionxn.cinematiccreeper.networking.AllPackets;
 import me.julionxn.cinematiccreeper.screen.gui.components.ExtendedScreen;
-import me.julionxn.cinematiccreeper.screen.gui.components.widgets.ScrollItem;
+import me.julionxn.cinematiccreeper.screen.gui.components.widgets.RemovableItemsScrollWidget;
 import me.julionxn.cinematiccreeper.screen.gui.components.widgets.ScrollWidget;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -20,14 +20,20 @@ import java.util.List;
 
 public class PresetsMenu extends ExtendedScreen {
 
-    private final List<ScrollItem> scrollItems = new ArrayList<>();
+    private final List<RemovableItemsScrollWidget.RemovableScrollItem> scrollItems = new ArrayList<>();
     private final BlockPos blockPos;
 
     public PresetsMenu(BlockPos blockPos) {
         super(Text.of("NpcsMenu"));
+        setItems();
+        this.blockPos = blockPos;
+    }
+
+    private void setItems(){
+        scrollItems.clear();
         for (Preset preset : PresetsManager.getInstance().getPresets()) {
             String entityType = preset.getEntityType();
-            scrollItems.add(new ScrollItem(preset.getId(), buttonWidget -> {
+            scrollItems.add(new RemovableItemsScrollWidget.RemovableScrollItem(preset.getId(), buttonWidget -> {
                 PacketByteBuf buf = PacketByteBufs.create();
                 buf.writeBlockPos(blockPos).writeString(preset.getId());
                 if (entityType.equals(NpcEntity.ENTITY_ID)) {
@@ -40,14 +46,19 @@ public class PresetsMenu extends ExtendedScreen {
                     ClientPlayNetworking.send(AllPackets.C2S_SPAWN_PRESET, buf);
                 }
                 close();
+            }, buttonWidget -> {
+                PresetsManager.getInstance().removePresetWithId(preset.getId());
+                setItems();
             }));
         }
-        this.blockPos = blockPos;
     }
 
     @Override
     public void addWidgets() {
-        ScrollWidget scrollWidget = new ScrollWidget(this, windowWidth / 2 - 75, windowHeight / 2 - 40, 150, 20, 5, scrollItems);
+        RemovableItemsScrollWidget scrollWidget = new RemovableItemsScrollWidget(this,
+                windowWidth / 2 - 95, windowHeight / 2 - 40,
+                150, 20, 5,
+                () -> this.scrollItems);
         addWidget(scrollWidget);
     }
 

@@ -7,7 +7,6 @@ import me.julionxn.cinematiccreeper.managers.PresetsManager;
 import me.julionxn.cinematiccreeper.managers.presets.Preset;
 import me.julionxn.cinematiccreeper.managers.presets.PresetOptions;
 import me.julionxn.cinematiccreeper.screen.gui.components.ExtendedScreen;
-import me.julionxn.cinematiccreeper.screen.gui.components.widgets.ScrollItem;
 import me.julionxn.cinematiccreeper.screen.gui.components.widgets.ScrollWidget;
 import me.julionxn.cinematiccreeper.screen.gui.screens.npc_options.BasicTypeMenu;
 import me.julionxn.cinematiccreeper.util.TextUtils;
@@ -28,7 +27,7 @@ import java.util.List;
 public class NewPresetMenu extends ExtendedScreen {
 
     private final List<String> types;
-    private final List<ScrollItem> items = new ArrayList<>();
+    private final List<ScrollWidget.ScrollItem> items = new ArrayList<>();
     private final int buttonsPerPage = 10;
     private final BlockPos blockPos;
     private PresetOptions presetOptions;
@@ -40,7 +39,7 @@ public class NewPresetMenu extends ExtendedScreen {
         super(Text.of("NewPresetMenu"));
         types = NpcsManager.getInstance().getLoadedEntityTypes();
         for (String type : types) {
-            ScrollItem scrollItem = new ScrollItem(TextUtils.idToLegibleText(type), buttonWidget -> {
+            ScrollWidget.ScrollItem scrollItem = new ScrollWidget.ScrollItem(TextUtils.idToLegibleText(type), buttonWidget -> {
                 selectedEntity = type;
                 clear();
             });
@@ -107,6 +106,10 @@ public class NewPresetMenu extends ExtendedScreen {
         if (selectedEntity.equals(NpcEntity.ENTITY_ID)) {
             addDrawableChild(skinUrlField);
             ButtonWidget createPreset = ButtonWidget.builder(Text.of("Crear"), button -> {
+                if (PresetsManager.getInstance().getPresetWithId(nameTextField.getText()).isPresent()){
+                    nameTextField.setText("");
+                    return;
+                }
                 Preset preset = new Preset(selectedEntity, nameTextField.getText(),
                         presetOptions == null ? new PresetOptions()
                                 .setDisplayName(nameTextField.getText())
@@ -117,6 +120,10 @@ public class NewPresetMenu extends ExtendedScreen {
             addDrawableChild(createPreset);
         } else {
             ButtonWidget createPreset = ButtonWidget.builder(Text.of("Crear"), button -> {
+                if (PresetsManager.getInstance().getPresetWithId(nameTextField.getText()).isPresent()){
+                    nameTextField.setText("");
+                    return;
+                }
                 Preset preset = new Preset(selectedEntity, nameTextField.getText(),
                         presetOptions == null ? new PresetOptions().setDisplayName(nameTextField.getText()) : presetOptions);
                 PresetsManager.getInstance().addPreset(preset);
