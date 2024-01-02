@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(PlayerEntity.class)
-public class PlayerEntityMixin implements PlayerData {
+public abstract class PlayerEntityMixin implements PlayerData {
 
     @Unique
     private PlayerPathState playerPathState = PlayerPathState.none();

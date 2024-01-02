@@ -76,10 +76,8 @@ public class PerformPathGoal extends Goal {
             if ((forwardDirection && currentAction + 1 == pathActions.size()) ||
                     (!forwardDirection && currentAction - 1 < 0)) {
                 if (type == Path.Type.LOOP) {
-                    System.out.println("LOOP");
                     currentAction = -1;
                 } else if (type == Path.Type.PING_PONG) {
-                    System.out.println("PING PONG");
                     forwardDirection = !forwardDirection;
                 }
             }

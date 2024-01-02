@@ -64,13 +64,11 @@ public abstract class NpcTypeMenu extends ExtendedScreen {
     }
 
     private void addBasicButtons(int x, int y) {
-        ButtonWidget cancelButton = ButtonWidget.builder(Text.of("Cancelar"), button -> {
-            onCancel.run();
-        }).dimensions(x + 20, y + height, 100, 20).build();
+        ButtonWidget cancelButton = ButtonWidget.builder(Text.of("Cancelar"), button -> onCancel.run())
+                .dimensions(x + 20, y + height, 100, 20).build();
         addDrawableChild(cancelButton);
-        ButtonWidget saveButton = ButtonWidget.builder(Text.of("Guardar"), button -> {
-            onReady.accept(presetOptions);
-        }).dimensions(x + width - 120, y + height, 100, 20).build();
+        ButtonWidget saveButton = ButtonWidget.builder(Text.of("Guardar"), button -> onReady.accept(presetOptions))
+                .dimensions(x + width - 120, y + height, 100, 20).build();
         addDrawableChild(saveButton);
 
         addTab("Básico", (buttonWidget, minecraftClient) -> {

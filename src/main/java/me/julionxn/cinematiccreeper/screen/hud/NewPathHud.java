@@ -27,9 +27,9 @@ public class NewPathHud implements HudRenderCallback {
         PlayerPathState.State state = pathState.state();
         if (state == PlayerPathState.State.NONE) return;
 
-        String firstAction = TextUtils.parseKeybind(Keybindings.firstAction).toUpperCase();
-        String secondAction = TextUtils.parseKeybind(Keybindings.secondAction).toUpperCase();
-        String acceptAction = TextUtils.parseKeybind(Keybindings.acceptAction).toUpperCase();
+        String firstAction = TextUtils.parseKeybind(Keybindings.firstAction);
+        String secondAction = TextUtils.parseKeybind(Keybindings.secondAction);
+        String acceptAction = TextUtils.parseKeybind(Keybindings.acceptAction);
 
         context.drawTextWithShadow(client.textRenderer, "ESC: Salir",
                 20, 20, 0xffffff);
@@ -45,7 +45,7 @@ public class NewPathHud implements HudRenderCallback {
             context.drawTextWithShadow(client.textRenderer, acceptAction + ": Terminar",
                     20, 68, 0xffffff);
         } else {
-
+            //todo
         }
 
 

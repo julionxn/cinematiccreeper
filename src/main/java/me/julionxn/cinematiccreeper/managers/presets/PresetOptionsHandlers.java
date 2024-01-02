@@ -4,7 +4,6 @@ import me.julionxn.cinematiccreeper.CinematicCreeper;
 import me.julionxn.cinematiccreeper.entity.NpcEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
@@ -75,9 +74,6 @@ public class PresetOptionsHandlers {
         if (entity instanceof MobEntity mobEntity) {
             presetOptions.holdingItem = Registries.ITEM.getId(mobEntity.getMainHandStack().getItem()).toString();
         }
-        if (entity instanceof PathAwareEntity) {
-
-        }
         if (entity instanceof NpcEntity) {
             presetOptions.skinUrl = ((NpcEntity) entity).getSkinUrl();
         }
@@ -90,9 +86,6 @@ public class PresetOptionsHandlers {
         entity.setSneaking(presetOptions.sneaking);
         if (entity instanceof MobEntity mobEntity) {
             setStackInHand(mobEntity, presetOptions.holdingItem);
-        }
-        if (entity instanceof PathAwareEntity) {
-
         }
     }
 

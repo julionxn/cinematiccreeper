@@ -44,25 +44,24 @@ public class PathAction {
         buf.writeDouble(pathAction.pos[0]);
         buf.writeDouble(pathAction.pos[1]);
         buf.writeDouble(pathAction.pos[2]);
-        if (pathAction.haveAngles()) {
+        buf.writeByte(pathAction.flags);
+        if (pathAction.getYaw() != null && pathAction.getPitch() != null) {
+            buf.writeBoolean(true);
             buf.writeFloat(pathAction.getYaw());
             buf.writeFloat(pathAction.getPitch());
         } else {
-            buf.writeFloat(-123123123);
-            buf.writeFloat(-123123123);
+            buf.writeBoolean(false);
         }
-        buf.writeByte(pathAction.flags);
     }
 
     public static PathAction fromBuf(PacketByteBuf buf) {
         PathAction pathAction = new PathAction(buf.readDouble(), buf.readDouble(), buf.readDouble());
-        float yaw = buf.readFloat();
-        float pitch = buf.readFloat();
-        if (yaw != -123123123 && pitch != -123123123) {
-            pathAction.angles[0] = yaw;
-            pathAction.angles[1] = pitch;
-        }
         pathAction.flags = buf.readByte();
+        boolean addAngles = buf.readBoolean();
+        if (addAngles){
+            pathAction.angles[0] = buf.readFloat();
+            pathAction.angles[1] = buf.readFloat();
+        }
         return pathAction;
     }
 
@@ -71,12 +70,9 @@ public class PathAction {
         return angles[0];
     }
 
+    @Nullable
     public Float getPitch() {
         return angles[1];
-    }
-
-    public boolean haveAngles() {
-        return angles[0] != null && angles[1] != null;
     }
 
     public boolean getFlag(int flag) {
@@ -93,10 +89,6 @@ public class PathAction {
 
     public boolean getHit() {
         return getFlag(HIT_FLAG);
-    }
-
-    public void setFlags(byte flags) {
-        this.flags = flags;
     }
 
     public void setFlag(int flag, boolean value) {

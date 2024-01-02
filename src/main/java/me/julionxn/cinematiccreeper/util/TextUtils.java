@@ -23,7 +23,7 @@ public class TextUtils {
         Pattern pattern = Pattern.compile("key\\.keyboard\\.(\\w)");
         Matcher matcher = pattern.matcher(text);
         if (matcher.matches()) {
-            return matcher.group(1);
+            return matcher.group(1).toUpperCase();
         }
         return text;
     }

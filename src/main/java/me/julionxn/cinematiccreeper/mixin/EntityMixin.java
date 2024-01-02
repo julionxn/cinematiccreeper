@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Entity.class)
-public class EntityMixin implements NpcData {
+public abstract class EntityMixin implements NpcData {
 
     @SuppressWarnings("all")
     @Unique
@@ -29,7 +29,7 @@ public class EntityMixin implements NpcData {
     protected DataTracker dataTracker;
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void init(EntityType type, World world, CallbackInfo ci) {
+    private void init(EntityType<?> type, World world, CallbackInfo ci) {
         dataTracker.startTracking(NPC_ID, "");
     }
 
