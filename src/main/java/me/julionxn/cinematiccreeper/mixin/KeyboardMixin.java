@@ -1,7 +1,7 @@
 package me.julionxn.cinematiccreeper.mixin;
 
 import me.julionxn.cinematiccreeper.keybinds.Keybindings;
-import me.julionxn.cinematiccreeper.managers.paths.PathInputHandlers;
+import me.julionxn.cinematiccreeper.keybinds.InputHandlers;
 import me.julionxn.cinematiccreeper.managers.paths.PlayerPathState;
 import me.julionxn.cinematiccreeper.util.mixins.PlayerData;
 import net.minecraft.client.Keyboard;
@@ -34,14 +34,20 @@ public abstract class KeyboardMixin {
             return;
         }
         if (Keybindings.firstAction.matchesKey(key, scancode)) {
-            PathInputHandlers.handleFirstAction(client);
+            InputHandlers.handleFirstAction(client);
             return;
         }
         if (Keybindings.secondAction.matchesKey(key, scancode)) {
-            PathInputHandlers.handleSecondAction(client);
+            InputHandlers.handleSecondAction(client);
+            return;
         }
-        if (Keybindings.acceptAction.matchesKey(key, scancode)) {
-            PathInputHandlers.handleAcceptAction(client);
+        if (Keybindings.thirdAction.matchesKey(key, scancode)) {
+            InputHandlers.handleThirdAction(client);
+            return;
+        }
+        if (Keybindings.fourthAction.matchesKey(key, scancode)) {
+            InputHandlers.handleFourthAction(client);
+            return;
         }
     }
 

@@ -29,7 +29,7 @@ public class NewPathHud implements HudRenderCallback {
 
         String firstAction = TextUtils.parseKeybind(Keybindings.firstAction);
         String secondAction = TextUtils.parseKeybind(Keybindings.secondAction);
-        String acceptAction = TextUtils.parseKeybind(Keybindings.acceptAction);
+        String acceptAction = TextUtils.parseKeybind(Keybindings.thirdAction);
 
         context.drawTextWithShadow(client.textRenderer, "ESC: Salir",
                 20, 20, 0xffffff);

@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "EntityMixin",
+    "GameOptionsMixin",
     "MobEntityMixin",
     "PathAwareEntityMixin",
     "PlayerEntityMixin"
@@ -12,6 +13,9 @@
     "defaultRequire": 1
   },
   "client": [
+    "CameraMixin",
+    "GameRendererMixin",
+    "InGameHudMixin",
     "KeyboardMixin",
     "MinecraftClientMixin"
   ]

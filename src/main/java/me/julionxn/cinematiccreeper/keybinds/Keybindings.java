@@ -10,11 +10,13 @@ public class Keybindings {
     public static final String KEY_CATEGORY_CINEMATICCREEPER = "key.category.cinematiccreeper";
     public static final String KEY_FIRST_ACTION = "key.cinematiccreeper.first_action";
     public static final String KEY_SECOND_ACTION = "key.cinematiccreeper.second_action";
-    public static final String KEY_ACCEPT_ACTION = "key.cinematiccreeper.accept_action";
+    public static final String KEY_THIRD_ACTION = "key.cinematiccreeper.third_action";
+    public static final String KEY_FOURTH_ACTION = "key.cinematiccreeper.fourth_action";
 
     public static KeyBinding firstAction;
     public static KeyBinding secondAction;
-    public static KeyBinding acceptAction;
+    public static KeyBinding thirdAction;
+    public static KeyBinding fourthAction;
 
     public static void register() {
         firstAction = KeyBindingHelper.registerKeyBinding(new KeyBinding(
@@ -29,10 +31,16 @@ public class Keybindings {
                 GLFW.GLFW_KEY_K,
                 KEY_CATEGORY_CINEMATICCREEPER
         ));
-        acceptAction = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                KEY_ACCEPT_ACTION,
+        thirdAction = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+                KEY_THIRD_ACTION,
                 InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_M,
+                KEY_CATEGORY_CINEMATICCREEPER
+        ));
+        fourthAction= KeyBindingHelper.registerKeyBinding(new KeyBinding(
+                KEY_FOURTH_ACTION,
+                InputUtil.Type.KEYSYM,
+                GLFW.GLFW_KEY_N,
                 KEY_CATEGORY_CINEMATICCREEPER
         ));
     }
