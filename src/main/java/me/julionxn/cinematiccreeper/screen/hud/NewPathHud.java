@@ -2,9 +2,9 @@ package me.julionxn.cinematiccreeper.screen.hud;
 
 import me.julionxn.cinematiccreeper.CinematicCreeper;
 import me.julionxn.cinematiccreeper.keybinds.Keybindings;
+import me.julionxn.cinematiccreeper.managers.paths.PlayerPathState;
 import me.julionxn.cinematiccreeper.util.TextUtils;
 import me.julionxn.cinematiccreeper.util.mixins.PlayerData;
-import me.julionxn.cinematiccreeper.managers.paths.PlayerPathState;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -22,7 +22,7 @@ public class NewPathHud implements HudRenderCallback {
         if (client == null) return;
         PlayerEntity player = client.player;
         if (player == null) return;
-        PlayerData playerData  = (PlayerData) player;
+        PlayerData playerData = (PlayerData) player;
         PlayerPathState pathState = playerData.cinematiccreeper$getPathState();
         PlayerPathState.State state = pathState.state();
         if (state == PlayerPathState.State.NONE) return;
@@ -37,7 +37,7 @@ public class NewPathHud implements HudRenderCallback {
         context.drawTexture(texture, context.getScaledWindowWidth() - 52,
                 20, 0, 0, 0,
                 32, 32, 32, 32);
-        if (state == PlayerPathState.State.ADDING){
+        if (state == PlayerPathState.State.ADDING) {
             context.drawTextWithShadow(client.textRenderer, firstAction + ": Añadir punto",
                     20, 36, 0xffffff);
             context.drawTextWithShadow(client.textRenderer, secondAction + ": Eliminar último punto",
@@ -47,7 +47,6 @@ public class NewPathHud implements HudRenderCallback {
         } else {
 
         }
-
 
 
     }

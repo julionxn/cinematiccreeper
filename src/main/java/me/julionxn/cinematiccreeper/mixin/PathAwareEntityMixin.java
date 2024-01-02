@@ -31,7 +31,7 @@ public abstract class PathAwareEntityMixin extends MobEntity implements PathAwar
     @Override
     protected void initGoals() {
         super.initGoals();
-        performPathGoal = new PerformPathGoal((PathAwareEntity)(Object) this);
+        performPathGoal = new PerformPathGoal((PathAwareEntity) (Object) this);
         goalSelector.add(0, performPathGoal);
     }
 

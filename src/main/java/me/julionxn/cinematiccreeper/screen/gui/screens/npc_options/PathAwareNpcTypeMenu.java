@@ -1,17 +1,12 @@
 package me.julionxn.cinematiccreeper.screen.gui.screens.npc_options;
 
-import me.julionxn.cinematiccreeper.entity.NpcEntity;
-import me.julionxn.cinematiccreeper.managers.PresetsManager;
 import me.julionxn.cinematiccreeper.managers.paths.Path;
+import me.julionxn.cinematiccreeper.managers.paths.PlayerPathState;
 import me.julionxn.cinematiccreeper.managers.presets.PresetOptions;
-import me.julionxn.cinematiccreeper.managers.presets.PresetOptionsHandlers;
 import me.julionxn.cinematiccreeper.networking.AllPackets;
-import me.julionxn.cinematiccreeper.screen.gui.components.widgets.RemovableItemsScrollWidget;
 import me.julionxn.cinematiccreeper.screen.gui.components.widgets.ScrollWidget;
 import me.julionxn.cinematiccreeper.screen.gui.screens.NewPathMenu;
 import me.julionxn.cinematiccreeper.util.mixins.PathAwareData;
-import me.julionxn.cinematiccreeper.util.mixins.PlayerData;
-import me.julionxn.cinematiccreeper.managers.paths.PlayerPathState;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -34,7 +29,7 @@ public class PathAwareNpcTypeMenu extends NpcTypeMenu {
         setItems();
     }
 
-    private void setItems(){
+    private void setItems() {
         if (entity == null) return;
         scrollItems.clear();
         scrollItems.add(new ScrollWidget.ScrollItem("Ninguno", buttonWidget -> {

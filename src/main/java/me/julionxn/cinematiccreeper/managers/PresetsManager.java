@@ -5,7 +5,9 @@ import me.julionxn.cinematiccreeper.managers.presets.Preset;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Environment(EnvType.CLIENT)
 public class PresetsManager extends SerializableJsonManager<PresetsManager> {

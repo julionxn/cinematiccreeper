@@ -22,9 +22,9 @@ public class RemovableItemsScrollWidget extends ExtendedWidget {
     protected final int itemsHeight;
     protected final int itemsPerPage;
     protected final Supplier<List<RemovableScrollItem>> itemsSupplier;
+    protected final boolean isScroll;
     protected List<RemovableScrollItem> scrollItems;
     protected int size;
-    protected final boolean isScroll;
     protected int showingFrom = 0;
 
     public RemovableItemsScrollWidget(ExtendedScreen screen, int x, int y, int itemsWidth, int itemsHeight, int itemsPerPage, Supplier<List<RemovableScrollItem>> supplier) {
@@ -39,7 +39,7 @@ public class RemovableItemsScrollWidget extends ExtendedWidget {
         this.isScroll = size > itemsPerPage;
     }
 
-    private void retreiveItems(){
+    private void retreiveItems() {
         scrollItems = itemsSupplier.get();
         size = scrollItems.size();
     }
@@ -56,7 +56,7 @@ public class RemovableItemsScrollWidget extends ExtendedWidget {
         addDrawableChild(downList);
     }
 
-    protected void addItems(){
+    protected void addItems() {
         int current = 0;
         for (int i = showingFrom; i - showingFrom < Math.min(itemsPerPage, size); i++) {
             RemovableScrollItem scrollItem = scrollItems.get(i);
@@ -93,7 +93,7 @@ public class RemovableItemsScrollWidget extends ExtendedWidget {
         renderBar(context);
     }
 
-    protected void renderBar(DrawContext context){
+    protected void renderBar(DrawContext context) {
         int totalHeight = 20 * (itemsPerPage - 2);
         int barHeight = (int) ((itemsPerPage / (float) scrollItems.size()) * totalHeight);
         totalHeight -= barHeight;

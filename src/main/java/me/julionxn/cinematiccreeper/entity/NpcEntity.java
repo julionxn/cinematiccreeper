@@ -1,6 +1,5 @@
 package me.julionxn.cinematiccreeper.entity;
 
-import me.julionxn.cinematiccreeper.managers.presets.PresetOptions;
 import me.julionxn.cinematiccreeper.managers.skins.NpcSkinManager;
 import net.minecraft.client.util.DefaultSkinHelper;
 import net.minecraft.entity.Entity;
@@ -14,16 +13,12 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.listener.ClientPlayPacketListener;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -67,7 +62,7 @@ public class NpcEntity extends PathAwareEntity {
     @Override
     protected ActionResult interactMob(PlayerEntity player, Hand hand) {
         if (hand == Hand.OFF_HAND) return ActionResult.PASS;
-        if (getWorld().isClient){
+        if (getWorld().isClient) {
             lookAt(player);
         }
         return super.interactMob(player, hand);
@@ -85,17 +80,17 @@ public class NpcEntity extends PathAwareEntity {
         lookRelativeTo(d, f, e);
     }
 
-    public void lookAt(Vec3d position){
+    public void lookAt(Vec3d position) {
         double y = position.y - this.getEyeY();
         double x = position.x - this.getX();
         double z = position.z - this.getZ();
         lookRelativeTo(x, y, z);
     }
 
-    private void lookRelativeTo(double x, double y, double z){
+    private void lookRelativeTo(double x, double y, double z) {
         double g = Math.sqrt(x * x + z * z);
-        float yaw = (float)(MathHelper.atan2(z, x) * 57.2957763671875) - 90.0f;
-        float pitch = (float)(-(MathHelper.atan2(y, g) * 57.2957763671875));
+        float yaw = (float) (MathHelper.atan2(z, x) * 57.2957763671875) - 90.0f;
+        float pitch = (float) (-(MathHelper.atan2(y, g) * 57.2957763671875));
         setPitch(pitch);
         setHeadYaw(yaw);
         setYaw(yaw);

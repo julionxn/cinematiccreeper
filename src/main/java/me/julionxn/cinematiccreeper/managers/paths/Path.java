@@ -1,6 +1,5 @@
 package me.julionxn.cinematiccreeper.managers.paths;
 
-import com.google.gson.annotations.Expose;
 import net.minecraft.network.PacketByteBuf;
 
 import java.util.ArrayList;
@@ -19,31 +18,7 @@ public class Path {
         this.entityId = entityId;
     }
 
-    public String getId(){
-        return id;
-    }
-
-    public Type getType(){
-        return type;
-    }
-
-    public int getEntityId(){
-        return entityId;
-    }
-
-    public void addAction(PathAction pathAction){
-        actions.add(pathAction);
-    }
-
-    public void popAction(){
-        actions.remove(actions.size() - 1);
-    }
-
-    public List<PathAction> getActions(){
-        return actions;
-    }
-
-    public static void addToBuf(PacketByteBuf buf, Path path){
+    public static void addToBuf(PacketByteBuf buf, Path path) {
         buf.writeString(path.id);
         buf.writeEnumConstant(path.type);
         buf.writeInt(path.entityId);
@@ -53,7 +28,7 @@ public class Path {
         }
     }
 
-    public static Path fromBuf(PacketByteBuf buf){
+    public static Path fromBuf(PacketByteBuf buf) {
         String id = buf.readString();
         Type type = buf.readEnumConstant(Type.class);
         int entityId = buf.readInt();
@@ -64,6 +39,30 @@ public class Path {
             path.actions.add(pathAction);
         }
         return path;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public int getEntityId() {
+        return entityId;
+    }
+
+    public void addAction(PathAction pathAction) {
+        actions.add(pathAction);
+    }
+
+    public void popAction() {
+        actions.remove(actions.size() - 1);
+    }
+
+    public List<PathAction> getActions() {
+        return actions;
     }
 
     public enum Type {

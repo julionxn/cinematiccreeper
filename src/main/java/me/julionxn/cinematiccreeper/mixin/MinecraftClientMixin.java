@@ -19,7 +19,7 @@ public class MinecraftClientMixin {
     public ClientPlayerEntity player;
 
     @Inject(method = "openGameMenu", at = @At("HEAD"), cancellable = true)
-    public void cancelESC(boolean pauseOnly, CallbackInfo ci){
+    public void cancelESC(boolean pauseOnly, CallbackInfo ci) {
         if (player == null) return;
         PlayerData accessor = (PlayerData) player;
         if (accessor.cinematiccreeper$getPathState().state() == PlayerPathState.State.NONE) return;

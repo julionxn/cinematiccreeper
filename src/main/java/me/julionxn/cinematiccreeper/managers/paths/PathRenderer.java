@@ -20,10 +20,10 @@ public class PathRenderer {
 
     private static final Identifier TEXTURE = new Identifier(CinematicCreeper.MOD_ID, "point.png");
 
-    public static void render(WorldRenderContext context, PlayerPathState playerPathState){
+    public static void render(WorldRenderContext context, PlayerPathState playerPathState) {
         Path path = playerPathState.path();
         List<PathAction> pathActions = path.getActions();
-        if (pathActions.size() > 1){
+        if (pathActions.size() > 1) {
             Vec3d firstPos = pathActions.get(0).getPos().add(0, 0.5, 0);
             for (PathAction action : pathActions) {
                 Vec3d newPos = action.getPos().add(0, 0.5, 0);
@@ -36,7 +36,7 @@ public class PathRenderer {
         }
     }
 
-    public static void renderBillboardTexture(WorldRenderContext context, Vec3d targetPosition, Identifier texture, float r, float g, float b){
+    public static void renderBillboardTexture(WorldRenderContext context, Vec3d targetPosition, Identifier texture, float r, float g, float b) {
         Camera camera = context.camera();
         Vec3d cameraPosition = camera.getPos();
         Vec3d transformedPosition = targetPosition.subtract(cameraPosition);
@@ -67,11 +67,11 @@ public class PathRenderer {
         matrixStack.pop();
     }
 
-    public static void renderLine(WorldRenderContext context, Vec3d from, Vec3d to){
+    public static void renderLine(WorldRenderContext context, Vec3d from, Vec3d to) {
         renderLine(context, from, to, 0f, 0f, 1f);
     }
 
-    public static void renderLine(WorldRenderContext context, Vec3d from, Vec3d to, float r, float g, float b){
+    public static void renderLine(WorldRenderContext context, Vec3d from, Vec3d to, float r, float g, float b) {
         Camera camera = context.camera();
         Vec3d transformedPosition = to.subtract(camera.getPos());
         MatrixStack matrixStack = new MatrixStack();
@@ -100,6 +100,6 @@ public class PathRenderer {
         RenderSystem.depthFunc(GL11.GL_LEQUAL);
         RenderSystem.enableCull();
     }
-    
+
 
 }

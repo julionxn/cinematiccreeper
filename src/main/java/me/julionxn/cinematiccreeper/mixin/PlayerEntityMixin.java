@@ -1,7 +1,7 @@
 package me.julionxn.cinematiccreeper.mixin;
 
-import me.julionxn.cinematiccreeper.util.mixins.PlayerData;
 import me.julionxn.cinematiccreeper.managers.paths.PlayerPathState;
+import me.julionxn.cinematiccreeper.util.mixins.PlayerData;
 import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;

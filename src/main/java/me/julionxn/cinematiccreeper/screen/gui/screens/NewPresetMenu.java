@@ -106,7 +106,7 @@ public class NewPresetMenu extends ExtendedScreen {
         if (selectedEntity.equals(NpcEntity.ENTITY_ID)) {
             addDrawableChild(skinUrlField);
             ButtonWidget createPreset = ButtonWidget.builder(Text.of("Crear"), button -> {
-                if (PresetsManager.getInstance().getPresetWithId(nameTextField.getText()).isPresent()){
+                if (PresetsManager.getInstance().getPresetWithId(nameTextField.getText()).isPresent()) {
                     nameTextField.setText("");
                     return;
                 }
@@ -120,7 +120,7 @@ public class NewPresetMenu extends ExtendedScreen {
             addDrawableChild(createPreset);
         } else {
             ButtonWidget createPreset = ButtonWidget.builder(Text.of("Crear"), button -> {
-                if (PresetsManager.getInstance().getPresetWithId(nameTextField.getText()).isPresent()){
+                if (PresetsManager.getInstance().getPresetWithId(nameTextField.getText()).isPresent()) {
                     nameTextField.setText("");
                     return;
                 }

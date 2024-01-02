@@ -22,7 +22,7 @@ public class PerformPathGoal extends Goal {
         this.entity = entity;
     }
 
-    public void reset(){
+    public void reset() {
         path = ((PathAwareData) entity).cinematiccreeper$getPath();
         if (path == null) return;
         pathActions = path.getActions();
@@ -47,13 +47,13 @@ public class PerformPathGoal extends Goal {
         performAction(0);
     }
 
-    private void performAction(double yOffset){
+    private void performAction(double yOffset) {
         PathAction pathAction = pathActions.get(currentAction);
         Vec3d pos = pathAction.getPos();
         this.entity.getNavigation().startMovingTo(pos.x, pos.y + yOffset, pos.z, 1);
     }
 
-    private boolean reachedCurrentAction(){
+    private boolean reachedCurrentAction() {
         return entity.getPos().isInRange(path.getActions().get(currentAction).getPos(), 1.75);
     }
 
@@ -67,7 +67,7 @@ public class PerformPathGoal extends Goal {
         if (path == null) return;
         if (!reachedCurrentAction()) {
             tryingTicks++;
-            if (shouldResetPath()){
+            if (shouldResetPath()) {
                 performAction(1);
             }
         } else {

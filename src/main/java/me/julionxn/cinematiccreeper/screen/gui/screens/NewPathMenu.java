@@ -4,7 +4,6 @@ import me.julionxn.cinematiccreeper.CinematicCreeper;
 import me.julionxn.cinematiccreeper.managers.paths.Path;
 import me.julionxn.cinematiccreeper.managers.paths.PlayerPathState;
 import me.julionxn.cinematiccreeper.util.mixins.PlayerData;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -54,7 +53,7 @@ public class NewPathMenu extends Screen {
         ButtonWidget addButton = ButtonWidget.builder(Text.of("Empezar"), button -> {
             ((PlayerData) player).cinematiccreeper$setPathState(new PlayerPathState(state,
                     new Path(idTextField.getText(), type, entityId)
-                    ));
+            ));
             close();
         }).dimensions(centerX - 120, centerY + 20, 100, 20).build();
         addDrawableChild(addButton);
@@ -68,6 +67,6 @@ public class NewPathMenu extends Screen {
         int y = type == Path.Type.PING_PONG ? centerY + 20 : centerY;
         context.drawTexture(new Identifier(CinematicCreeper.MOD_ID, "point.png"),
                 x, y, 0, 0, 0, 20, 20, 20, 20
-                );
+        );
     }
 }

@@ -26,21 +26,20 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 
 public abstract class NpcTypeMenu extends ExtendedScreen {
 
     private static final Identifier BACKGROUND = new Identifier(CinematicCreeper.MOD_ID, "textures/gui/npc_type_bg.png");
     protected final PresetOptions presetOptions;
     protected final Entity entity;
+    protected final String entityType;
     private final Consumer<PresetOptions> onReady;
     private final Runnable onCancel;
-    protected final String entityType;
+    private final List<Tab> tabs = new ArrayList<>();
     protected int x;
     protected int y;
     protected int width = 300;
     protected int height = 200;
-    private final List<Tab> tabs = new ArrayList<>();
 
     public NpcTypeMenu(String entityType, Consumer<PresetOptions> onReady, Runnable onCancel, PresetOptions presetOptions, @Nullable Entity entity) {
         super(Text.of("NpcTypeMenu"));
@@ -137,7 +136,7 @@ public abstract class NpcTypeMenu extends ExtendedScreen {
         addDrawableChild(resetButton);
     }
 
-    protected void addTab(String text, BiConsumer<ButtonWidget, MinecraftClient> onClick, BiPredicate<String, MinecraftClient> predicate){
+    protected void addTab(String text, BiConsumer<ButtonWidget, MinecraftClient> onClick, BiPredicate<String, MinecraftClient> predicate) {
         tabs.add(new Tab(text, onClick, predicate));
     }
 
@@ -157,7 +156,8 @@ public abstract class NpcTypeMenu extends ExtendedScreen {
 
     }
 
-    private record Tab(String text, BiConsumer<ButtonWidget, MinecraftClient> onClick, BiPredicate<String, MinecraftClient> predicate) {
+    private record Tab(String text, BiConsumer<ButtonWidget, MinecraftClient> onClick,
+                       BiPredicate<String, MinecraftClient> predicate) {
 
     }
 }

@@ -16,7 +16,7 @@ public class Keybindings {
     public static KeyBinding secondAction;
     public static KeyBinding acceptAction;
 
-    public static void register(){
+    public static void register() {
         firstAction = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 KEY_FIRST_ACTION,
                 InputUtil.Type.KEYSYM,

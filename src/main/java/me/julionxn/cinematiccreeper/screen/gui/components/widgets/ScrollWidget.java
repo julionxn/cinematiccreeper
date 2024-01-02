@@ -49,7 +49,7 @@ public class ScrollWidget extends ExtendedWidget {
         addDrawableChild(downList);
     }
 
-    protected void addItems(){
+    protected void addItems() {
         int current = 0;
         for (int i = showingFrom; i - showingFrom < Math.min(itemsPerPage, size); i++) {
             ScrollItem scrollItem = scrollItems.get(i);
@@ -76,7 +76,7 @@ public class ScrollWidget extends ExtendedWidget {
         renderBar(context);
     }
 
-    protected void renderBar(DrawContext context){
+    protected void renderBar(DrawContext context) {
         int totalHeight = 20 * (itemsPerPage - 2);
         int barHeight = (int) ((itemsPerPage / (float) scrollItems.size()) * totalHeight);
         totalHeight -= barHeight;

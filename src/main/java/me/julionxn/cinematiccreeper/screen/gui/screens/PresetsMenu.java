@@ -7,7 +7,6 @@ import me.julionxn.cinematiccreeper.managers.presets.PresetOptionsHandlers;
 import me.julionxn.cinematiccreeper.networking.AllPackets;
 import me.julionxn.cinematiccreeper.screen.gui.components.ExtendedScreen;
 import me.julionxn.cinematiccreeper.screen.gui.components.widgets.RemovableItemsScrollWidget;
-import me.julionxn.cinematiccreeper.screen.gui.components.widgets.ScrollWidget;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -29,7 +28,7 @@ public class PresetsMenu extends ExtendedScreen {
         this.blockPos = blockPos;
     }
 
-    private void setItems(){
+    private void setItems() {
         scrollItems.clear();
         for (Preset preset : PresetsManager.getInstance().getPresets()) {
             String entityType = preset.getEntityType();

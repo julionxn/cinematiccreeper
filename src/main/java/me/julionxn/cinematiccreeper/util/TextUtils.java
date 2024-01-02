@@ -18,7 +18,7 @@ public class TextUtils {
         return builder.toString().trim();
     }
 
-    public static String parseKeybind(KeyBinding keyBinding){
+    public static String parseKeybind(KeyBinding keyBinding) {
         String text = keyBinding.getBoundKeyTranslationKey();
         Pattern pattern = Pattern.compile("key\\.keyboard\\.(\\w)");
         Matcher matcher = pattern.matcher(text);
