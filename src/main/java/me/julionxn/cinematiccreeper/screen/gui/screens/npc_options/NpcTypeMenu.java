@@ -117,6 +117,7 @@ public abstract class NpcTypeMenu extends ExtendedScreen {
                 PacketByteBuf buf = PacketByteBufs.create();
                 buf.writeUuid(entity.getUuid());
                 ClientPlayNetworking.send(AllPackets.C2S_REMOVE_ENTITY, buf);
+                close();
             });
         }).dimensions(x + width, y + 20, 20, 20).build();
         addDrawableChild(removeButton);
@@ -129,6 +130,7 @@ public abstract class NpcTypeMenu extends ExtendedScreen {
                 buf.writeBoolean(true);
                 PresetOptionsHandlers.addToBuf(buf, presetOptions1);
                 ClientPlayNetworking.send(AllPackets.C2S_APPLY_PRESET_OPTIONS, buf);
+                close();
             });
         }).dimensions(x + width, y + 40, 20, 20).build();
         addDrawableChild(resetButton);

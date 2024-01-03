@@ -24,9 +24,10 @@ public class PresetsManager extends SerializableJsonManager<PresetsManager> {
     }
 
     @Override
-    protected void onLoad(PresetsManager data) {
-        if (data == null) return;
-        presets = data.presets;
+    protected void onLoad(Optional<PresetsManager> dataOptional) {
+        dataOptional.ifPresent(data -> {
+            presets = data.presets;
+        });
     }
 
     public void addPreset(Preset preset) {

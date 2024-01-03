@@ -32,15 +32,16 @@ public class NpcsManager extends SerializableJsonManager<NpcsManager> {
     }
 
     @Override
-    protected void onLoad(NpcsManager data) {
+    protected void onLoad(Optional<NpcsManager> dataOptional) {
         loadedEntityTypes.put(NpcEntity.ENTITY_ID, AllEntities.NPC_ENTITY);
         for (EntityType<?> entityType : Registries.ENTITY_TYPE) {
             String identifier = Registries.ENTITY_TYPE.getId(entityType).toString();
             if (identifier.equals(NpcEntity.ENTITY_ID)) continue;
             loadedEntityTypes.put(identifier, entityType);
         }
-        if (data == null) return;
-        trackedEntities = data.trackedEntities;
+        dataOptional.ifPresent(data -> {
+            trackedEntities = data.trackedEntities;
+        });
     }
 
     public List<String> getLoadedEntityTypes() {

@@ -61,7 +61,7 @@ public class CachedSkin implements Serializable {
                 .handle((identifier, throwable) -> {
                     if (throwable != null) {
                         texture = DefaultSkinHelper.getTexture();
-                        CinematicCreeper.LOGGER.error("Failed to load skin texture from Url:" + url, throwable);
+                        CinematicCreeper.LOGGER.error("Failed to load skin texture from Url: " + url, throwable);
                         return null;
                     }
                     return identifier;

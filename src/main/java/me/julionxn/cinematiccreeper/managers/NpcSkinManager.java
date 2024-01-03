@@ -1,7 +1,8 @@
-package me.julionxn.cinematiccreeper.managers.skins;
+package me.julionxn.cinematiccreeper.managers;
 
 import me.julionxn.cinematiccreeper.CinematicCreeper;
 import me.julionxn.cinematiccreeper.entity.NpcEntity;
+import me.julionxn.cinematiccreeper.managers.skins.CachedSkin;
 import me.julionxn.cinematiccreeper.util.mixins.NpcData;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -10,8 +11,8 @@ import net.minecraft.util.Identifier;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -31,7 +32,7 @@ public class NpcSkinManager {
     }
 
     public void load() {
-        cachedSkinsFolder = FabricLoader.getInstance().getConfigDir().resolve("cache").toFile();
+        cachedSkinsFolder = FabricLoader.getInstance().getConfigDir().resolve("cc_cache").toFile();
         if (cachedSkinsFolder.mkdir()) return;
         File[] skinFiles = cachedSkinsFolder.listFiles();
         if (skinFiles == null) return;
@@ -45,9 +46,15 @@ public class NpcSkinManager {
     }
 
     public void save() {
-        cachedSkinsFolder.mkdir();
+        if (!cachedSkinsFolder.exists()){
+            if (!cachedSkinsFolder.mkdir()){
+                CinematicCreeper.LOGGER.error("Cache folder cannot be created.");
+                return;
+            }
+        }
+        Path path = cachedSkinsFolder.toPath();
         for (CachedSkin cachedSkin : cachedSkins.values()) {
-            CachedSkin.save(cachedSkin, cachedSkinsFolder.toPath().resolve(cachedSkin.getId().hashCode() + ".skin").toFile());
+            CachedSkin.save(cachedSkin, path.resolve(cachedSkin.getId().hashCode() + ".skin").toFile());
         }
     }
 
@@ -55,7 +62,7 @@ public class NpcSkinManager {
         String npcId = ((NpcData) entity).cinematiccreeper$getId();
         try {
             URL url = new URL(entity.getSkinUrl());
-            String id = cleanURL(url);
+            String id = getIdFromUrl(url);
             Identifier texture = cachedSkins.computeIfAbsent(id, key -> new CachedSkin(id, url)).loadAndGetTexture();
             entity.setSkin(texture);
         } catch (IOException e) {
@@ -63,10 +70,13 @@ public class NpcSkinManager {
         }
     }
 
-    public String cleanURL(URL url) throws UnsupportedEncodingException {
-        String string = url.toString();
+    public String getIdFromUrl(URL url){
+        return getIdFromUrl(url.toString());
+    }
+
+    public String getIdFromUrl(String url) {
         Pattern pattern = Pattern.compile("[^a-z0-9_]");
-        Matcher matcher = pattern.matcher(string.toLowerCase());
+        Matcher matcher = pattern.matcher(url.toLowerCase());
         return matcher.replaceAll("_");
     }
 

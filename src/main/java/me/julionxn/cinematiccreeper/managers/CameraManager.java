@@ -3,7 +3,6 @@ package me.julionxn.cinematiccreeper.managers;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.option.SimpleOption;
 
 @Environment(EnvType.CLIENT)
 public class CameraManager {

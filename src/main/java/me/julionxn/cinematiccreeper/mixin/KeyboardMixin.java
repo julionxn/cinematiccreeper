@@ -1,7 +1,7 @@
 package me.julionxn.cinematiccreeper.mixin;
 
-import me.julionxn.cinematiccreeper.keybinds.Keybindings;
 import me.julionxn.cinematiccreeper.keybinds.InputHandlers;
+import me.julionxn.cinematiccreeper.keybinds.Keybindings;
 import me.julionxn.cinematiccreeper.managers.paths.PlayerPathState;
 import me.julionxn.cinematiccreeper.util.mixins.PlayerData;
 import net.minecraft.client.Keyboard;

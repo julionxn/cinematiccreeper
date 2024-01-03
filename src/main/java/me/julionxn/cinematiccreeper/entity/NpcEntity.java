@@ -1,6 +1,6 @@
 package me.julionxn.cinematiccreeper.entity;
 
-import me.julionxn.cinematiccreeper.managers.skins.NpcSkinManager;
+import me.julionxn.cinematiccreeper.managers.NpcSkinManager;
 import net.minecraft.client.util.DefaultSkinHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
