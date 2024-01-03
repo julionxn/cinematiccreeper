@@ -39,7 +39,6 @@ public class C2S_SpawnPreset {
             }
             PresetOptionsHandlers.applyPresetOptions(entity, presetOptions);
             world.spawnEntity(entity);
-            NpcsManager.getInstance().trackEntity((ServerWorld) world, entity);
         });
 
     }

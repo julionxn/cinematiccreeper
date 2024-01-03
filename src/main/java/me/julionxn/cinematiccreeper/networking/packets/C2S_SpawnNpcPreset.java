@@ -36,7 +36,6 @@ public class C2S_SpawnNpcPreset {
             ((MobNpcData) entity).cinematiccreeper$setSpawnPosition(spawnPosition.toVector3f());
             PresetOptionsHandlers.applyPresetOptions(entity, presetOptions);
             world.spawnEntity(entity);
-            NpcsManager.getInstance().trackEntity((ServerWorld) world, entity);
         });
 
     }

@@ -17,18 +17,15 @@ public class NpcsManager extends SerializableJsonManager<NpcsManager> {
 
     private final Map<String, EntityType<?>> loadedEntityTypes = new HashMap<>();
     @Expose
-    private Map<String, List<UUID>> trackedEntities = new HashMap<>();
+    private Map<String, Boolean> cachedMobEntities = new HashMap<>();
+    @Expose Map<String, Boolean> cachedPathAwareEntities = new HashMap<>();
 
     private NpcsManager() {
-        super("cc_tracked.json", NpcsManager.class);
+        super("cc_types.json", NpcsManager.class);
     }
 
     public static NpcsManager getInstance() {
         return NpcsManager.SingletonHolder.INSTANCE;
-    }
-
-    public static String worldIdentifier(ServerWorld world) {
-        return world.worldProperties.getLevelName();
     }
 
     @Override
@@ -50,21 +47,26 @@ public class NpcsManager extends SerializableJsonManager<NpcsManager> {
         return loadedEntityTypes.get(id);
     }
 
-    public void trackEntity(ServerWorld serverWorld, Entity entity) {
-        String worldHash = worldIdentifier(serverWorld);
-        trackedEntities.computeIfAbsent(worldHash, k -> new ArrayList<>()).add(entity.getUuid());
-    }
-
     public boolean isMobEntity(World world, String sEntityType) {
+        if (cachedMobEntities.containsKey(sEntityType)) {
+            return cachedMobEntities.get(sEntityType);
+        }
         EntityType<?> entityType = loadedEntityTypes.get(sEntityType);
         Entity entity = entityType.create(world);
-        return entity instanceof MobEntity;
+        boolean isMobEntity = entity instanceof MobEntity;
+        cachedMobEntities.put(sEntityType, isMobEntity);
+        return isMobEntity;
     }
 
     public boolean isPathAwareEntity(World world, String sEntityType) {
+        if (cachedPathAwareEntities.containsKey(sEntityType)) {
+            return cachedPathAwareEntities.get(sEntityType);
+        }
         EntityType<?> entityType = loadedEntityTypes.get(sEntityType);
         Entity entity = entityType.create(world);
-        return entity instanceof PathAwareEntity;
+        boolean isPathAware = entity instanceof PathAwareEntity;
+        cachedPathAwareEntities.put(sEntityType, isPathAware);
+        return isPathAware;
     }
 
     private static final class SingletonHolder {
