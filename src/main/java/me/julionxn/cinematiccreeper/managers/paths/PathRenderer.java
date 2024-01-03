@@ -20,8 +20,8 @@ public class PathRenderer {
 
     private static final Identifier TEXTURE = new Identifier(CinematicCreeper.MOD_ID, "point.png");
 
-    public static void render(WorldRenderContext context, PlayerPathState playerPathState) {
-        Path path = playerPathState.path();
+    public static void render(WorldRenderContext context, PlayerPathHolder playerPathHolder) {
+        Path path = playerPathHolder.path();
         List<PathAction> pathActions = path.getActions();
         if (pathActions.size() > 1) {
             Vec3d firstPos = pathActions.get(0).getPos().add(0, 0.5, 0);

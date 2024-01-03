@@ -3,7 +3,7 @@ package me.julionxn.cinematiccreeper.keybinds;
 import me.julionxn.cinematiccreeper.managers.CameraManager;
 import me.julionxn.cinematiccreeper.managers.paths.Path;
 import me.julionxn.cinematiccreeper.managers.paths.PathAction;
-import me.julionxn.cinematiccreeper.managers.paths.PlayerPathState;
+import me.julionxn.cinematiccreeper.managers.paths.PlayerPathHolder;
 import me.julionxn.cinematiccreeper.util.mixins.PathAwareData;
 import me.julionxn.cinematiccreeper.util.mixins.PlayerData;
 import net.minecraft.client.MinecraftClient;
@@ -21,13 +21,13 @@ public class InputHandlers {
             Data data = dataOptional.get();
             PlayerEntity player = client.player;
             if (player == null) return;
-            if (data.state == PlayerPathState.State.ADDING) {
+            if (data.state == PlayerPathHolder.State.ADDING) {
                 Path path = data.pathState.path();
                 PathAction pathAction = PathAction.getCurrentPathAction(player, false);
                 path.addAction(pathAction);
                 return;
             }
-            if (data.state == PlayerPathState.State.RECORDING) {
+            if (data.state == PlayerPathHolder.State.RECORDING) {
 
             }
             return;
@@ -40,7 +40,7 @@ public class InputHandlers {
         Optional<Data> dataOptional = shouldHandlePaths(client);
         if (dataOptional.isPresent()){
             Data data = dataOptional.get();
-            if (data.state == PlayerPathState.State.ADDING) {
+            if (data.state == PlayerPathHolder.State.ADDING) {
                 Path path = data.pathState.path();
                 path.popAction();
             }
@@ -57,13 +57,13 @@ public class InputHandlers {
         if (dataOptional.isPresent()) {
             Data data = dataOptional.get();
             Path path = data.pathState.path();
-            if (data.state == PlayerPathState.State.ADDING) {
+            if (data.state == PlayerPathHolder.State.ADDING) {
                 Entity entity = ((PlayerEntity) data.playerData).getWorld().getEntityById(path.getEntityId());
-                data.playerData.cinematiccreeper$setPathState(PlayerPathState.none());
+                data.playerData.cinematiccreeper$setPathHolder(PlayerPathHolder.none());
                 if (entity == null) return;
                 ((PathAwareData) entity).cinematiccreeper$addPath(path);
             }
-            if (data.state == PlayerPathState.State.RECORDING) {
+            if (data.state == PlayerPathHolder.State.RECORDING) {
 
             }
             return;
@@ -85,13 +85,13 @@ public class InputHandlers {
         PlayerEntity player = client.player;
         if (player == null) return Optional.empty();
         PlayerData playerData = (PlayerData) player;
-        PlayerPathState playerPathState = playerData.cinematiccreeper$getPathState();
-        PlayerPathState.State state = playerPathState.state();
-        if (state == PlayerPathState.State.NONE) return Optional.empty();
-        return Optional.of(new Data(playerData, playerPathState, state));
+        PlayerPathHolder playerPathHolder = playerData.cinematiccreeper$getPathHolder();
+        PlayerPathHolder.State state = playerPathHolder.state();
+        if (state == PlayerPathHolder.State.NONE) return Optional.empty();
+        return Optional.of(new Data(playerData, playerPathHolder, state));
     }
 
-    private record Data(PlayerData playerData, PlayerPathState pathState, PlayerPathState.State state) {
+    private record Data(PlayerData playerData, PlayerPathHolder pathState, PlayerPathHolder.State state) {
 
     }
 

@@ -2,7 +2,7 @@ package me.julionxn.cinematiccreeper.screen.hud;
 
 import me.julionxn.cinematiccreeper.CinematicCreeper;
 import me.julionxn.cinematiccreeper.keybinds.Keybindings;
-import me.julionxn.cinematiccreeper.managers.paths.PlayerPathState;
+import me.julionxn.cinematiccreeper.managers.paths.PlayerPathHolder;
 import me.julionxn.cinematiccreeper.util.TextUtils;
 import me.julionxn.cinematiccreeper.util.mixins.PlayerData;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
@@ -23,9 +23,9 @@ public class NewPathHud implements HudRenderCallback {
         PlayerEntity player = client.player;
         if (player == null) return;
         PlayerData playerData = (PlayerData) player;
-        PlayerPathState pathState = playerData.cinematiccreeper$getPathState();
-        PlayerPathState.State state = pathState.state();
-        if (state == PlayerPathState.State.NONE) return;
+        PlayerPathHolder holder = playerData.cinematiccreeper$getPathHolder();
+        PlayerPathHolder.State state = holder.state();
+        if (state == PlayerPathHolder.State.NONE) return;
 
         String firstAction = TextUtils.parseKeybind(Keybindings.firstAction);
         String secondAction = TextUtils.parseKeybind(Keybindings.secondAction);
@@ -33,11 +33,11 @@ public class NewPathHud implements HudRenderCallback {
 
         context.drawTextWithShadow(client.textRenderer, "ESC: Salir",
                 20, 20, 0xffffff);
-        Identifier texture = state == PlayerPathState.State.ADDING ? ADDING_TEXTURE : RECORDING_TEXTURE;
+        Identifier texture = state == PlayerPathHolder.State.ADDING ? ADDING_TEXTURE : RECORDING_TEXTURE;
         context.drawTexture(texture, context.getScaledWindowWidth() - 52,
                 20, 0, 0, 0,
                 32, 32, 32, 32);
-        if (state == PlayerPathState.State.ADDING) {
+        if (state == PlayerPathHolder.State.ADDING) {
             context.drawTextWithShadow(client.textRenderer, firstAction + ": Añadir punto",
                     20, 36, 0xffffff);
             context.drawTextWithShadow(client.textRenderer, secondAction + ": Eliminar último punto",

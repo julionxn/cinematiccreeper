@@ -2,7 +2,7 @@ package me.julionxn.cinematiccreeper.mixin;
 
 import me.julionxn.cinematiccreeper.keybinds.InputHandlers;
 import me.julionxn.cinematiccreeper.keybinds.Keybindings;
-import me.julionxn.cinematiccreeper.managers.paths.PlayerPathState;
+import me.julionxn.cinematiccreeper.managers.paths.PlayerPathHolder;
 import me.julionxn.cinematiccreeper.util.mixins.PlayerData;
 import net.minecraft.client.Keyboard;
 import net.minecraft.client.MinecraftClient;
@@ -28,8 +28,8 @@ public abstract class KeyboardMixin {
             PlayerEntity player = client.player;
             if (player == null) return;
             PlayerData playerData = (PlayerData) player;
-            if (playerData.cinematiccreeper$getPathState().state() != PlayerPathState.State.NONE) {
-                playerData.cinematiccreeper$setPathState(PlayerPathState.none());
+            if (playerData.cinematiccreeper$getPathHolder().state() != PlayerPathHolder.State.NONE) {
+                playerData.cinematiccreeper$setPathHolder(PlayerPathHolder.none());
             }
             return;
         }

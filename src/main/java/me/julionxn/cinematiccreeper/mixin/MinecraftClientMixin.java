@@ -1,6 +1,6 @@
 package me.julionxn.cinematiccreeper.mixin;
 
-import me.julionxn.cinematiccreeper.managers.paths.PlayerPathState;
+import me.julionxn.cinematiccreeper.managers.paths.PlayerPathHolder;
 import me.julionxn.cinematiccreeper.util.mixins.PlayerData;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -22,7 +22,7 @@ public abstract class MinecraftClientMixin {
     public void cancelESC(boolean pauseOnly, CallbackInfo ci) {
         if (player == null) return;
         PlayerData accessor = (PlayerData) player;
-        if (accessor.cinematiccreeper$getPathState().state() == PlayerPathState.State.NONE) return;
+        if (accessor.cinematiccreeper$getPathHolder().state() == PlayerPathHolder.State.NONE) return;
         ci.cancel();
     }
 

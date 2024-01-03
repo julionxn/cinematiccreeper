@@ -2,7 +2,7 @@ package me.julionxn.cinematiccreeper.screen.gui.screens;
 
 import me.julionxn.cinematiccreeper.CinematicCreeper;
 import me.julionxn.cinematiccreeper.managers.paths.Path;
-import me.julionxn.cinematiccreeper.managers.paths.PlayerPathState;
+import me.julionxn.cinematiccreeper.managers.paths.PlayerPathHolder;
 import me.julionxn.cinematiccreeper.util.mixins.PlayerData;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -15,10 +15,10 @@ import net.minecraft.util.Identifier;
 public class NewPathMenu extends Screen {
 
     private final int entityId;
-    private final PlayerPathState.State state;
+    private final PlayerPathHolder.State state;
     private Path.Type type = Path.Type.LOOP;
 
-    public NewPathMenu(int entityId, PlayerPathState.State state) {
+    public NewPathMenu(int entityId, PlayerPathHolder.State state) {
         super(Text.of("NewPath"));
         this.entityId = entityId;
         this.state = state;
@@ -51,7 +51,7 @@ public class NewPathMenu extends Screen {
         addDrawableChild(pingPongButton);
         addDrawableChild(loopButton);
         ButtonWidget addButton = ButtonWidget.builder(Text.of("Empezar"), button -> {
-            ((PlayerData) player).cinematiccreeper$setPathState(new PlayerPathState(state,
+            ((PlayerData) player).cinematiccreeper$setPathHolder(new PlayerPathHolder(state,
                     new Path(idTextField.getText(), type, entityId)
             ));
             close();

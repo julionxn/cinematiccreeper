@@ -1,11 +1,11 @@
 package me.julionxn.cinematiccreeper.util.mixins;
 
-import me.julionxn.cinematiccreeper.managers.paths.PlayerPathState;
+import me.julionxn.cinematiccreeper.managers.paths.PlayerPathHolder;
 
 public interface PlayerData {
 
-    void cinematiccreeper$setPathState(PlayerPathState state);
+    void cinematiccreeper$setPathHolder(PlayerPathHolder state);
 
-    PlayerPathState cinematiccreeper$getPathState();
+    PlayerPathHolder cinematiccreeper$getPathHolder();
 
 }

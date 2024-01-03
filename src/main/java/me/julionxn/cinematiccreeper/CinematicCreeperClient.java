@@ -6,7 +6,7 @@ import me.julionxn.cinematiccreeper.keybinds.Keybindings;
 import me.julionxn.cinematiccreeper.managers.NpcSkinManager;
 import me.julionxn.cinematiccreeper.managers.PresetsManager;
 import me.julionxn.cinematiccreeper.managers.paths.PathRenderer;
-import me.julionxn.cinematiccreeper.managers.paths.PlayerPathState;
+import me.julionxn.cinematiccreeper.managers.paths.PlayerPathHolder;
 import me.julionxn.cinematiccreeper.networking.AllPackets;
 import me.julionxn.cinematiccreeper.screen.hud.NewPathHud;
 import me.julionxn.cinematiccreeper.util.mixins.PlayerData;
@@ -34,9 +34,9 @@ public class CinematicCreeperClient implements ClientModInitializer {
             if (client == null) return;
             PlayerEntity player = client.player;
             if (player == null) return;
-            PlayerPathState state = ((PlayerData) player).cinematiccreeper$getPathState();
-            if (state.state() == PlayerPathState.State.NONE) return;
-            PathRenderer.render(context, state);
+            PlayerPathHolder holder = ((PlayerData) player).cinematiccreeper$getPathHolder();
+            if (holder.state() == PlayerPathHolder.State.NONE) return;
+            PathRenderer.render(context, holder);
         });
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
             PresetsManager.getInstance().save();

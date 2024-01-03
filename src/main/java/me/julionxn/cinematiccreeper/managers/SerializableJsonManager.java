@@ -2,6 +2,7 @@ package me.julionxn.cinematiccreeper.managers;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.Expose;
 import me.julionxn.cinematiccreeper.CinematicCreeper;
 import net.fabricmc.loader.api.FabricLoader;
 
@@ -9,6 +10,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Optional;
 
 public abstract class SerializableJsonManager<T extends SerializableJsonManager<T>> {
@@ -29,17 +32,30 @@ public abstract class SerializableJsonManager<T extends SerializableJsonManager<
 
     public void load() {
         try {
-            Optional<T> data = configFile.exists() ? Optional.ofNullable(GSON.fromJson(new FileReader(configFile), clazz)) : Optional.empty();
-            onLoad(data);
+            T data = GSON.fromJson(new FileReader(configFile), clazz);
+            if (data == null) return;
+            setValues(data);
             if (!configFile.exists()) {
                 save();
             }
-        } catch (IOException e) {
+        } catch (IOException | IllegalAccessException e) {
             CinematicCreeper.LOGGER.error("Something went wrong while loading the config.", e);
         }
     }
 
-    protected abstract void onLoad(Optional<T> dataOptional);
+    private void setValues(T data) throws IllegalAccessException {
+        T instance = getCurrentInstance();
+        Field[] fields = clazz.getDeclaredFields();
+        for (Field field : fields) {
+            if (!field.isAnnotationPresent(Expose.class)) continue;
+            int modifiers = field.getModifiers();
+            if (Modifier.isStatic(modifiers) || Modifier.isTransient(modifiers)) continue;
+            field.setAccessible(true);
+            field.set(instance, field.get(data));
+        }
+    }
+
+    protected abstract T getCurrentInstance();
 
     public void save() {
         try (FileWriter fileWriter = new FileWriter(configFile)) {
