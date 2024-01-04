@@ -28,6 +28,11 @@ public class PresetsManager extends SerializableJsonManager<PresetsManager> {
         return this;
     }
 
+    @Override
+    protected void afterLoad() {
+
+    }
+
     public void addPreset(Preset preset) {
         presets.add(preset);
     }

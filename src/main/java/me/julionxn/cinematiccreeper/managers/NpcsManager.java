@@ -8,10 +8,11 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.registry.Registries;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class NpcsManager extends SerializableJsonManager<NpcsManager> {
 
@@ -30,13 +31,17 @@ public class NpcsManager extends SerializableJsonManager<NpcsManager> {
 
     @Override
     protected NpcsManager getCurrentInstance() {
+        return this;
+    }
+
+    @Override
+    protected void afterLoad() {
         loadedEntityTypes.put(NpcEntity.ENTITY_ID, AllEntities.NPC_ENTITY);
         for (EntityType<?> entityType : Registries.ENTITY_TYPE) {
             String identifier = Registries.ENTITY_TYPE.getId(entityType).toString();
             if (identifier.equals(NpcEntity.ENTITY_ID)) continue;
             loadedEntityTypes.put(identifier, entityType);
         }
-        return this;
     }
 
     public List<String> getLoadedEntityTypes() {
@@ -48,6 +53,7 @@ public class NpcsManager extends SerializableJsonManager<NpcsManager> {
     }
 
     public boolean isMobEntity(World world, String sEntityType) {
+        System.out.println(loadedEntityTypes);
         if (cachedMobEntities.containsKey(sEntityType)) {
             return cachedMobEntities.get(sEntityType);
         }

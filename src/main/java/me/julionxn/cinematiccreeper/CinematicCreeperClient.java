@@ -3,6 +3,7 @@ package me.julionxn.cinematiccreeper;
 import me.julionxn.cinematiccreeper.entity.AllEntities;
 import me.julionxn.cinematiccreeper.entity.NpcEntityRenderer;
 import me.julionxn.cinematiccreeper.keybinds.Keybindings;
+import me.julionxn.cinematiccreeper.managers.NpcPosesManager;
 import me.julionxn.cinematiccreeper.managers.NpcSkinManager;
 import me.julionxn.cinematiccreeper.managers.PresetsManager;
 import me.julionxn.cinematiccreeper.managers.paths.PathRenderer;
@@ -25,6 +26,7 @@ public class CinematicCreeperClient implements ClientModInitializer {
     public void onInitializeClient() {
         PresetsManager.getInstance().load();
         NpcSkinManager.getInstance().load();
+        NpcPosesManager.getInstance().load();
         EntityRendererRegistry.register(AllEntities.NPC_ENTITY, NpcEntityRenderer::new);
         AllPackets.registerS2CPackets();
         Keybindings.register();
@@ -41,8 +43,13 @@ public class CinematicCreeperClient implements ClientModInitializer {
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
             PresetsManager.getInstance().save();
             NpcSkinManager.getInstance().save();
+            NpcPosesManager.getInstance().save();
         });
-        ClientLifecycleEvents.CLIENT_STOPPING.register(client -> PresetsManager.getInstance().save());
+        ClientLifecycleEvents.CLIENT_STOPPING.register(client -> {
+            PresetsManager.getInstance().save();
+            NpcSkinManager.getInstance().save();
+            NpcPosesManager.getInstance().save();
+        });
     }
 
 }

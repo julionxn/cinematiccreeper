@@ -35,11 +35,11 @@ public class RemovableItemsScrollWidget extends ExtendedWidget {
         this.itemsHeight = itemsHeight;
         this.itemsPerPage = itemsPerPage;
         this.itemsSupplier = supplier;
-        retreiveItems();
+        retrieveItems();
         this.isScroll = size > itemsPerPage;
     }
 
-    private void retreiveItems() {
+    private void retrieveItems() {
         scrollItems = itemsSupplier.get();
         size = scrollItems.size();
     }
@@ -70,7 +70,7 @@ public class RemovableItemsScrollWidget extends ExtendedWidget {
                     Text.of("R"),
                     button -> {
                         scrollItem.onRemove.accept(button);
-                        retreiveItems();
+                        retrieveItems();
                         clear();
                     }
             ).dimensions(x + itemsWidth, y + (current++ * itemsHeight), 20, 20).build();

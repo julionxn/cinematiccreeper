@@ -84,6 +84,8 @@ public abstract class ExtendedScreen extends Screen {
 
     public void clear() {
         clearChildren();
+        widgets.clear();
+        addWidgets();
         for (ExtendedWidget widget : widgets) {
             widget.init();
         }

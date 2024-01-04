@@ -12,7 +12,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.Optional;
 
 public abstract class SerializableJsonManager<T extends SerializableJsonManager<T>> {
 
@@ -32,12 +31,14 @@ public abstract class SerializableJsonManager<T extends SerializableJsonManager<
 
     public void load() {
         try {
+            if (!configFile.exists()) {
+                save();
+                return;
+            }
             T data = GSON.fromJson(new FileReader(configFile), clazz);
             if (data == null) return;
             setValues(data);
-            if (!configFile.exists()) {
-                save();
-            }
+            afterLoad();
         } catch (IOException | IllegalAccessException e) {
             CinematicCreeper.LOGGER.error("Something went wrong while loading the config.", e);
         }
@@ -56,6 +57,7 @@ public abstract class SerializableJsonManager<T extends SerializableJsonManager<
     }
 
     protected abstract T getCurrentInstance();
+    protected abstract void afterLoad();
 
     public void save() {
         try (FileWriter fileWriter = new FileWriter(configFile)) {

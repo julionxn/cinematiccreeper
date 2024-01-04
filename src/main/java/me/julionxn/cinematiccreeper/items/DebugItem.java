@@ -22,6 +22,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 
 public class DebugItem extends Item {
+
     public DebugItem() {
         super(new FabricItemSettings());
     }

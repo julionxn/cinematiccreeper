@@ -1,6 +1,5 @@
 package me.julionxn.cinematiccreeper.screen.gui.components.widgets;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import me.julionxn.cinematiccreeper.CinematicCreeper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -30,10 +29,8 @@ public class ToggleWidget extends ClickableWidget {
         if (client == null) return;
         drawText(context, client.textRenderer);
         Identifier identifier = active ? ON_TOGGLE_TEXTURE : OFF_TOGGLE_TEXTURE;
-        RenderSystem.enableBlend();
         context.drawTexture(identifier, getX() + getWidth() - 40, getY(),
                 0, 0, 0, 40, 20, 40, 20);
-        RenderSystem.disableBlend();
     }
 
     private void drawText(DrawContext context, TextRenderer textRenderer) {

@@ -2,7 +2,6 @@ package me.julionxn.cinematiccreeper.networking.packets;
 
 import me.julionxn.cinematiccreeper.entity.AllEntities;
 import me.julionxn.cinematiccreeper.entity.NpcEntity;
-import me.julionxn.cinematiccreeper.managers.NpcsManager;
 import me.julionxn.cinematiccreeper.managers.presets.PresetOptions;
 import me.julionxn.cinematiccreeper.managers.presets.PresetOptionsHandlers;
 import me.julionxn.cinematiccreeper.util.mixins.MobNpcData;
@@ -12,7 +11,6 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;

@@ -1,6 +1,7 @@
 package me.julionxn.cinematiccreeper.screen.gui.screens.npc_options;
 
 import me.julionxn.cinematiccreeper.CinematicCreeper;
+import me.julionxn.cinematiccreeper.entity.NpcEntity;
 import me.julionxn.cinematiccreeper.managers.NpcsManager;
 import me.julionxn.cinematiccreeper.managers.PresetsManager;
 import me.julionxn.cinematiccreeper.managers.presets.PresetOptions;
@@ -70,7 +71,7 @@ public abstract class NpcTypeMenu extends ExtendedScreen {
         ButtonWidget saveButton = ButtonWidget.builder(Text.of("Guardar"), button -> onReady.accept(presetOptions))
                 .dimensions(x + width - 120, y + height, 100, 20).build();
         addDrawableChild(saveButton);
-
+        tabs.clear();
         addTab("Básico", (buttonWidget, minecraftClient) -> {
             if (minecraftClient.currentScreen == null) return;
             if (minecraftClient.currentScreen.getClass() == BasicTypeMenu.class) return;
@@ -98,6 +99,12 @@ public abstract class NpcTypeMenu extends ExtendedScreen {
             World world = player.getWorld();
             return NpcsManager.getInstance().isPathAwareEntity(world, string);
         });
+        addTab("Npc", (buttonWidget, minecraftClient) -> {
+            if (minecraftClient.currentScreen == null) return;
+            if (minecraftClient.currentScreen.getClass() == NpcMenu.class) return;
+            minecraftClient.setScreen(new NpcMenu(entityType, onReady, onCancel, presetOptions, entity));
+            //todo move camara in front of the npc
+        }, (string, client1) -> string.equals(NpcEntity.ENTITY_ID));
 
         if (client == null) return;
         List<Tab> filteredTabs = tabs.stream().filter(tab -> tab.predicate.test(entityType, client)).toList();
