@@ -103,7 +103,6 @@ public abstract class NpcTypeMenu extends ExtendedScreen {
             if (minecraftClient.currentScreen == null) return;
             if (minecraftClient.currentScreen.getClass() == NpcMenu.class) return;
             minecraftClient.setScreen(new NpcMenu(entityType, onReady, onCancel, presetOptions, entity));
-            //todo move camara in front of the npc
         }, (string, client1) -> string.equals(NpcEntity.ENTITY_ID));
 
         if (client == null) return;

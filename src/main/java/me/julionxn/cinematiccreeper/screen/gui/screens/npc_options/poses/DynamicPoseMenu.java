@@ -1,18 +1,24 @@
 package me.julionxn.cinematiccreeper.screen.gui.screens.npc_options.poses;
 
 import me.julionxn.cinematiccreeper.CinematicCreeper;
+import me.julionxn.cinematiccreeper.entity.NpcEntity;
 import me.julionxn.cinematiccreeper.managers.NpcPosesManager;
-import me.julionxn.cinematiccreeper.poses.Easing;
-import me.julionxn.cinematiccreeper.poses.NpcPose;
-import me.julionxn.cinematiccreeper.poses.PosePoint;
-import me.julionxn.cinematiccreeper.poses.PoseType;
+import me.julionxn.cinematiccreeper.poses.*;
 import me.julionxn.cinematiccreeper.screen.gui.components.ExtendedScreen;
 import me.julionxn.cinematiccreeper.screen.gui.components.widgets.PosePointWidget;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.entity.model.EntityModelLayers;
+import net.minecraft.client.render.entity.model.EntityModelLoader;
+import net.minecraft.client.render.entity.model.PlayerEntityModel;
+import net.minecraft.client.util.DefaultSkinHelper;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.RotationAxis;
+import org.joml.Vector3f;
 
 public class DynamicPoseMenu extends ExtendedScreen {
 
@@ -20,11 +26,15 @@ public class DynamicPoseMenu extends ExtendedScreen {
     private static final Identifier TIMELINE_TEXTURE = new Identifier(CinematicCreeper.MOD_ID, "textures/gui/timeline.png");
     private final Screen previousScreen;
     private final String id;
+    private int prevToPlayTick = 0;
     private int currentTick = 0;
     private int displayLength = 60;
     private int previousMaxTickPoint = 0;
     private int currentLength = 0;
     private final NpcPose npcPose = new NpcPose(PoseType.DYNAMIC);
+    private PoseTicker ticker;
+    private boolean playing = false;
+    private PlayerEntityModel<NpcEntity> model;
 
     public DynamicPoseMenu(Screen previousScreen, String id) {
         super(Text.of("StaticPose"));
@@ -33,11 +43,22 @@ public class DynamicPoseMenu extends ExtendedScreen {
     }
 
     @Override
+    protected void init() {
+        super.init();
+        if (client != null && model == null){
+            EntityModelLoader loader = client.getEntityModelLoader();
+            PlayerEntityModel<NpcEntity> model = new PlayerEntityModel<>(loader.getModelPart(EntityModelLayers.PLAYER), false);
+            model.head.scale(new Vector3f(-0.33f));
+            ticker = new PoseTicker(model);
+        }
+    }
+
+    @Override
     public void addWidgets() {
         if (client == null) return;
         int windowWidth = client.getWindow().getScaledWidth();
         int windowHeight = client.getWindow().getScaledHeight();
-        if (npcPose.containsAPose(currentTick)){
+        if (npcPose.containsAPose(currentTick) && !playing){
             PosePointWidget widget = new PosePointWidget(this, windowWidth / 2 - 30, windowHeight / 2 - 60, npcPose.getPoseOfTick(currentTick));
             addWidget(widget);
         }
@@ -46,6 +67,21 @@ public class DynamicPoseMenu extends ExtendedScreen {
     @Override
     public void addDrawables() {
         if (client == null) return;
+        String text = playing ? "Pausar" : "Play";
+        ButtonWidget playButton = ButtonWidget.builder(Text.of(text), button -> {
+            if (playing){
+                playing = false;
+                ticker.stop();
+                currentTick = prevToPlayTick;
+            } else {
+                playing = true;
+                prevToPlayTick = currentTick;
+                ticker.play();
+            }
+            clear();
+        }).dimensions(windowWidth - 120, windowHeight - 50, 100, 20).build();
+        addDrawableChild(playButton);
+        if (playing) return;
         addChangeTickButton("<", windowWidth / 2 - 170, -1);
         addChangeTickButton("<<", windowWidth / 2 - 190, -20);
         addChangeTickButton(">", windowWidth / 2 + 150, 1);
@@ -66,10 +102,6 @@ public class DynamicPoseMenu extends ExtendedScreen {
             client.setScreen(previousScreen);
         }).dimensions(windowWidth - 120, windowHeight - 30, 100, 20).build();
         addDrawableChild(createButton);
-        ButtonWidget playButton = ButtonWidget.builder(Text.of("Play"), button -> {
-            System.out.println("PLAY");
-        }).dimensions(windowWidth - 120, windowHeight - 50, 100, 20).build();
-        addDrawableChild(playButton);
     }
 
     private void addEaseTypeButton(Easing easing, int x, int y){
@@ -84,6 +116,11 @@ public class DynamicPoseMenu extends ExtendedScreen {
                 .dimensions(x, 20, 20, 20)
                 .build();
         addDrawableChild(buttonWidget);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
     }
 
     @Override
@@ -110,10 +147,22 @@ public class DynamicPoseMenu extends ExtendedScreen {
             int color = i == currentTick ? 0xff3af6eb : npcPose.containsAPose(i) ? 0xffff1717 : 0xff8d697a;
             context.fill(x, y, x + 1, y + height, 100, color);
         }
-        if (npcPose.containsAPose(currentTick)){
-            Easing easing = npcPose.getPoseOfTick(currentTick).easing;
-            int y = easing == Easing.NONE ? 0 : easing == Easing.EASE_IN ? 20 : 40;
-            context.drawTexture(POINT_TEXTURE, windowWidth / 2 - 210, windowHeight / 2 - 30 + y, 0, 0, 0, 20, 20, 20, 20);
+        if (playing && ticker != null){
+            ticker.tick(npcPose, delta);
+            MatrixStack stack = context.getMatrices();
+            stack.push();
+            stack.translate(centerX, windowHeight / 2f - 120, 200);
+            stack.multiply(RotationAxis.NEGATIVE_Y.rotation((float) Math.PI));
+            stack.scale(120, 120, 120);
+            ticker.render(stack, context.getVertexConsumers().getBuffer(RenderLayer.getEntityAlpha(DefaultSkinHelper.getTexture())), 0xffffff);
+            stack.pop();
+            currentTick = ticker.getCurrentTick();
+        } else {
+            if (npcPose.containsAPose(currentTick)){
+                Easing easing = npcPose.getPoseOfTick(currentTick).easing;
+                int y = easing == Easing.NONE ? 0 : easing == Easing.EASE_IN ? 20 : 40;
+                context.drawTexture(POINT_TEXTURE, windowWidth / 2 - 210, windowHeight / 2 - 30 + y, 0, 0, 0, 20, 20, 20, 20);
+            }
         }
     }
 

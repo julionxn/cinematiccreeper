@@ -1,6 +1,5 @@
 package me.julionxn.cinematiccreeper.screen.gui.components.widgets;
 
-import me.julionxn.cinematiccreeper.entity.AllEntities;
 import me.julionxn.cinematiccreeper.entity.NpcEntity;
 import me.julionxn.cinematiccreeper.poses.Part;
 import me.julionxn.cinematiccreeper.poses.PoseData;
@@ -10,16 +9,15 @@ import me.julionxn.cinematiccreeper.screen.gui.components.ExtendedWidget;
 import me.julionxn.cinematiccreeper.util.MathHelper;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.model.EntityModelLayers;
 import net.minecraft.client.render.entity.model.EntityModelLoader;
 import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.client.util.DefaultSkinHelper;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.RotationAxis;
-import net.minecraft.world.World;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
@@ -99,11 +97,6 @@ public class PosePointWidget extends ExtendedWidget {
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         if (client == null) return;
-        PlayerEntity player = client.player;
-        if (player == null) return;
-        World world = player.getWorld();
-        NpcEntity npcEntity = AllEntities.NPC_ENTITY.create(world);
-        if (npcEntity == null) return;
         MatrixStack stack = context.getMatrices();
         stack.push();
         stack.translate(x, y - 55, 200);
@@ -115,7 +108,7 @@ public class PosePointWidget extends ExtendedWidget {
         applyPosePointToRenderer(model);
         model.render(stack,
                 context.getVertexConsumers().getBuffer(RenderLayer.getEntityAlpha(DefaultSkinHelper.getTexture())),
-                0xffffff, 0x00000000, 1f, 1f, 1f, 1f);
+                0xffffff, OverlayTexture.DEFAULT_UV, 1f, 1f, 1f, 1f);
         context.draw();
         stack.pop();
     }

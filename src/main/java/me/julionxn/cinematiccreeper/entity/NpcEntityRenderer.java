@@ -57,29 +57,28 @@ public class NpcEntityRenderer extends MobEntityRenderer<NpcEntity, PlayerEntity
         matrixStack.translate(0, -1.5, 0);
         VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(getRenderLayer(livingEntity, true, false, true));
         renderPart(matrixStack, vertexConsumer, currentModel.head, posePoint.head, i);
-        renderLimb(matrixStack, vertexConsumer, currentModel.leftArm, posePoint.leftArm, i);
-        renderLimb(matrixStack, vertexConsumer, currentModel.rightArm, posePoint.rightArm, i);
-        renderLimb(matrixStack, vertexConsumer, currentModel.leftLeg, posePoint.leftLeg, i);
-        renderLimb(matrixStack, vertexConsumer, currentModel.rightLeg, posePoint.rightLeg, i);
+        renderLimb(matrixStack, vertexConsumer, currentModel.leftArm, currentModel.leftSleeve, posePoint.leftArm, i);
+        renderLimb(matrixStack, vertexConsumer, currentModel.rightArm, currentModel.rightSleeve, posePoint.rightArm, i);
+        renderLimb(matrixStack, vertexConsumer, currentModel.leftLeg, currentModel.leftPants, posePoint.leftLeg, i);
+        renderLimb(matrixStack, vertexConsumer, currentModel.rightLeg, currentModel.rightPants, posePoint.rightLeg, i);
         currentModel.body.render(matrixStack, vertexConsumer, i, OverlayTexture.DEFAULT_UV);
         matrixStack.pop();
     }
 
     private void renderPart(MatrixStack matrixStack, VertexConsumer vertexConsumer, ModelPart modelPart, PoseData data, int light){
         matrixStack.push();
-        matrixStack.multiply(RotationAxis.POSITIVE_Y.rotation(-data.yaw));
-        matrixStack.multiply(RotationAxis.POSITIVE_X.rotation(data.pitch));
-        matrixStack.multiply(RotationAxis.POSITIVE_Z.rotation(-data.roll));
+        matrixStack.multiply(new Quaternionf().rotationZYX(-data.roll, -data.yaw, data.pitch));
         modelPart.render(matrixStack, vertexConsumer, light, OverlayTexture.DEFAULT_UV);
         matrixStack.pop();
     }
 
-    private void renderLimb(MatrixStack matrixStack, VertexConsumer vertexConsumer, ModelPart modelPart, PoseData data, int light){
+    private void renderLimb(MatrixStack matrixStack, VertexConsumer vertexConsumer, ModelPart modelPart, ModelPart modelPart2, PoseData data, int light){
         matrixStack.push();
         matrixStack.translate(modelPart.pivotX / 18f, modelPart.pivotY / 18.0f, modelPart.pivotZ / 18.0f);
         matrixStack.multiply(new Quaternionf().rotationZYX(data.roll, data.yaw, data.pitch));
         matrixStack.translate(-modelPart.pivotX / 18f, -modelPart.pivotY / 18.0f, -modelPart.pivotZ / 18.0f);
         modelPart.render(matrixStack, vertexConsumer, light, OverlayTexture.DEFAULT_UV);
+        modelPart2.render(matrixStack, vertexConsumer, light, OverlayTexture.DEFAULT_UV);
         matrixStack.pop();
     }
 
@@ -95,4 +94,5 @@ public class NpcEntityRenderer extends MobEntityRenderer<NpcEntity, PlayerEntity
         if (texture == null) return DefaultSkinHelper.getTexture();
         return texture;
     }
+
 }
