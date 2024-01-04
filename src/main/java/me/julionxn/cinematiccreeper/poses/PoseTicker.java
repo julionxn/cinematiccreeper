@@ -25,10 +25,14 @@ public class PoseTicker {
 
     public void stop(){
         playing = false;
+        reset();
+    }
+
+    public void reset(){
         currentTick = 0;
     }
 
-    public void tick(NpcPose npcPose, float tickDelta){
+    public void delta(NpcPose npcPose, float tickDelta){
         if (!playing) return;
         currentTick += tickDelta;
         currentTick %= npcPose.getLength();

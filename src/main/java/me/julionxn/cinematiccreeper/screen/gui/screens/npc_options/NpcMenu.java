@@ -1,9 +1,11 @@
 package me.julionxn.cinematiccreeper.screen.gui.screens.npc_options;
 
 import me.julionxn.cinematiccreeper.entity.NpcEntity;
+import me.julionxn.cinematiccreeper.entity.NpcEntityRenderer;
 import me.julionxn.cinematiccreeper.managers.NpcPosesManager;
 import me.julionxn.cinematiccreeper.managers.presets.PresetOptions;
 import me.julionxn.cinematiccreeper.poses.NpcPose;
+import me.julionxn.cinematiccreeper.poses.PoseTicker;
 import me.julionxn.cinematiccreeper.screen.gui.components.widgets.RemovableItemsScrollWidget;
 import me.julionxn.cinematiccreeper.screen.gui.screens.npc_options.poses.AddNewNpcPoseMenu;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -42,15 +44,25 @@ public class NpcMenu extends NpcTypeMenu {
         poses.clear();
         poses.add(new RemovableItemsScrollWidget.RemovableScrollItem("Ninguno", buttonWidget -> {
             npcEntity.clearNpcPose();
+            PoseTicker poseTicker = NpcEntityRenderer.models.get(npcEntity.getId());
+            if (poseTicker == null) return;
+            poseTicker.stop();
         }, buttonWidget -> {}));
         for (Map.Entry<String, NpcPose> entry : NpcPosesManager.getInstance().getLoadedPoses().entrySet()) {
             poses.add(new RemovableItemsScrollWidget.RemovableScrollItem(entry.getKey(), buttonWidget -> {
                 npcEntity.setNpcPose(entry.getValue());
+                PoseTicker poseTicker = NpcEntityRenderer.models.get(npcEntity.getId());
+                if (poseTicker == null) return;
+                poseTicker.reset();
+                poseTicker.play();
             }, buttonWidget -> {
                 NpcPosesManager.getInstance().removeNpcPose(entry.getKey());
                 NpcPose npcPose = npcEntity.getNpcPose();
                 if (npcPose != null && npcPose.equals(entry.getValue())){
                     npcEntity.clearNpcPose();
+                    PoseTicker poseTicker = NpcEntityRenderer.models.get(npcEntity.getId());
+                    if (poseTicker == null) return;
+                    poseTicker.stop();
                 }
                 clear();
             }));

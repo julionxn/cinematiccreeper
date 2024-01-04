@@ -148,7 +148,7 @@ public class DynamicPoseMenu extends ExtendedScreen {
             context.fill(x, y, x + 1, y + height, 100, color);
         }
         if (playing && ticker != null){
-            ticker.tick(npcPose, delta);
+            ticker.delta(npcPose, delta);
             MatrixStack stack = context.getMatrices();
             stack.push();
             stack.translate(centerX, windowHeight / 2f - 120, 200);
