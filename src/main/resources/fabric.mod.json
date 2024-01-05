@@ -3,13 +3,13 @@
   "id": "cinematiccreeper",
   "version": "${version}",
   "name": "CinematicCreeper",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "description": "A Fabric mod with tools for creating minecraft videos.",
   "authors": [
-    "Me!"
+    "Julionxn"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://julionxn.me",
+    "sources": "https://github.com/julionxn/cinematiccreeper"
   },
   "license": "CC0-1.0",
   "icon": "assets/cinematiccreeper/icon.png",
@@ -30,9 +30,6 @@
     "minecraft": "~1.20.2",
     "java": ">=17",
     "fabric-api": "*"
-  },
-  "suggests": {
-    "another-mod": "*"
   },
   "accessWidener": "cinematiccreeper.accesswidener"
 }

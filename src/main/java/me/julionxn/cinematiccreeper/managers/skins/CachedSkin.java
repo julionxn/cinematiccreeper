@@ -85,8 +85,7 @@ public class CachedSkin implements Serializable {
                 data.flip();
                 NativeImageBackedTexture tex = new NativeImageBackedTexture(NativeImage.read(data));
                 Identifier identifier = new Identifier(CinematicCreeper.MOD_ID, id);
-                MinecraftClient.getInstance().execute(() ->
-                        client.getTextureManager().registerTexture(identifier, tex));
+                client.execute(() -> client.getTextureManager().registerTexture(identifier, tex));
                 out.close();
                 return identifier;
             } catch (IOException e) {
