@@ -1,9 +1,9 @@
 package me.julionxn.cinematiccreeper.screen.gui.screens;
 
-import me.julionxn.cinematiccreeper.entity.NpcEntity;
 import me.julionxn.cinematiccreeper.core.managers.PresetsManager;
 import me.julionxn.cinematiccreeper.core.presets.Preset;
 import me.julionxn.cinematiccreeper.core.presets.PresetOptionsHandlers;
+import me.julionxn.cinematiccreeper.entity.NpcEntity;
 import me.julionxn.cinematiccreeper.networking.AllPackets;
 import me.julionxn.cinematiccreeper.screen.gui.components.ExtendedScreen;
 import me.julionxn.cinematiccreeper.screen.gui.components.widgets.RemovableItemsScrollWidget;

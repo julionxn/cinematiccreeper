@@ -20,7 +20,7 @@ public class AllEntities {
     );
 
     public static void register() {
-        CinematicCreeper.LOGGER.info("xd");
+        CinematicCreeper.LOGGER.info("Registering entities.");
     }
 
 }

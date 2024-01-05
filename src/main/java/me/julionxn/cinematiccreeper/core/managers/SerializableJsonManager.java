@@ -12,6 +12,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.nio.file.Path;
 
 public abstract class SerializableJsonManager<T extends SerializableJsonManager<T>> {
 
@@ -23,9 +24,18 @@ public abstract class SerializableJsonManager<T extends SerializableJsonManager<
             .create();
     private final File configFile;
     private final Class<T> clazz;
+    @Expose
+    public final float version;
 
-    protected SerializableJsonManager(String path, Class<T> clazz) {
-        this.configFile = FabricLoader.getInstance().getConfigDir().resolve(path).toFile();
+    protected SerializableJsonManager(String path, float version, Class<T> clazz) {
+        Path ccFolder = FabricLoader.getInstance().getConfigDir().resolve("cinematiccreeper");
+        File file = ccFolder.toFile();
+        if (!file.exists()){
+            boolean made = file.mkdir();
+            if (made) CinematicCreeper.LOGGER.info("CinematicCreeper config folder created.");
+        }
+        this.configFile = ccFolder.resolve(path).toFile();
+        this.version = version;
         this.clazz = clazz;
     }
 
@@ -37,7 +47,13 @@ public abstract class SerializableJsonManager<T extends SerializableJsonManager<
             }
             T data = GSON.fromJson(new FileReader(configFile), clazz);
             if (data == null) return;
-            setValues(data);
+            if (data.version != version) {
+                CinematicCreeper.LOGGER.error("Mismatching version with current version of file " + configFile.getPath() + ". Restarting file.");
+                save();
+            } else {
+                CinematicCreeper.LOGGER.info("Loading " + configFile.getPath());
+                setValues(data);
+            }
             afterLoad();
         } catch (IOException | IllegalAccessException e) {
             CinematicCreeper.LOGGER.error("Something went wrong while loading the config.", e);

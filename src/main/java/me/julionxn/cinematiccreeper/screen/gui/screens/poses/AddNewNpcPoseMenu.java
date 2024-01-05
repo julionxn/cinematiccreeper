@@ -1,7 +1,6 @@
-package me.julionxn.cinematiccreeper.screen.gui.screens.npc_options.poses;
+package me.julionxn.cinematiccreeper.screen.gui.screens.poses;
 
 import me.julionxn.cinematiccreeper.CinematicCreeper;
-import me.julionxn.cinematiccreeper.core.poses.PoseType;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -14,7 +13,7 @@ public class AddNewNpcPoseMenu extends Screen {
 
     private static final Identifier POINT_TEXTURE = new Identifier(CinematicCreeper.MOD_ID, "point.png");
     private final Screen previousScreen;
-    private PoseType poseType;
+    private boolean dynamic;
 
     public AddNewNpcPoseMenu(Screen previousScreen) {
         super(Text.of("AddNewNpcPose"));
@@ -34,18 +33,18 @@ public class AddNewNpcPoseMenu extends Screen {
         );
         addDrawableChild(idField);
         ButtonWidget staticButton = ButtonWidget.builder(Text.of("Estática"), button ->
-                        poseType = PoseType.STATIC
-                ).dimensions(centerX + 20, centerY + 20, 100, 20).build();
-        ButtonWidget dynamicButton = ButtonWidget.builder(Text.of("Dinámica"), button ->
-                        poseType = PoseType.DYNAMIC
+                        dynamic = false
                 ).dimensions(centerX + 20, centerY, 100, 20).build();
+        ButtonWidget dynamicButton = ButtonWidget.builder(Text.of("Dinámica"), button ->
+                        dynamic = true
+                ).dimensions(centerX + 20, centerY + 20, 100, 20).build();
         addDrawableChild(staticButton);
         addDrawableChild(dynamicButton);
         ButtonWidget createButton = ButtonWidget.builder(Text.of("Crear"), button -> {
-            if (poseType == PoseType.STATIC){
-                client.setScreen(new StaticPoseMenu(previousScreen, idField.getText()));
-            } else {
+            if (dynamic){
                 client.setScreen(new DynamicPoseMenu(previousScreen, idField.getText()));
+            } else {
+                client.setScreen(new StaticPoseMenu(previousScreen, idField.getText()));
             }
         }).dimensions(centerX - 120, centerY + 20, 100, 20).build();
         addDrawableChild(createButton);
@@ -56,7 +55,7 @@ public class AddNewNpcPoseMenu extends Screen {
         super.render(context, mouseX, mouseY, delta);
         int x = context.getScaledWindowWidth() / 2;
         int centerY = context.getScaledWindowHeight() / 2;
-        int y = poseType == PoseType.STATIC ? centerY + 20 : centerY;
+        int y = dynamic ? centerY + 20 : centerY;
         context.drawTexture(POINT_TEXTURE, x, y, 0, 0, 0, 20, 20, 20, 20);
     }
 

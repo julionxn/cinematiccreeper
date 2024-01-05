@@ -8,15 +8,9 @@ import java.util.TreeMap;
 public class NpcPose {
 
     @Expose
-    private final PoseType poseType;
-    @Expose
     private final TreeMap<Integer, PosePoint> poses = new TreeMap<>();
     @Expose
     private int length = 0;
-
-    public NpcPose(PoseType poseType){
-        this.poseType = poseType;
-    }
 
     public TreeMap<Integer, PosePoint> getPoses(){
         return poses;

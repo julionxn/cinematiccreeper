@@ -10,11 +10,12 @@ import java.util.HashMap;
 @Environment(EnvType.CLIENT)
 public class NpcPosesManager extends SerializableJsonManager<NpcPosesManager> {
 
+    private static final float VERSION = 1.0f;
     @Expose
     private final HashMap<String, NpcPose> loadedPoses = new HashMap<>();
 
     protected NpcPosesManager() {
-        super("cc_poses.json", NpcPosesManager.class);
+        super("cc_poses.json", VERSION, NpcPosesManager.class);
     }
 
     private static class SingletonHolder {

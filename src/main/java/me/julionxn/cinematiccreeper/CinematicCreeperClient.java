@@ -1,13 +1,13 @@
 package me.julionxn.cinematiccreeper;
 
-import me.julionxn.cinematiccreeper.entity.AllEntities;
-import me.julionxn.cinematiccreeper.entity.NpcEntityRenderer;
-import me.julionxn.cinematiccreeper.keybinds.Keybindings;
 import me.julionxn.cinematiccreeper.core.managers.NpcPosesManager;
 import me.julionxn.cinematiccreeper.core.managers.NpcSkinManager;
 import me.julionxn.cinematiccreeper.core.managers.PresetsManager;
 import me.julionxn.cinematiccreeper.core.paths.PathRenderer;
 import me.julionxn.cinematiccreeper.core.paths.PlayerPathHolder;
+import me.julionxn.cinematiccreeper.entity.AllEntities;
+import me.julionxn.cinematiccreeper.entity.NpcEntityRenderer;
+import me.julionxn.cinematiccreeper.keybinds.Keybindings;
 import me.julionxn.cinematiccreeper.networking.AllPackets;
 import me.julionxn.cinematiccreeper.screen.hud.NewPathHud;
 import me.julionxn.cinematiccreeper.util.mixins.PlayerData;

@@ -1,9 +1,9 @@
 package me.julionxn.cinematiccreeper.screen.gui.components.widgets;
 
-import me.julionxn.cinematiccreeper.entity.NpcEntity;
 import me.julionxn.cinematiccreeper.core.poses.Part;
 import me.julionxn.cinematiccreeper.core.poses.PoseData;
 import me.julionxn.cinematiccreeper.core.poses.PosePoint;
+import me.julionxn.cinematiccreeper.entity.NpcEntity;
 import me.julionxn.cinematiccreeper.screen.gui.components.ExtendedScreen;
 import me.julionxn.cinematiccreeper.screen.gui.components.ExtendedWidget;
 import me.julionxn.cinematiccreeper.util.MathHelper;

@@ -1,13 +1,13 @@
 package me.julionxn.cinematiccreeper.screen.gui.screens.npc_options;
 
+import me.julionxn.cinematiccreeper.core.managers.NpcPosesManager;
+import me.julionxn.cinematiccreeper.core.poses.NpcPose;
 import me.julionxn.cinematiccreeper.core.poses.PoseAnimator;
+import me.julionxn.cinematiccreeper.core.presets.PresetOptions;
 import me.julionxn.cinematiccreeper.entity.NpcEntity;
 import me.julionxn.cinematiccreeper.entity.NpcEntityRenderer;
-import me.julionxn.cinematiccreeper.core.managers.NpcPosesManager;
-import me.julionxn.cinematiccreeper.core.presets.PresetOptions;
-import me.julionxn.cinematiccreeper.core.poses.NpcPose;
 import me.julionxn.cinematiccreeper.screen.gui.components.widgets.RemovableItemsScrollWidget;
-import me.julionxn.cinematiccreeper.screen.gui.screens.npc_options.poses.AddNewNpcPoseMenu;
+import me.julionxn.cinematiccreeper.screen.gui.screens.poses.AddNewNpcPoseMenu;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.entity.Entity;
 import net.minecraft.text.Text;

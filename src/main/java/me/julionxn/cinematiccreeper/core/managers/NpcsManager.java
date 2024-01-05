@@ -16,13 +16,14 @@ import java.util.Map;
 
 public class NpcsManager extends SerializableJsonManager<NpcsManager> {
 
+    private static final float VERSION = 1.0f;
     private final Map<String, EntityType<?>> loadedEntityTypes = new HashMap<>();
     @Expose
     private Map<String, Boolean> cachedMobEntities = new HashMap<>();
     @Expose Map<String, Boolean> cachedPathAwareEntities = new HashMap<>();
 
     private NpcsManager() {
-        super("cc_types.json", NpcsManager.class);
+        super("cc_types.json", VERSION, NpcsManager.class);
     }
 
     public static NpcsManager getInstance() {

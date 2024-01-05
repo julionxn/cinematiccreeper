@@ -12,11 +12,12 @@ import java.util.Optional;
 @Environment(EnvType.CLIENT)
 public class PresetsManager extends SerializableJsonManager<PresetsManager> {
 
+    private static final float VERSION = 1.0f;
     @Expose
     private List<Preset> presets = new ArrayList<>();
 
     private PresetsManager() {
-        super("cc_presets.json", PresetsManager.class);
+        super("cc_presets.json", VERSION, PresetsManager.class);
     }
 
     public static PresetsManager getInstance() {

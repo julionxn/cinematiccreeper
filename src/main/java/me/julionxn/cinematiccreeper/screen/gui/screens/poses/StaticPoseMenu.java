@@ -1,9 +1,8 @@
-package me.julionxn.cinematiccreeper.screen.gui.screens.npc_options.poses;
+package me.julionxn.cinematiccreeper.screen.gui.screens.poses;
 
 import me.julionxn.cinematiccreeper.core.managers.NpcPosesManager;
 import me.julionxn.cinematiccreeper.core.poses.NpcPose;
 import me.julionxn.cinematiccreeper.core.poses.PosePoint;
-import me.julionxn.cinematiccreeper.core.poses.PoseType;
 import me.julionxn.cinematiccreeper.screen.gui.components.ExtendedScreen;
 import me.julionxn.cinematiccreeper.screen.gui.components.widgets.PosePointWidget;
 import net.minecraft.client.gui.DrawContext;
@@ -15,7 +14,7 @@ public class StaticPoseMenu extends ExtendedScreen {
 
     private final Screen previousScreen;
     private final String id;
-    private final NpcPose npcPose = new NpcPose(PoseType.STATIC);
+    private final NpcPose npcPose = new NpcPose();
     private final PosePoint posePoint = new PosePoint();
 
     public StaticPoseMenu(Screen previousScreen, String id) {

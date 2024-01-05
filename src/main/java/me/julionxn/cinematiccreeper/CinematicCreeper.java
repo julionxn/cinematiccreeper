@@ -1,9 +1,9 @@
 package me.julionxn.cinematiccreeper;
 
+import me.julionxn.cinematiccreeper.core.managers.NpcsManager;
 import me.julionxn.cinematiccreeper.entity.AllEntities;
 import me.julionxn.cinematiccreeper.entity.NpcEntity;
 import me.julionxn.cinematiccreeper.items.AllItems;
-import me.julionxn.cinematiccreeper.core.managers.NpcsManager;
 import me.julionxn.cinematiccreeper.networking.AllPackets;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;

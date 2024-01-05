@@ -1,9 +1,9 @@
-package me.julionxn.cinematiccreeper.screen.gui.screens.npc_options.poses;
+package me.julionxn.cinematiccreeper.screen.gui.screens.poses;
 
 import me.julionxn.cinematiccreeper.CinematicCreeper;
-import me.julionxn.cinematiccreeper.entity.NpcEntity;
 import me.julionxn.cinematiccreeper.core.managers.NpcPosesManager;
 import me.julionxn.cinematiccreeper.core.poses.*;
+import me.julionxn.cinematiccreeper.entity.NpcEntity;
 import me.julionxn.cinematiccreeper.screen.gui.components.ExtendedScreen;
 import me.julionxn.cinematiccreeper.screen.gui.components.widgets.PosePointWidget;
 import net.minecraft.client.gui.DrawContext;
@@ -31,7 +31,7 @@ public class DynamicPoseMenu extends ExtendedScreen {
     private int displayLength = 60;
     private int previousMaxTickPoint = 0;
     private int currentLength = 0;
-    private final NpcPose npcPose = new NpcPose(PoseType.DYNAMIC);
+    private final NpcPose npcPose = new NpcPose();
     private PoseAnimator ticker;
     private boolean playing = false;
     private PlayerEntityModel<NpcEntity> model;

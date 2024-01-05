@@ -1,8 +1,8 @@
 package me.julionxn.cinematiccreeper.core.managers;
 
 import me.julionxn.cinematiccreeper.CinematicCreeper;
-import me.julionxn.cinematiccreeper.entity.NpcEntity;
 import me.julionxn.cinematiccreeper.core.skins.CachedSkin;
+import me.julionxn.cinematiccreeper.entity.NpcEntity;
 import me.julionxn.cinematiccreeper.util.mixins.NpcData;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -32,7 +32,7 @@ public class NpcSkinManager {
     }
 
     public void load() {
-        cachedSkinsFolder = FabricLoader.getInstance().getConfigDir().resolve("cc_cache").toFile();
+        cachedSkinsFolder = FabricLoader.getInstance().getConfigDir().resolve("cinematiccreeper/cc_cache").toFile();
         if (cachedSkinsFolder.mkdir()) return;
         File[] skinFiles = cachedSkinsFolder.listFiles();
         if (skinFiles == null) return;

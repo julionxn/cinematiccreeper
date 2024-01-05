@@ -69,6 +69,7 @@ public class CachedSkin implements Serializable {
                 .thenAccept(idText -> {
                     loaded = true;
                     texture = idText;
+                    CinematicCreeper.LOGGER.info("Skin " + url + " cached successfully.");
                 });
         return texture;
     }
