@@ -1,6 +1,6 @@
 package me.julionxn.cinematiccreeper.mixin;
 
-import me.julionxn.cinematiccreeper.managers.CameraManager;
+import me.julionxn.cinematiccreeper.core.managers.CameraManager;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import org.spongepowered.asm.mixin.Mixin;

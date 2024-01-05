@@ -1,7 +1,8 @@
 package me.julionxn.cinematiccreeper.entity;
 
-import me.julionxn.cinematiccreeper.poses.NpcPose;
-import me.julionxn.cinematiccreeper.poses.PoseTicker;
+import me.julionxn.cinematiccreeper.core.poses.NpcPose;
+import me.julionxn.cinematiccreeper.core.poses.PoseAnimator;
+import me.julionxn.cinematiccreeper.util.MathHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -21,7 +22,7 @@ import java.util.HashMap;
 public class NpcEntityRenderer extends MobEntityRenderer<NpcEntity, PlayerEntityModel<NpcEntity>> {
 
     private final EntityRendererFactory.Context ctx;
-    public static final HashMap<Integer, PoseTicker> models = new HashMap<>();
+    public static final HashMap<Integer, PoseAnimator> models = new HashMap<>();
 
     public NpcEntityRenderer(EntityRendererFactory.Context ctx) {
         super(ctx, new PlayerEntityModel<>(ctx.getPart(EntityModelLayers.PLAYER), false), 0.5f);
@@ -35,7 +36,7 @@ public class NpcEntityRenderer extends MobEntityRenderer<NpcEntity, PlayerEntity
             models.computeIfAbsent(livingEntity.getId(), id -> {
                 PlayerEntityModel<NpcEntity> playerEntityModel = new PlayerEntityModel<>(ctx.getPart(EntityModelLayers.PLAYER), false);
                 playerEntityModel.head.scale(new Vector3f(-0.33f));
-                return new PoseTicker(playerEntityModel);
+                return new PoseAnimator(playerEntityModel);
             });
             hijackRendering(entityYaw, npcPose, livingEntity, matrixStack, vertexConsumerProvider, i);
             return;
@@ -51,11 +52,11 @@ public class NpcEntityRenderer extends MobEntityRenderer<NpcEntity, PlayerEntity
     }
 
     private void hijackRendering(float yaw, NpcPose npcPose, NpcEntity livingEntity, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i){
-        PoseTicker ticker = models.get(livingEntity.getId());
+        PoseAnimator ticker = models.get(livingEntity.getId());
         ticker.delta(npcPose, MinecraftClient.getInstance().getLastFrameDuration());
         matrixStack.push();
         matrixStack.scale(2, 2, 2);
-        matrixStack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180));
+        matrixStack.multiply(RotationAxis.POSITIVE_Z.rotation(MathHelper.PI));
         matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180 + yaw));
         matrixStack.translate(0, -1.5, 0);
         VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(getRenderLayer(livingEntity, true, false, true));

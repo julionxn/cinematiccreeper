@@ -1,6 +1,6 @@
 package me.julionxn.cinematiccreeper.screen.gui.screens.npc_options;
 
-import me.julionxn.cinematiccreeper.managers.presets.PresetOptions;
+import me.julionxn.cinematiccreeper.core.presets.PresetOptions;
 import me.julionxn.cinematiccreeper.screen.gui.components.widgets.ToggleWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.entity.Entity;

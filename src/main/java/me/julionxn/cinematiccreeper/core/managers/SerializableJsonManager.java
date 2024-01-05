@@ -1,4 +1,4 @@
-package me.julionxn.cinematiccreeper.managers;
+package me.julionxn.cinematiccreeper.core.managers;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

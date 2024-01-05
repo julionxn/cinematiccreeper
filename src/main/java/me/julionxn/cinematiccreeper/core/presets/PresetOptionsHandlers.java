@@ -1,4 +1,4 @@
-package me.julionxn.cinematiccreeper.managers.presets;
+package me.julionxn.cinematiccreeper.core.presets;
 
 import me.julionxn.cinematiccreeper.CinematicCreeper;
 import me.julionxn.cinematiccreeper.entity.NpcEntity;

@@ -1,8 +1,8 @@
 package me.julionxn.cinematiccreeper.screen.gui.screens.npc_options;
 
-import me.julionxn.cinematiccreeper.managers.paths.Path;
-import me.julionxn.cinematiccreeper.managers.paths.PlayerPathHolder;
-import me.julionxn.cinematiccreeper.managers.presets.PresetOptions;
+import me.julionxn.cinematiccreeper.core.paths.Path;
+import me.julionxn.cinematiccreeper.core.paths.PlayerPathHolder;
+import me.julionxn.cinematiccreeper.core.presets.PresetOptions;
 import me.julionxn.cinematiccreeper.networking.AllPackets;
 import me.julionxn.cinematiccreeper.screen.gui.components.widgets.ScrollWidget;
 import me.julionxn.cinematiccreeper.screen.gui.screens.NewPathMenu;

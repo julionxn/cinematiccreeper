@@ -1,7 +1,7 @@
 package me.julionxn.cinematiccreeper.screen.gui.screens.npc_options.poses;
 
 import me.julionxn.cinematiccreeper.CinematicCreeper;
-import me.julionxn.cinematiccreeper.poses.PoseType;
+import me.julionxn.cinematiccreeper.core.poses.PoseType;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;

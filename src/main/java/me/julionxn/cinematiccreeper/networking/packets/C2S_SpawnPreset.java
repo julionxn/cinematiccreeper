@@ -1,8 +1,8 @@
 package me.julionxn.cinematiccreeper.networking.packets;
 
-import me.julionxn.cinematiccreeper.managers.NpcsManager;
-import me.julionxn.cinematiccreeper.managers.presets.PresetOptions;
-import me.julionxn.cinematiccreeper.managers.presets.PresetOptionsHandlers;
+import me.julionxn.cinematiccreeper.core.managers.NpcsManager;
+import me.julionxn.cinematiccreeper.core.presets.PresetOptions;
+import me.julionxn.cinematiccreeper.core.presets.PresetOptionsHandlers;
 import me.julionxn.cinematiccreeper.util.mixins.MobNpcData;
 import me.julionxn.cinematiccreeper.util.mixins.NpcData;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;

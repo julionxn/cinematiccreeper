@@ -1,6 +1,6 @@
 package me.julionxn.cinematiccreeper.util.mixins;
 
-import me.julionxn.cinematiccreeper.managers.paths.Path;
+import me.julionxn.cinematiccreeper.core.paths.Path;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;

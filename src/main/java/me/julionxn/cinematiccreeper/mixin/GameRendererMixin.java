@@ -1,6 +1,6 @@
 package me.julionxn.cinematiccreeper.mixin;
 
-import me.julionxn.cinematiccreeper.managers.CameraManager;
+import me.julionxn.cinematiccreeper.core.managers.CameraManager;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;

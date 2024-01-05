@@ -1,8 +1,8 @@
-package me.julionxn.cinematiccreeper.managers;
+package me.julionxn.cinematiccreeper.core.managers;
 
 import me.julionxn.cinematiccreeper.CinematicCreeper;
 import me.julionxn.cinematiccreeper.entity.NpcEntity;
-import me.julionxn.cinematiccreeper.managers.skins.CachedSkin;
+import me.julionxn.cinematiccreeper.core.skins.CachedSkin;
 import me.julionxn.cinematiccreeper.util.mixins.NpcData;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

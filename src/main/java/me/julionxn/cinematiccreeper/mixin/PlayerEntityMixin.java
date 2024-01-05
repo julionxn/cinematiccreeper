@@ -1,6 +1,6 @@
 package me.julionxn.cinematiccreeper.mixin;
 
-import me.julionxn.cinematiccreeper.managers.paths.PlayerPathHolder;
+import me.julionxn.cinematiccreeper.core.paths.PlayerPathHolder;
 import me.julionxn.cinematiccreeper.util.mixins.PlayerData;
 import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;

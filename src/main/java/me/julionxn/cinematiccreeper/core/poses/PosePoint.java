@@ -1,4 +1,4 @@
-package me.julionxn.cinematiccreeper.poses;
+package me.julionxn.cinematiccreeper.core.poses;
 
 import com.google.gson.annotations.Expose;
 

@@ -1,7 +1,7 @@
 package me.julionxn.cinematiccreeper.entity;
 
-import me.julionxn.cinematiccreeper.managers.NpcSkinManager;
-import me.julionxn.cinematiccreeper.poses.NpcPose;
+import me.julionxn.cinematiccreeper.core.managers.NpcSkinManager;
+import me.julionxn.cinematiccreeper.core.poses.NpcPose;
 import net.minecraft.client.util.DefaultSkinHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;

@@ -1,7 +1,7 @@
 package me.julionxn.cinematiccreeper.entity.ai;
 
-import me.julionxn.cinematiccreeper.managers.paths.Path;
-import me.julionxn.cinematiccreeper.managers.paths.PathAction;
+import me.julionxn.cinematiccreeper.core.paths.Path;
+import me.julionxn.cinematiccreeper.core.paths.PathAction;
 import me.julionxn.cinematiccreeper.util.mixins.PathAwareData;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.mob.PathAwareEntity;

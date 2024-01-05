@@ -1,7 +1,7 @@
-package me.julionxn.cinematiccreeper.managers;
+package me.julionxn.cinematiccreeper.core.managers;
 
 import com.google.gson.annotations.Expose;
-import me.julionxn.cinematiccreeper.poses.NpcPose;
+import me.julionxn.cinematiccreeper.core.poses.NpcPose;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 

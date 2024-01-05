@@ -2,8 +2,8 @@ package me.julionxn.cinematiccreeper.screen.gui.screens.npc_options.poses;
 
 import me.julionxn.cinematiccreeper.CinematicCreeper;
 import me.julionxn.cinematiccreeper.entity.NpcEntity;
-import me.julionxn.cinematiccreeper.managers.NpcPosesManager;
-import me.julionxn.cinematiccreeper.poses.*;
+import me.julionxn.cinematiccreeper.core.managers.NpcPosesManager;
+import me.julionxn.cinematiccreeper.core.poses.*;
 import me.julionxn.cinematiccreeper.screen.gui.components.ExtendedScreen;
 import me.julionxn.cinematiccreeper.screen.gui.components.widgets.PosePointWidget;
 import net.minecraft.client.gui.DrawContext;
@@ -32,7 +32,7 @@ public class DynamicPoseMenu extends ExtendedScreen {
     private int previousMaxTickPoint = 0;
     private int currentLength = 0;
     private final NpcPose npcPose = new NpcPose(PoseType.DYNAMIC);
-    private PoseTicker ticker;
+    private PoseAnimator ticker;
     private boolean playing = false;
     private PlayerEntityModel<NpcEntity> model;
 
@@ -49,7 +49,7 @@ public class DynamicPoseMenu extends ExtendedScreen {
             EntityModelLoader loader = client.getEntityModelLoader();
             PlayerEntityModel<NpcEntity> model = new PlayerEntityModel<>(loader.getModelPart(EntityModelLayers.PLAYER), false);
             model.head.scale(new Vector3f(-0.33f));
-            ticker = new PoseTicker(model);
+            ticker = new PoseAnimator(model);
         }
     }
 

@@ -1,4 +1,4 @@
-package me.julionxn.cinematiccreeper.poses;
+package me.julionxn.cinematiccreeper.core.poses;
 
 import me.julionxn.cinematiccreeper.entity.NpcEntity;
 import me.julionxn.cinematiccreeper.util.MathHelper;
@@ -9,13 +9,13 @@ import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import org.jetbrains.annotations.Nullable;
 
-public class PoseTicker {
+public class PoseAnimator {
 
     private final PlayerEntityModel<NpcEntity> model;
     float currentTick = 0;
     boolean playing;
 
-    public PoseTicker(PlayerEntityModel<NpcEntity> model) {
+    public PoseAnimator(PlayerEntityModel<NpcEntity> model) {
         this.model = model;
     }
 

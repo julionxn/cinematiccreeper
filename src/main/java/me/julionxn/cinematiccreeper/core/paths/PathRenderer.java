@@ -1,4 +1,4 @@
-package me.julionxn.cinematiccreeper.managers.paths;
+package me.julionxn.cinematiccreeper.core.paths;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import me.julionxn.cinematiccreeper.CinematicCreeper;

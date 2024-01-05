@@ -1,9 +1,9 @@
 package me.julionxn.cinematiccreeper.keybinds;
 
-import me.julionxn.cinematiccreeper.managers.CameraManager;
-import me.julionxn.cinematiccreeper.managers.paths.Path;
-import me.julionxn.cinematiccreeper.managers.paths.PathAction;
-import me.julionxn.cinematiccreeper.managers.paths.PlayerPathHolder;
+import me.julionxn.cinematiccreeper.core.managers.CameraManager;
+import me.julionxn.cinematiccreeper.core.paths.Path;
+import me.julionxn.cinematiccreeper.core.paths.PathAction;
+import me.julionxn.cinematiccreeper.core.paths.PlayerPathHolder;
 import me.julionxn.cinematiccreeper.util.mixins.PathAwareData;
 import me.julionxn.cinematiccreeper.util.mixins.PlayerData;
 import net.minecraft.client.MinecraftClient;

@@ -1,4 +1,4 @@
-package me.julionxn.cinematiccreeper.managers.paths;
+package me.julionxn.cinematiccreeper.core.paths;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;

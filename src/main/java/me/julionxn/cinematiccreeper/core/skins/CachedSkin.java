@@ -1,4 +1,4 @@
-package me.julionxn.cinematiccreeper.managers.skins;
+package me.julionxn.cinematiccreeper.core.skins;
 
 import me.julionxn.cinematiccreeper.CinematicCreeper;
 import net.fabricmc.api.EnvType;

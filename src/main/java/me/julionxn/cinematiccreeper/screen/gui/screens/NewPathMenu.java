@@ -1,8 +1,8 @@
 package me.julionxn.cinematiccreeper.screen.gui.screens;
 
 import me.julionxn.cinematiccreeper.CinematicCreeper;
-import me.julionxn.cinematiccreeper.managers.paths.Path;
-import me.julionxn.cinematiccreeper.managers.paths.PlayerPathHolder;
+import me.julionxn.cinematiccreeper.core.paths.Path;
+import me.julionxn.cinematiccreeper.core.paths.PlayerPathHolder;
 import me.julionxn.cinematiccreeper.util.mixins.PlayerData;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;

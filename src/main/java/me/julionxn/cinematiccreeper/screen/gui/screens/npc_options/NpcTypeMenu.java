@@ -2,10 +2,10 @@ package me.julionxn.cinematiccreeper.screen.gui.screens.npc_options;
 
 import me.julionxn.cinematiccreeper.CinematicCreeper;
 import me.julionxn.cinematiccreeper.entity.NpcEntity;
-import me.julionxn.cinematiccreeper.managers.NpcsManager;
-import me.julionxn.cinematiccreeper.managers.PresetsManager;
-import me.julionxn.cinematiccreeper.managers.presets.PresetOptions;
-import me.julionxn.cinematiccreeper.managers.presets.PresetOptionsHandlers;
+import me.julionxn.cinematiccreeper.core.managers.NpcsManager;
+import me.julionxn.cinematiccreeper.core.managers.PresetsManager;
+import me.julionxn.cinematiccreeper.core.presets.PresetOptions;
+import me.julionxn.cinematiccreeper.core.presets.PresetOptionsHandlers;
 import me.julionxn.cinematiccreeper.networking.AllPackets;
 import me.julionxn.cinematiccreeper.screen.gui.components.ExtendedScreen;
 import me.julionxn.cinematiccreeper.util.mixins.NpcData;

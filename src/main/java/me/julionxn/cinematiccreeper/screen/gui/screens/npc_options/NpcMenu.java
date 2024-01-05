@@ -1,11 +1,11 @@
 package me.julionxn.cinematiccreeper.screen.gui.screens.npc_options;
 
+import me.julionxn.cinematiccreeper.core.poses.PoseAnimator;
 import me.julionxn.cinematiccreeper.entity.NpcEntity;
 import me.julionxn.cinematiccreeper.entity.NpcEntityRenderer;
-import me.julionxn.cinematiccreeper.managers.NpcPosesManager;
-import me.julionxn.cinematiccreeper.managers.presets.PresetOptions;
-import me.julionxn.cinematiccreeper.poses.NpcPose;
-import me.julionxn.cinematiccreeper.poses.PoseTicker;
+import me.julionxn.cinematiccreeper.core.managers.NpcPosesManager;
+import me.julionxn.cinematiccreeper.core.presets.PresetOptions;
+import me.julionxn.cinematiccreeper.core.poses.NpcPose;
 import me.julionxn.cinematiccreeper.screen.gui.components.widgets.RemovableItemsScrollWidget;
 import me.julionxn.cinematiccreeper.screen.gui.screens.npc_options.poses.AddNewNpcPoseMenu;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -44,25 +44,25 @@ public class NpcMenu extends NpcTypeMenu {
         poses.clear();
         poses.add(new RemovableItemsScrollWidget.RemovableScrollItem("Ninguno", buttonWidget -> {
             npcEntity.clearNpcPose();
-            PoseTicker poseTicker = NpcEntityRenderer.models.get(npcEntity.getId());
-            if (poseTicker == null) return;
-            poseTicker.stop();
+            PoseAnimator poseAnimator = NpcEntityRenderer.models.get(npcEntity.getId());
+            if (poseAnimator == null) return;
+            poseAnimator.stop();
         }, buttonWidget -> {}));
         for (Map.Entry<String, NpcPose> entry : NpcPosesManager.getInstance().getLoadedPoses().entrySet()) {
             poses.add(new RemovableItemsScrollWidget.RemovableScrollItem(entry.getKey(), buttonWidget -> {
                 npcEntity.setNpcPose(entry.getValue());
-                PoseTicker poseTicker = NpcEntityRenderer.models.get(npcEntity.getId());
-                if (poseTicker == null) return;
-                poseTicker.reset();
-                poseTicker.play();
+                PoseAnimator poseAnimator = NpcEntityRenderer.models.get(npcEntity.getId());
+                if (poseAnimator == null) return;
+                poseAnimator.reset();
+                poseAnimator.play();
             }, buttonWidget -> {
                 NpcPosesManager.getInstance().removeNpcPose(entry.getKey());
                 NpcPose npcPose = npcEntity.getNpcPose();
                 if (npcPose != null && npcPose.equals(entry.getValue())){
                     npcEntity.clearNpcPose();
-                    PoseTicker poseTicker = NpcEntityRenderer.models.get(npcEntity.getId());
-                    if (poseTicker == null) return;
-                    poseTicker.stop();
+                    PoseAnimator poseAnimator = NpcEntityRenderer.models.get(npcEntity.getId());
+                    if (poseAnimator == null) return;
+                    poseAnimator.stop();
                 }
                 clear();
             }));

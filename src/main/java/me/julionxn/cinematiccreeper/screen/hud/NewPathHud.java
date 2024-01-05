@@ -2,7 +2,7 @@ package me.julionxn.cinematiccreeper.screen.hud;
 
 import me.julionxn.cinematiccreeper.CinematicCreeper;
 import me.julionxn.cinematiccreeper.keybinds.Keybindings;
-import me.julionxn.cinematiccreeper.managers.paths.PlayerPathHolder;
+import me.julionxn.cinematiccreeper.core.paths.PlayerPathHolder;
 import me.julionxn.cinematiccreeper.util.TextUtils;
 import me.julionxn.cinematiccreeper.util.mixins.PlayerData;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;

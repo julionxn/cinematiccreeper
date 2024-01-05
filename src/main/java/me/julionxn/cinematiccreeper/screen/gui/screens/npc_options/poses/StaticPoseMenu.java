@@ -1,9 +1,9 @@
 package me.julionxn.cinematiccreeper.screen.gui.screens.npc_options.poses;
 
-import me.julionxn.cinematiccreeper.managers.NpcPosesManager;
-import me.julionxn.cinematiccreeper.poses.NpcPose;
-import me.julionxn.cinematiccreeper.poses.PosePoint;
-import me.julionxn.cinematiccreeper.poses.PoseType;
+import me.julionxn.cinematiccreeper.core.managers.NpcPosesManager;
+import me.julionxn.cinematiccreeper.core.poses.NpcPose;
+import me.julionxn.cinematiccreeper.core.poses.PosePoint;
+import me.julionxn.cinematiccreeper.core.poses.PoseType;
 import me.julionxn.cinematiccreeper.screen.gui.components.ExtendedScreen;
 import me.julionxn.cinematiccreeper.screen.gui.components.widgets.PosePointWidget;
 import net.minecraft.client.gui.DrawContext;

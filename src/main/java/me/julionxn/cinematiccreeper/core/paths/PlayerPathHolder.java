@@ -1,4 +1,4 @@
-package me.julionxn.cinematiccreeper.managers.paths;
+package me.julionxn.cinematiccreeper.core.paths;
 
 public record PlayerPathHolder(PlayerPathHolder.State state, Path path) {
 

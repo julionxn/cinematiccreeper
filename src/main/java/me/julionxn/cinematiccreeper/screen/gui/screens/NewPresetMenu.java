@@ -2,10 +2,10 @@ package me.julionxn.cinematiccreeper.screen.gui.screens;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import me.julionxn.cinematiccreeper.entity.NpcEntity;
-import me.julionxn.cinematiccreeper.managers.NpcsManager;
-import me.julionxn.cinematiccreeper.managers.PresetsManager;
-import me.julionxn.cinematiccreeper.managers.presets.Preset;
-import me.julionxn.cinematiccreeper.managers.presets.PresetOptions;
+import me.julionxn.cinematiccreeper.core.managers.NpcsManager;
+import me.julionxn.cinematiccreeper.core.managers.PresetsManager;
+import me.julionxn.cinematiccreeper.core.presets.Preset;
+import me.julionxn.cinematiccreeper.core.presets.PresetOptions;
 import me.julionxn.cinematiccreeper.screen.gui.components.ExtendedScreen;
 import me.julionxn.cinematiccreeper.screen.gui.components.widgets.ScrollWidget;
 import me.julionxn.cinematiccreeper.screen.gui.screens.npc_options.BasicTypeMenu;
