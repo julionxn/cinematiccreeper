@@ -64,7 +64,6 @@ public class PathRenderer {
         RenderSystem.disableCull();
         tessellator.draw();
         RenderSystem.enableCull();
-        matrixStack.pop();
     }
 
     public static void renderLine(WorldRenderContext context, Vec3d from, Vec3d to) {

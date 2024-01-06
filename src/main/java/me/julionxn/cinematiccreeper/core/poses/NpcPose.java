@@ -57,4 +57,8 @@ public class NpcPose {
         return length;
     }
 
+    public boolean isEmpty(){
+        return poses.isEmpty();
+    }
+
 }

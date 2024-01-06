@@ -1,6 +1,8 @@
 package me.julionxn.cinematiccreeper.keybinds;
 
 import me.julionxn.cinematiccreeper.core.managers.CameraManager;
+import me.julionxn.cinematiccreeper.core.notifications.Notification;
+import me.julionxn.cinematiccreeper.core.notifications.NotificationManager;
 import me.julionxn.cinematiccreeper.core.paths.Path;
 import me.julionxn.cinematiccreeper.core.paths.PathAction;
 import me.julionxn.cinematiccreeper.core.paths.PlayerPathHolder;
@@ -57,6 +59,10 @@ public class InputHandlers {
         if (dataOptional.isPresent()) {
             Data data = dataOptional.get();
             Path path = data.pathState.path();
+            if (path.isEmpty()){
+                NotificationManager.getInstance().add(Notification.Type.WARNING, "No hay puntos.");
+                return;
+            }
             if (data.state == PlayerPathHolder.State.ADDING) {
                 Entity entity = ((PlayerEntity) data.playerData).getWorld().getEntityById(path.getEntityId());
                 data.playerData.cinematiccreeper$setPathHolder(PlayerPathHolder.none());

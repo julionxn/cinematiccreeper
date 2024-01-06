@@ -3,6 +3,8 @@ package me.julionxn.cinematiccreeper.screen.gui.screens;
 import com.mojang.blaze3d.systems.RenderSystem;
 import me.julionxn.cinematiccreeper.core.managers.NpcsManager;
 import me.julionxn.cinematiccreeper.core.managers.PresetsManager;
+import me.julionxn.cinematiccreeper.core.notifications.Notification;
+import me.julionxn.cinematiccreeper.core.notifications.NotificationManager;
 import me.julionxn.cinematiccreeper.core.presets.Preset;
 import me.julionxn.cinematiccreeper.core.presets.PresetOptions;
 import me.julionxn.cinematiccreeper.entity.NpcEntity;
@@ -68,6 +70,8 @@ public class NewPresetMenu extends ExtendedScreen {
             String searchText = searchField.getText();
             if (types.contains(searchText)) {
                 selectedEntity = searchText;
+            } else {
+                NotificationManager.getInstance().add(Notification.Type.WARNING, "No existe ese id.");
             }
         }).dimensions(startingX + 150, startingY, 20, 20).build();
         addDrawableChild(searchButton);
@@ -106,31 +110,41 @@ public class NewPresetMenu extends ExtendedScreen {
         if (selectedEntity.equals(NpcEntity.ENTITY_ID)) {
             addDrawableChild(skinUrlField);
             ButtonWidget createPreset = ButtonWidget.builder(Text.of("Crear"), button -> {
-                if (PresetsManager.getInstance().getPresetWithId(nameTextField.getText()).isPresent()) {
-                    nameTextField.setText("");
-                    return;
-                }
+                if (invalidInput(nameTextField)) return;
                 Preset preset = new Preset(selectedEntity, nameTextField.getText(),
                         presetOptions == null ? new PresetOptions()
                                 .setDisplayName(nameTextField.getText())
                                 .setSkinUrl(skinUrlField.getText()) : presetOptions.setSkinUrl(skinUrlField.getText()));
                 PresetsManager.getInstance().addPreset(preset);
                 client.setScreen(new PresetsMenu(blockPos));
+                NotificationManager.getInstance().add(Notification.Type.OK, "Creado exitosamente.");
             }).dimensions(startingX + 180, client.getWindow().getScaledHeight() / 2 + 95, 150, 20).build();
             addDrawableChild(createPreset);
         } else {
             ButtonWidget createPreset = ButtonWidget.builder(Text.of("Crear"), button -> {
-                if (PresetsManager.getInstance().getPresetWithId(nameTextField.getText()).isPresent()) {
-                    nameTextField.setText("");
-                    return;
-                }
+                if (invalidInput(nameTextField)) return;
                 Preset preset = new Preset(selectedEntity, nameTextField.getText(),
                         presetOptions == null ? new PresetOptions().setDisplayName(nameTextField.getText()) : presetOptions);
                 PresetsManager.getInstance().addPreset(preset);
                 client.setScreen(new PresetsMenu(blockPos));
+                NotificationManager.getInstance().add(Notification.Type.OK, "Creado exitosamente.");
             }).dimensions(startingX + 180, client.getWindow().getScaledHeight() / 2 + 95, 150, 20).build();
             addDrawableChild(createPreset);
         }
+    }
+
+    private boolean invalidInput(TextFieldWidget nameTextField) {
+        String input = nameTextField.getText();
+        if (input.replace(" ", "").isEmpty()){
+            NotificationManager.getInstance().add(Notification.Type.ERROR, "Id vacio.");
+            return true;
+        }
+        if (PresetsManager.getInstance().getPresetWithId(input).isPresent()) {
+            nameTextField.setText("");
+            NotificationManager.getInstance().add(Notification.Type.ERROR, "Ya existe.");
+            return true;
+        }
+        return false;
     }
 
     @Override

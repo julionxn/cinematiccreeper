@@ -1,6 +1,8 @@
 package me.julionxn.cinematiccreeper.screen.gui.screens;
 
 import me.julionxn.cinematiccreeper.CinematicCreeper;
+import me.julionxn.cinematiccreeper.core.notifications.Notification;
+import me.julionxn.cinematiccreeper.core.notifications.NotificationManager;
 import me.julionxn.cinematiccreeper.core.paths.Path;
 import me.julionxn.cinematiccreeper.core.paths.PlayerPathHolder;
 import me.julionxn.cinematiccreeper.util.mixins.PlayerData;
@@ -51,6 +53,11 @@ public class NewPathMenu extends Screen {
         addDrawableChild(pingPongButton);
         addDrawableChild(loopButton);
         ButtonWidget addButton = ButtonWidget.builder(Text.of("Empezar"), button -> {
+            String id = idTextField.getText();
+            if (id.replace(" ", "").isEmpty()) {
+                NotificationManager.getInstance().add(Notification.Type.ERROR, "Id vacio.");
+                return;
+            }
             ((PlayerData) player).cinematiccreeper$setPathHolder(new PlayerPathHolder(state,
                     new Path(idTextField.getText(), type, entityId)
             ));

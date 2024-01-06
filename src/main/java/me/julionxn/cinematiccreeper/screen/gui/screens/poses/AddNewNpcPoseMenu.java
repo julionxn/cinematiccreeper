@@ -1,6 +1,8 @@
 package me.julionxn.cinematiccreeper.screen.gui.screens.poses;
 
 import me.julionxn.cinematiccreeper.CinematicCreeper;
+import me.julionxn.cinematiccreeper.core.notifications.Notification;
+import me.julionxn.cinematiccreeper.core.notifications.NotificationManager;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -41,10 +43,15 @@ public class AddNewNpcPoseMenu extends Screen {
         addDrawableChild(staticButton);
         addDrawableChild(dynamicButton);
         ButtonWidget createButton = ButtonWidget.builder(Text.of("Crear"), button -> {
+            String id = idField.getText();
+            if (id.replace(" ", "").isEmpty()) {
+                NotificationManager.getInstance().add(Notification.Type.ERROR, "Id vacio.");
+                return;
+            }
             if (dynamic){
-                client.setScreen(new DynamicPoseMenu(previousScreen, idField.getText()));
+                client.setScreen(new DynamicPoseMenu(previousScreen, id));
             } else {
-                client.setScreen(new StaticPoseMenu(previousScreen, idField.getText()));
+                client.setScreen(new StaticPoseMenu(previousScreen, id));
             }
         }).dimensions(centerX - 120, centerY + 20, 100, 20).build();
         addDrawableChild(createButton);

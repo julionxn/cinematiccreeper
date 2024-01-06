@@ -65,6 +65,10 @@ public class Path {
         return actions;
     }
 
+    public boolean isEmpty(){
+        return actions.isEmpty();
+    }
+
     public enum Type {
         PING_PONG, LOOP
     }

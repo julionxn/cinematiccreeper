@@ -2,7 +2,12 @@ package me.julionxn.cinematiccreeper.screen.gui.screens.poses;
 
 import me.julionxn.cinematiccreeper.CinematicCreeper;
 import me.julionxn.cinematiccreeper.core.managers.NpcPosesManager;
-import me.julionxn.cinematiccreeper.core.poses.*;
+import me.julionxn.cinematiccreeper.core.notifications.Notification;
+import me.julionxn.cinematiccreeper.core.notifications.NotificationManager;
+import me.julionxn.cinematiccreeper.core.poses.Easing;
+import me.julionxn.cinematiccreeper.core.poses.NpcPose;
+import me.julionxn.cinematiccreeper.core.poses.PoseAnimator;
+import me.julionxn.cinematiccreeper.core.poses.PosePoint;
 import me.julionxn.cinematiccreeper.entity.NpcEntity;
 import me.julionxn.cinematiccreeper.screen.gui.components.ExtendedScreen;
 import me.julionxn.cinematiccreeper.screen.gui.components.widgets.PosePointWidget;
@@ -98,6 +103,10 @@ public class DynamicPoseMenu extends ExtendedScreen {
             addDrawableChild(removePose);
         }
         ButtonWidget createButton = ButtonWidget.builder(Text.of("Hecho"), button -> {
+            if (npcPose.isEmpty()){
+                NotificationManager.getInstance().add(Notification.Type.WARNING, "No hay puntos.");
+                return;
+            }
             NpcPosesManager.getInstance().addNpcPose(id, npcPose);
             client.setScreen(previousScreen);
         }).dimensions(windowWidth - 120, windowHeight - 30, 100, 20).build();
@@ -116,11 +125,6 @@ public class DynamicPoseMenu extends ExtendedScreen {
                 .dimensions(x, 20, 20, 20)
                 .build();
         addDrawableChild(buttonWidget);
-    }
-
-    @Override
-    public void tick() {
-        super.tick();
     }
 
     @Override
