@@ -1,6 +1,7 @@
 package me.julionxn.cinematiccreeper.screen.gui.screens.poses;
 
 import me.julionxn.cinematiccreeper.CinematicCreeper;
+import me.julionxn.cinematiccreeper.core.managers.NpcPosesManager;
 import me.julionxn.cinematiccreeper.core.notifications.Notification;
 import me.julionxn.cinematiccreeper.core.notifications.NotificationManager;
 import net.minecraft.client.gui.DrawContext;
@@ -46,6 +47,10 @@ public class AddNewNpcPoseMenu extends Screen {
             String id = idField.getText();
             if (id.replace(" ", "").isEmpty()) {
                 NotificationManager.getInstance().add(Notification.Type.ERROR, "Id vacio.");
+                return;
+            }
+            if (NpcPosesManager.getInstance().getNpcPose(id).isPresent()){
+                NotificationManager.getInstance().add(Notification.Type.ERROR, "Ya existe.");
                 return;
             }
             if (dynamic){

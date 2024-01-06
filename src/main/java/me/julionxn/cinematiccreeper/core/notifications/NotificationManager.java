@@ -22,7 +22,6 @@ public class NotificationManager {
 
     private final Queue<Notification> queue = new LinkedList<>();
     private static final float inDuration = 10;
-    private static final float midDuration = 60;
     private static final float outDuration = 10;
     private float delta;
 
@@ -39,6 +38,10 @@ public class NotificationManager {
     }
 
     public void add(Notification notification){
+        if (queue.size() > 5){
+            queue.clear();
+            delta = 0;
+        }
         queue.add(notification);
     }
 
@@ -50,6 +53,7 @@ public class NotificationManager {
         float y = targetY;
         Notification notification = queue.peek();
         if (notification == null) return;
+        float midDuration = (float) (35 * Math.pow(Math.E, -0.3 * queue.size()) + 5);
         if (delta <= inDuration){
             float t = delta / inDuration;
             y = Easing.EASE_OUT.interpolate(t, startingY, targetY);
@@ -60,7 +64,6 @@ public class NotificationManager {
         context.getMatrices().translate(0, 0, 800f);
         renderNotification(textRenderer, context, (int) y, notification.type(), notification.text());
         context.getMatrices().pop();
-        context.drawTextWithShadow(textRenderer, notification.text(), 0, (int) y, 0xffffffff);
         context.draw();
         if (delta >= midDuration + inDuration + outDuration){
             queue.remove();
@@ -69,13 +72,14 @@ public class NotificationManager {
     }
 
     private void renderNotification(TextRenderer textRenderer, DrawContext context, int y, Notification.Type type, String text){
+        int startingX = context.getScaledWindowWidth() - 140;
         Identifier typeTexture = type == Notification.Type.OK ? OK : type == Notification.Type.ERROR ? ERROR : WARNING;
-        context.drawTexture(TEXTURE, 0, y, 0, 0, 0, 140, 20, 140, 20);
-        drawScrollableText(context, textRenderer, Text.of(text), 70, 25, y, 130, y + 20, 0xffffff);
-        context.drawTexture(typeTexture, 7, y + 4, 0, 0, 0, 12, 12, 12, 12);
+        context.drawTexture(TEXTURE, startingX, y, 0, 0, 0, 140, 20, 140, 20);
+        drawScrollableText(context, textRenderer, Text.of(text), startingX + 70, startingX + 25, y, startingX + 130, y + 20);
+        context.drawTexture(typeTexture, startingX + 7, y + 4, 0, 0, 0, 12, 12, 12, 12);
     }
 
-    protected void drawScrollableText(DrawContext context, TextRenderer textRenderer, Text text, int centerX, int startX, int startY, int endX, int endY, int color) {
+    private void drawScrollableText(DrawContext context, TextRenderer textRenderer, Text text, int centerX, int startX, int startY, int endX, int endY) {
         int i = textRenderer.getWidth(text);
         int j = (startY + endY - textRenderer.fontHeight) / 2 + 1;
         int k = endX - startX;
@@ -86,11 +90,11 @@ public class NotificationManager {
             double f = Math.sin(1.57079632 * Math.cos(Math.PI * 2 * d / e)) / 2.0 + 0.5;
             double g = MathHelper.lerp(f, 0.0, l);
             context.enableScissor(startX, startY, endX, endY);
-            context.drawTextWithShadow(textRenderer, text, startX - (int)g, j, color);
+            context.drawTextWithShadow(textRenderer, text, startX - (int)g, j, 16777215);
             context.disableScissor();
         } else {
             int l = MathHelper.clamp(centerX, startX + i / 2, endX - i / 2);
-            context.drawCenteredTextWithShadow(textRenderer, text, l, j, color);
+            context.drawCenteredTextWithShadow(textRenderer, text, l, j, 16777215);
         }
     }
 

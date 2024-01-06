@@ -147,19 +147,12 @@ public abstract class NpcTypeMenu extends ExtendedScreen {
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        super.render(context, mouseX, mouseY, delta);
-    }
-
-    @Override
     public void renderInGameBackground(DrawContext context) {
         super.renderInGameBackground(context);
         x = (windowWidth / 2) - width / 2;
         y = (windowHeight / 2) - height / 2;
-        context.setShaderColor(1f, 1f, 1f, 1f);
         context.drawTexture(BACKGROUND, x, y, 0, 0, 300, 200, 300, 200);
         context.fill(x + 3, y + 3, x + width - 3, y + height - 3, 0, 0x1fffffff);
-
     }
 
     private record Tab(String text, BiConsumer<ButtonWidget, MinecraftClient> onClick,

@@ -67,14 +67,15 @@ public class RemovableItemsScrollWidget extends ExtendedWidget {
                     .dimensions(x, y + (current * itemsHeight), itemsWidth, itemsHeight).build();
             addDrawableChild(option);
             ButtonWidget remove = ButtonWidget.builder(
-                    Text.of("R"),
+                    Text.of("E"),
                     button -> {
                         scrollItem.onRemove.accept(button);
                         retrieveItems();
                         clear();
                     }
-            ).dimensions(x + itemsWidth, y + (current++ * itemsHeight), 20, 20).build();
+            ).dimensions(x + itemsWidth, y + (current * itemsHeight), 20, 20).build();
             addDrawableChild(remove);
+            current++;
         }
     }
 

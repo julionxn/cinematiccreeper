@@ -6,6 +6,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 @Environment(EnvType.CLIENT)
 public class NpcPosesManager extends SerializableJsonManager<NpcPosesManager> {
@@ -30,8 +31,8 @@ public class NpcPosesManager extends SerializableJsonManager<NpcPosesManager> {
         loadedPoses.put(id, pose);
     }
 
-    public NpcPose getNpcPose(String id){
-        return loadedPoses.get(id);
+    public Optional<NpcPose> getNpcPose(String id){
+        return Optional.ofNullable(loadedPoses.get(id));
     }
 
     public HashMap<String, NpcPose> getLoadedPoses(){

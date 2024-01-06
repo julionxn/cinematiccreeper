@@ -5,11 +5,13 @@ import me.julionxn.cinematiccreeper.core.notifications.Notification;
 import me.julionxn.cinematiccreeper.core.notifications.NotificationManager;
 import me.julionxn.cinematiccreeper.core.paths.Path;
 import me.julionxn.cinematiccreeper.core.paths.PlayerPathHolder;
+import me.julionxn.cinematiccreeper.util.mixins.PathAwareData;
 import me.julionxn.cinematiccreeper.util.mixins.PlayerData;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -56,6 +58,12 @@ public class NewPathMenu extends Screen {
             String id = idTextField.getText();
             if (id.replace(" ", "").isEmpty()) {
                 NotificationManager.getInstance().add(Notification.Type.ERROR, "Id vacio.");
+                return;
+            }
+            Entity entity = player.getWorld().getEntityById(entityId);
+            if (entity == null) return;
+            if (((PathAwareData) entity).cinematiccreeper$getPaths().stream().anyMatch(path -> path.getId().equals(id))){
+                NotificationManager.getInstance().add(Notification.Type.ERROR, "Ya existe.");
                 return;
             }
             ((PlayerData) player).cinematiccreeper$setPathHolder(new PlayerPathHolder(state,
