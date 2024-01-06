@@ -1,6 +1,7 @@
 package me.julionxn.cinematiccreeper.core.poses;
 
 import com.google.gson.annotations.Expose;
+import me.julionxn.cinematiccreeper.core.Easing;
 
 public class PosePoint {
 

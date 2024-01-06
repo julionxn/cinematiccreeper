@@ -1,4 +1,4 @@
-package me.julionxn.cinematiccreeper.core.poses;
+package me.julionxn.cinematiccreeper.core;
 
 import java.util.function.Function;
 

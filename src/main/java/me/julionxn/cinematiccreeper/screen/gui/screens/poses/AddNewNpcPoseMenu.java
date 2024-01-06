@@ -35,22 +35,22 @@ public class AddNewNpcPoseMenu extends Screen {
                 client.textRenderer, centerX - 120, centerY, 100, 20, Text.of("PoseId")
         );
         addDrawableChild(idField);
-        ButtonWidget staticButton = ButtonWidget.builder(Text.of("Estática"), button ->
+        ButtonWidget staticButton = ButtonWidget.builder(Text.translatable("gui.cinematiccreeper.static"), button ->
                         dynamic = false
                 ).dimensions(centerX + 20, centerY, 100, 20).build();
-        ButtonWidget dynamicButton = ButtonWidget.builder(Text.of("Dinámica"), button ->
+        ButtonWidget dynamicButton = ButtonWidget.builder(Text.translatable("gui.cinematiccreeper.dynamic"), button ->
                         dynamic = true
                 ).dimensions(centerX + 20, centerY + 20, 100, 20).build();
         addDrawableChild(staticButton);
         addDrawableChild(dynamicButton);
-        ButtonWidget createButton = ButtonWidget.builder(Text.of("Crear"), button -> {
+        ButtonWidget createButton = ButtonWidget.builder(Text.translatable("gui.cinematiccreeper.create"), button -> {
             String id = idField.getText();
             if (id.replace(" ", "").isEmpty()) {
-                NotificationManager.getInstance().add(Notification.Type.ERROR, "Id vacio.");
+                NotificationManager.getInstance().add(Notification.Type.ERROR, Text.translatable("messages.cinematiccreeper.blank_id"));
                 return;
             }
             if (NpcPosesManager.getInstance().getNpcPose(id).isPresent()){
-                NotificationManager.getInstance().add(Notification.Type.ERROR, "Ya existe.");
+                NotificationManager.getInstance().add(Notification.Type.ERROR, Text.translatable("messages.cinematiccreeper.already_exists"));
                 return;
             }
             if (dynamic){

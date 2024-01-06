@@ -4,7 +4,7 @@ import me.julionxn.cinematiccreeper.CinematicCreeper;
 import me.julionxn.cinematiccreeper.core.managers.NpcPosesManager;
 import me.julionxn.cinematiccreeper.core.notifications.Notification;
 import me.julionxn.cinematiccreeper.core.notifications.NotificationManager;
-import me.julionxn.cinematiccreeper.core.poses.Easing;
+import me.julionxn.cinematiccreeper.core.Easing;
 import me.julionxn.cinematiccreeper.core.poses.NpcPose;
 import me.julionxn.cinematiccreeper.core.poses.PoseAnimator;
 import me.julionxn.cinematiccreeper.core.poses.PosePoint;
@@ -72,8 +72,8 @@ public class DynamicPoseMenu extends ExtendedScreen {
     @Override
     public void addDrawables() {
         if (client == null) return;
-        String text = playing ? "Pausar" : "Play";
-        ButtonWidget playButton = ButtonWidget.builder(Text.of(text), button -> {
+        Text text = playing ? Text.translatable("gui.cinematiccreeper.stop") : Text.translatable("gui.cinematiccreeper.play");
+        ButtonWidget playButton = ButtonWidget.builder(text, button -> {
             if (playing){
                 playing = false;
                 ticker.stop();
@@ -91,20 +91,22 @@ public class DynamicPoseMenu extends ExtendedScreen {
         addChangeTickButton("<<", windowWidth / 2 - 190, -20);
         addChangeTickButton(">", windowWidth / 2 + 150, 1);
         addChangeTickButton(">>", windowWidth / 2 + 170, 20);
-        ButtonWidget addPose = ButtonWidget.builder(Text.of("Añadir punto"), button -> addPoint(new PosePoint()))
-                .dimensions(20, windowHeight - 30, 100, 20).build();
-        addDrawableChild(addPose);
+
         if (npcPose.containsAPose(currentTick)){
             addEaseTypeButton(Easing.NONE, windowWidth / 2 - 190, windowHeight / 2 - 30);
             addEaseTypeButton(Easing.EASE_IN, windowWidth / 2 - 190, windowHeight / 2 - 10);
             addEaseTypeButton(Easing.EASE_OUT, windowWidth / 2 - 190, windowHeight / 2 + 10);
-            ButtonWidget removePose = ButtonWidget.builder(Text.of("Quitar punto"), button -> removePoint(currentTick))
-                    .dimensions(120, windowHeight - 30, 100, 20).build();
+            ButtonWidget removePose = ButtonWidget.builder(Text.translatable("gui.cinematiccreeper.remove_frame"), button -> removePoint(currentTick))
+                    .dimensions(20, windowHeight - 30, 100, 20).build();
             addDrawableChild(removePose);
+        } else {
+            ButtonWidget addPose = ButtonWidget.builder(Text.translatable("gui.cinematiccreeper.add_frame"), button -> addPoint(new PosePoint()))
+                    .dimensions(20, windowHeight - 30, 100, 20).build();
+            addDrawableChild(addPose);
         }
-        ButtonWidget createButton = ButtonWidget.builder(Text.of("Hecho"), button -> {
+        ButtonWidget createButton = ButtonWidget.builder(Text.translatable("gui.cinematiccreeper.done"), button -> {
             if (npcPose.isEmpty()){
-                NotificationManager.getInstance().add(Notification.Type.WARNING, "No hay puntos.");
+                NotificationManager.getInstance().add(Notification.Type.WARNING, Text.translatable("messages.cinematiccreeper.no_points"));
                 return;
             }
             NpcPosesManager.getInstance().addNpcPose(id, npcPose);

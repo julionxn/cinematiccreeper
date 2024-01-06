@@ -1,5 +1,6 @@
 package me.julionxn.cinematiccreeper.core.poses;
 
+import me.julionxn.cinematiccreeper.core.Easing;
 import me.julionxn.cinematiccreeper.entity.NpcEntity;
 import me.julionxn.cinematiccreeper.util.MathHelper;
 import net.minecraft.client.model.ModelPart;

@@ -42,7 +42,7 @@ public class NpcMenu extends NpcTypeMenu {
 
     private void setPoses(NpcEntity npcEntity){
         poses.clear();
-        poses.add(new RemovableItemsScrollWidget.RemovableScrollItem("Ninguno", buttonWidget -> {
+        poses.add(new RemovableItemsScrollWidget.RemovableScrollItem(Text.translatable("gui.cinematiccreeper.none").getString(), buttonWidget -> {
             npcEntity.clearNpcPose();
             PoseAnimator poseAnimator = NpcEntityRenderer.models.get(npcEntity.getId());
             if (poseAnimator == null) return;

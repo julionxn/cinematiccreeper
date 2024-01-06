@@ -11,6 +11,7 @@ import me.julionxn.cinematiccreeper.util.mixins.PlayerData;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.text.Text;
 
 import java.util.Optional;
 
@@ -44,6 +45,10 @@ public class InputHandlers {
             Data data = dataOptional.get();
             if (data.state == PlayerPathHolder.State.ADDING) {
                 Path path = data.pathState.path();
+                if (path.isEmpty()){
+                    NotificationManager.getInstance().add(Notification.Type.WARNING, Text.translatable("messages.cinematiccreeper.no_points"));
+                    return;
+                }
                 path.popAction();
             }
             return;
@@ -60,7 +65,7 @@ public class InputHandlers {
             Data data = dataOptional.get();
             Path path = data.pathState.path();
             if (path.isEmpty()){
-                NotificationManager.getInstance().add(Notification.Type.WARNING, "No hay puntos.");
+                NotificationManager.getInstance().add(Notification.Type.WARNING, Text.translatable("messages.cinematiccreeper.no_points"));
                 return;
             }
             if (data.state == PlayerPathHolder.State.ADDING) {

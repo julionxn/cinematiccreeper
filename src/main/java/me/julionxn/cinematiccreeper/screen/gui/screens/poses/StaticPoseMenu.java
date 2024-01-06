@@ -37,7 +37,7 @@ public class StaticPoseMenu extends ExtendedScreen {
         if (client == null) return;
         int windowWidth = client.getWindow().getScaledWidth();
         int windowHeight = client.getWindow().getScaledHeight();
-        ButtonWidget createButton = ButtonWidget.builder(Text.of("Hecho"), button -> {
+        ButtonWidget createButton = ButtonWidget.builder(Text.translatable("gui.cinematiccreeper.done"), button -> {
             npcPose.setPose(posePoint);
             NpcPosesManager.getInstance().addNpcPose(id, npcPose);
             client.setScreen(previousScreen);

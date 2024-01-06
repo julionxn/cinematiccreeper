@@ -65,20 +65,20 @@ public abstract class NpcTypeMenu extends ExtendedScreen {
     }
 
     private void addBasicButtons(int x, int y) {
-        ButtonWidget cancelButton = ButtonWidget.builder(Text.of("Cancelar"), button -> onCancel.run())
+        ButtonWidget cancelButton = ButtonWidget.builder(Text.translatable("gui.cinematiccreeper.cancel"), button -> onCancel.run())
                 .dimensions(x + 20, y + height, 100, 20).build();
         addDrawableChild(cancelButton);
-        ButtonWidget saveButton = ButtonWidget.builder(Text.of("Guardar"), button -> onReady.accept(presetOptions))
+        ButtonWidget saveButton = ButtonWidget.builder(Text.translatable("gui.cinematiccreeper.save"), button -> onReady.accept(presetOptions))
                 .dimensions(x + width - 120, y + height, 100, 20).build();
         addDrawableChild(saveButton);
         tabs.clear();
-        addTab("Básico", (buttonWidget, minecraftClient) -> {
+        addTab(Text.translatable("gui.cinematiccreeper.basic_tab"), (buttonWidget, minecraftClient) -> {
             if (minecraftClient.currentScreen == null) return;
             if (minecraftClient.currentScreen.getClass() == BasicTypeMenu.class) return;
             minecraftClient.setScreen(new BasicTypeMenu(entityType, onReady, onCancel, presetOptions, entity));
         }, (string, minecraftClient) -> true);
 
-        addTab("Mob", (buttonWidget, minecraftClient) -> {
+        addTab(Text.translatable("gui.cinematiccreeper.mob_tab"), (buttonWidget, minecraftClient) -> {
             if (minecraftClient.currentScreen == null) return;
             if (minecraftClient.currentScreen.getClass() == MobNpcTypeMenu.class) return;
             minecraftClient.setScreen(new MobNpcTypeMenu(entityType, onReady, onCancel, presetOptions, entity));
@@ -89,7 +89,7 @@ public abstract class NpcTypeMenu extends ExtendedScreen {
             return NpcsManager.getInstance().isMobEntity(world, string);
         });
 
-        addTab("Path", (buttonWidget, minecraftClient) -> {
+        addTab(Text.translatable("gui.cinematiccreeper.path_tab"), (buttonWidget, minecraftClient) -> {
             if (minecraftClient.currentScreen == null) return;
             if (minecraftClient.currentScreen.getClass() == PathAwareNpcTypeMenu.class) return;
             minecraftClient.setScreen(new PathAwareNpcTypeMenu(entityType, onReady, onCancel, presetOptions, entity));
@@ -99,7 +99,7 @@ public abstract class NpcTypeMenu extends ExtendedScreen {
             World world = player.getWorld();
             return NpcsManager.getInstance().isPathAwareEntity(world, string);
         });
-        addTab("Npc", (buttonWidget, minecraftClient) -> {
+        addTab(Text.translatable("gui.cinematiccreeper.npc_tab"), (buttonWidget, minecraftClient) -> {
             if (minecraftClient.currentScreen == null) return;
             if (minecraftClient.currentScreen.getClass() == NpcMenu.class) return;
             minecraftClient.setScreen(new NpcMenu(entityType, onReady, onCancel, presetOptions, entity));
@@ -111,7 +111,7 @@ public abstract class NpcTypeMenu extends ExtendedScreen {
         int tabWidth = (width - 50) / filteredTabs.size();
         for (int i = 0; i < filteredTabs.size(); i++) {
             Tab tab = filteredTabs.get(i);
-            ButtonWidget buttonWidget = ButtonWidget.builder(Text.of(tab.text), button -> tab.onClick.accept(button, client))
+            ButtonWidget buttonWidget = ButtonWidget.builder(tab.text, button -> tab.onClick.accept(button, client))
                     .dimensions(startingX + (i * tabWidth), y - 20, tabWidth, 20).build();
             addDrawableChild(buttonWidget);
         }
@@ -142,7 +142,7 @@ public abstract class NpcTypeMenu extends ExtendedScreen {
         addDrawableChild(resetButton);
     }
 
-    protected void addTab(String text, BiConsumer<ButtonWidget, MinecraftClient> onClick, BiPredicate<String, MinecraftClient> predicate) {
+    protected void addTab(Text text, BiConsumer<ButtonWidget, MinecraftClient> onClick, BiPredicate<String, MinecraftClient> predicate) {
         tabs.add(new Tab(text, onClick, predicate));
     }
 
@@ -155,7 +155,7 @@ public abstract class NpcTypeMenu extends ExtendedScreen {
         context.fill(x + 3, y + 3, x + width - 3, y + height - 3, 0, 0x1fffffff);
     }
 
-    private record Tab(String text, BiConsumer<ButtonWidget, MinecraftClient> onClick,
+    private record Tab(Text text, BiConsumer<ButtonWidget, MinecraftClient> onClick,
                        BiPredicate<String, MinecraftClient> predicate) {
 
     }

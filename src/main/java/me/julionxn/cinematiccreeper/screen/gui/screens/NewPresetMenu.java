@@ -71,7 +71,7 @@ public class NewPresetMenu extends ExtendedScreen {
             if (types.contains(searchText)) {
                 selectedEntity = searchText;
             } else {
-                NotificationManager.getInstance().add(Notification.Type.WARNING, "No existe ese id.");
+                NotificationManager.getInstance().add(Notification.Type.WARNING, Text.translatable("messages.cinematiccreeper.id_not_found"));
             }
         }).dimensions(startingX + 150, startingY, 20, 20).build();
         addDrawableChild(searchButton);
@@ -96,7 +96,7 @@ public class NewPresetMenu extends ExtendedScreen {
         skinUrlField.setText(urlLink);
 
 
-        ButtonWidget optionsButton = ButtonWidget.builder(Text.of("Opciones"), button -> {
+        ButtonWidget optionsButton = ButtonWidget.builder(Text.translatable("gui.cinematiccreeper.options"), button -> {
             textName = nameTextField.getText();
             urlLink = skinUrlField.getText();
             client.setScreen(new BasicTypeMenu(selectedEntity, presetOptions1 -> {
@@ -109,7 +109,7 @@ public class NewPresetMenu extends ExtendedScreen {
 
         if (selectedEntity.equals(NpcEntity.ENTITY_ID)) {
             addDrawableChild(skinUrlField);
-            ButtonWidget createPreset = ButtonWidget.builder(Text.of("Crear"), button -> {
+            ButtonWidget createPreset = ButtonWidget.builder(Text.translatable("gui.cinematiccreeper.create"), button -> {
                 if (invalidInput(nameTextField)) return;
                 Preset preset = new Preset(selectedEntity, nameTextField.getText(),
                         presetOptions == null ? new PresetOptions()
@@ -117,17 +117,17 @@ public class NewPresetMenu extends ExtendedScreen {
                                 .setSkinUrl(skinUrlField.getText()) : presetOptions.setSkinUrl(skinUrlField.getText()));
                 PresetsManager.getInstance().addPreset(preset);
                 client.setScreen(new PresetsMenu(blockPos));
-                NotificationManager.getInstance().add(Notification.Type.OK, "Creado exitosamente.");
+                NotificationManager.getInstance().add(Notification.Type.OK, Text.translatable("messages.cinematiccreeper.created_successfully"));
             }).dimensions(startingX + 180, client.getWindow().getScaledHeight() / 2 + 95, 150, 20).build();
             addDrawableChild(createPreset);
         } else {
-            ButtonWidget createPreset = ButtonWidget.builder(Text.of("Crear"), button -> {
+            ButtonWidget createPreset = ButtonWidget.builder(Text.translatable("gui.cinematiccreeper.create"), button -> {
                 if (invalidInput(nameTextField)) return;
                 Preset preset = new Preset(selectedEntity, nameTextField.getText(),
                         presetOptions == null ? new PresetOptions().setDisplayName(nameTextField.getText()) : presetOptions);
                 PresetsManager.getInstance().addPreset(preset);
                 client.setScreen(new PresetsMenu(blockPos));
-                NotificationManager.getInstance().add(Notification.Type.OK, "Creado exitosamente.");
+                NotificationManager.getInstance().add(Notification.Type.OK, Text.translatable("messages.cinematiccreeper.created_successfully"));
             }).dimensions(startingX + 180, client.getWindow().getScaledHeight() / 2 + 95, 150, 20).build();
             addDrawableChild(createPreset);
         }
@@ -136,12 +136,12 @@ public class NewPresetMenu extends ExtendedScreen {
     private boolean invalidInput(TextFieldWidget nameTextField) {
         String input = nameTextField.getText();
         if (input.replace(" ", "").isEmpty()){
-            NotificationManager.getInstance().add(Notification.Type.ERROR, "Id vacio.");
+            NotificationManager.getInstance().add(Notification.Type.ERROR, Text.translatable("messages.cinematiccreeper.blank_id"));
             return true;
         }
         if (PresetsManager.getInstance().getPresetWithId(input).isPresent()) {
             nameTextField.setText("");
-            NotificationManager.getInstance().add(Notification.Type.ERROR, "Ya existe.");
+            NotificationManager.getInstance().add(Notification.Type.ERROR, Text.translatable("messages.cinematiccreeper.already_exists"));
             return true;
         }
         return false;

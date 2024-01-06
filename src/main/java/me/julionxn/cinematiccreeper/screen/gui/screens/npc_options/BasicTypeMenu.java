@@ -25,13 +25,13 @@ public class BasicTypeMenu extends NpcTypeMenu {
         customNameField.setText(presetOptions.getDisplayName());
         addDrawableChild(customNameField);
 
-        ToggleWidget showNameWidget = new ToggleWidget(x + 130, y + 20, 150, 20, Text.of("Mostrar nombre"),
+        ToggleWidget showNameWidget = new ToggleWidget(x + 130, y + 20, 150, 20, Text.translatable("gui.cinematiccreeper.show_name"),
                 () -> presetOptions.setShowDisplayName(true),
                 () -> presetOptions.setShowDisplayName(false));
         showNameWidget.setActive(presetOptions.showDisplayName());
         addDrawableChild(showNameWidget);
 
-        ToggleWidget sneakingWidget = new ToggleWidget(x + 20, y + 50, 130, 20, Text.of("Sneaking"),
+        ToggleWidget sneakingWidget = new ToggleWidget(x + 20, y + 50, 130, 20, Text.translatable("gui.cinematiccreeper.sneaking"),
                 () -> presetOptions.setSneaking(true),
                 () -> presetOptions.setSneaking(false));
         sneakingWidget.setActive(presetOptions.isSneaking());

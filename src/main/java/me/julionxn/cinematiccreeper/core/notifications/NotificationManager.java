@@ -1,7 +1,7 @@
 package me.julionxn.cinematiccreeper.core.notifications;
 
 import me.julionxn.cinematiccreeper.CinematicCreeper;
-import me.julionxn.cinematiccreeper.core.poses.Easing;
+import me.julionxn.cinematiccreeper.core.Easing;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -33,7 +33,7 @@ public class NotificationManager {
         return SingletonHolder.INSTANCE;
     }
 
-    public void add(Notification.Type type, String text){
+    public void add(Notification.Type type, Text text){
         add(new Notification(type, text));
     }
 
@@ -62,7 +62,7 @@ public class NotificationManager {
         }
         context.getMatrices().push();
         context.getMatrices().translate(0, 0, 800f);
-        renderNotification(textRenderer, context, (int) y, notification.type(), notification.text());
+        renderNotification(textRenderer, context, (int) y, notification.type(), notification.text().getString());
         context.getMatrices().pop();
         context.draw();
         if (delta >= midDuration + inDuration + outDuration){
