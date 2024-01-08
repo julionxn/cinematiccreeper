@@ -1,12 +1,8 @@
 package me.julionxn.cinematiccreeper.mixin;
 
-import me.julionxn.cinematiccreeper.core.paths.PlayerPathHolder;
-import me.julionxn.cinematiccreeper.keybinds.InputHandlers;
-import me.julionxn.cinematiccreeper.keybinds.Keybindings;
-import me.julionxn.cinematiccreeper.util.mixins.PlayerData;
+import me.julionxn.cinematiccreeper.keybinds.InputHandlersManager;
 import net.minecraft.client.Keyboard;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -23,32 +19,7 @@ public abstract class KeyboardMixin {
 
     @Inject(method = "onKey", at = @At("TAIL"))
     public void handleInput(long window, int key, int scancode, int action, int modifiers, CallbackInfo ci) {
-        if (action != 1) return;
-        if (key == 256) {
-            PlayerEntity player = client.player;
-            if (player == null) return;
-            PlayerData playerData = (PlayerData) player;
-            if (playerData.cinematiccreeper$getPathHolder().state() != PlayerPathHolder.State.NONE) {
-                playerData.cinematiccreeper$setPathHolder(PlayerPathHolder.none());
-            }
-            return;
-        }
-        if (Keybindings.firstAction.matchesKey(key, scancode)) {
-            InputHandlers.handleFirstAction(client);
-            return;
-        }
-        if (Keybindings.secondAction.matchesKey(key, scancode)) {
-            InputHandlers.handleSecondAction(client);
-            return;
-        }
-        if (Keybindings.thirdAction.matchesKey(key, scancode)) {
-            InputHandlers.handleThirdAction(client);
-            return;
-        }
-        if (Keybindings.fourthAction.matchesKey(key, scancode)) {
-            InputHandlers.handleFourthAction(client);
-            return;
-        }
+        InputHandlersManager.handleKeyboard(client, key, action, modifiers);
     }
 
 }

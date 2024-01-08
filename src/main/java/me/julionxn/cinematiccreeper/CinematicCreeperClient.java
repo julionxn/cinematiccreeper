@@ -1,5 +1,6 @@
 package me.julionxn.cinematiccreeper;
 
+import me.julionxn.cinematiccreeper.core.managers.CameraManager;
 import me.julionxn.cinematiccreeper.core.managers.NpcPosesManager;
 import me.julionxn.cinematiccreeper.core.managers.NpcSkinManager;
 import me.julionxn.cinematiccreeper.core.managers.PresetsManager;
@@ -27,6 +28,7 @@ public class CinematicCreeperClient implements ClientModInitializer {
         PresetsManager.getInstance().load();
         NpcSkinManager.getInstance().load();
         NpcPosesManager.getInstance().load();
+        CameraManager.getInstance().load();
         EntityRendererRegistry.register(AllEntities.NPC_ENTITY, NpcEntityRenderer::new);
         AllPackets.registerS2CPackets();
         Keybindings.register();
@@ -44,11 +46,13 @@ public class CinematicCreeperClient implements ClientModInitializer {
             PresetsManager.getInstance().save();
             NpcSkinManager.getInstance().save();
             NpcPosesManager.getInstance().save();
+            CameraManager.getInstance().save();
         });
         ClientLifecycleEvents.CLIENT_STOPPING.register(client -> {
             PresetsManager.getInstance().save();
             NpcSkinManager.getInstance().save();
             NpcPosesManager.getInstance().save();
+            CameraManager.getInstance().save();
         });
     }
 

@@ -7,7 +7,6 @@ import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -17,7 +16,7 @@ public class SliderWidget extends ClickableWidget {
 
     private static final Identifier SCROLLBAR_TEXTURE = new Identifier(CinematicCreeper.MOD_ID, "textures/gui/scrollbar.png");
     private static final Identifier BACKGROUND_TEXTURE = new Identifier(CinematicCreeper.MOD_ID, "textures/gui/slider.png");
-    private Supplier<Float> value;
+    private final Supplier<Float> value;
     private final float maxValue;
     private final Consumer<Float> onChange;
     private final Function<Float, String> text;
@@ -64,8 +63,12 @@ public class SliderWidget extends ClickableWidget {
 
     private void setValue(double mouseX){
         float newValue = (float) (mouseX - getX()) / width;
-        float value = MathHelper.clamp(newValue, 0, 1);
-        onChange.accept(value);
+        if (newValue > 1){
+            newValue %= 1;
+        } else if (newValue < 0){
+            newValue += 1;
+        }
+        onChange.accept(newValue);
     }
 
     @Override

@@ -1,16 +1,17 @@
 package me.julionxn.cinematiccreeper.screen.gui.screens.poses;
 
 import me.julionxn.cinematiccreeper.CinematicCreeper;
+import me.julionxn.cinematiccreeper.core.Interpolation;
 import me.julionxn.cinematiccreeper.core.managers.NpcPosesManager;
 import me.julionxn.cinematiccreeper.core.notifications.Notification;
 import me.julionxn.cinematiccreeper.core.notifications.NotificationManager;
-import me.julionxn.cinematiccreeper.core.Easing;
 import me.julionxn.cinematiccreeper.core.poses.NpcPose;
 import me.julionxn.cinematiccreeper.core.poses.PoseAnimator;
 import me.julionxn.cinematiccreeper.core.poses.PosePoint;
 import me.julionxn.cinematiccreeper.entity.NpcEntity;
 import me.julionxn.cinematiccreeper.screen.gui.components.ExtendedScreen;
 import me.julionxn.cinematiccreeper.screen.gui.components.widgets.PosePointWidget;
+import me.julionxn.cinematiccreeper.util.MathHelper;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -93,9 +94,9 @@ public class DynamicPoseMenu extends ExtendedScreen {
         addChangeTickButton(">>", windowWidth / 2 + 170, 20);
 
         if (npcPose.containsAPose(currentTick)){
-            addEaseTypeButton(Easing.NONE, windowWidth / 2 - 190, windowHeight / 2 - 30);
-            addEaseTypeButton(Easing.EASE_IN, windowWidth / 2 - 190, windowHeight / 2 - 10);
-            addEaseTypeButton(Easing.EASE_OUT, windowWidth / 2 - 190, windowHeight / 2 + 10);
+            addEaseTypeButton(Interpolation.LINEAR, windowWidth / 2 - 190, windowHeight / 2 - 30);
+            addEaseTypeButton(Interpolation.EASE_IN, windowWidth / 2 - 190, windowHeight / 2 - 10);
+            addEaseTypeButton(Interpolation.EASE_OUT, windowWidth / 2 - 190, windowHeight / 2 + 10);
             ButtonWidget removePose = ButtonWidget.builder(Text.translatable("gui.cinematiccreeper.remove_frame"), button -> removePoint(currentTick))
                     .dimensions(20, windowHeight - 30, 100, 20).build();
             addDrawableChild(removePose);
@@ -115,9 +116,9 @@ public class DynamicPoseMenu extends ExtendedScreen {
         addDrawableChild(createButton);
     }
 
-    private void addEaseTypeButton(Easing easing, int x, int y){
-        ButtonWidget buttonWidget = ButtonWidget.builder(Text.of(easing.toString().replace("_", " ")), button -> {
-            npcPose.getPoseOfTick(currentTick).easing = easing;
+    private void addEaseTypeButton(Interpolation interpolation, int x, int y){
+        ButtonWidget buttonWidget = ButtonWidget.builder(Text.of(interpolation.toString().replace("_", " ")), button -> {
+            npcPose.getPoseOfTick(currentTick).interpolation = interpolation;
         }).dimensions(x, y, 80, 20).build();
         addDrawableChild(buttonWidget);
     }
@@ -158,15 +159,15 @@ public class DynamicPoseMenu extends ExtendedScreen {
             MatrixStack stack = context.getMatrices();
             stack.push();
             stack.translate(centerX, windowHeight / 2f - 120, 200);
-            stack.multiply(RotationAxis.NEGATIVE_Y.rotation((float) Math.PI));
+            stack.multiply(RotationAxis.NEGATIVE_Y.rotation(MathHelper.PI));
             stack.scale(120, 120, 120);
             ticker.render(stack, context.getVertexConsumers().getBuffer(RenderLayer.getEntityAlpha(DefaultSkinHelper.getTexture())), 0xffffff);
             stack.pop();
-            currentTick = ticker.getCurrentTick();
+            currentTick = ticker.getTick();
         } else {
             if (npcPose.containsAPose(currentTick)){
-                Easing easing = npcPose.getPoseOfTick(currentTick).easing;
-                int y = easing == Easing.NONE ? 0 : easing == Easing.EASE_IN ? 20 : 40;
+                Interpolation interpolation = npcPose.getPoseOfTick(currentTick).interpolation;
+                int y = interpolation == Interpolation.LINEAR ? 0 : interpolation == Interpolation.EASE_IN ? 20 : 40;
                 context.drawTexture(POINT_TEXTURE, windowWidth / 2 - 210, windowHeight / 2 - 30 + y, 0, 0, 0, 20, 20, 20, 20);
             }
         }

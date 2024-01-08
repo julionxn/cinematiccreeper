@@ -13,10 +13,12 @@
   },
   "client": [
     "CameraMixin",
+    "ClientPlayerEntityMixin",
     "GameRendererMixin",
     "InGameHudMixin",
     "KeyboardMixin",
     "MinecraftClientMixin",
+    "MouseMixin",
     "ToastManagerMixin"
   ]
 }

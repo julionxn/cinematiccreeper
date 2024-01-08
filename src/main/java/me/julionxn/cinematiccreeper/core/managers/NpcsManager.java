@@ -54,7 +54,6 @@ public class NpcsManager extends SerializableJsonManager<NpcsManager> {
     }
 
     public boolean isMobEntity(World world, String sEntityType) {
-        System.out.println(loadedEntityTypes);
         if (cachedMobEntities.containsKey(sEntityType)) {
             return cachedMobEntities.get(sEntityType);
         }

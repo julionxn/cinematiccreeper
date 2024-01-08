@@ -1,7 +1,8 @@
 package me.julionxn.cinematiccreeper.core.notifications;
 
+import com.google.common.collect.ImmutableMap;
 import me.julionxn.cinematiccreeper.CinematicCreeper;
-import me.julionxn.cinematiccreeper.core.Easing;
+import me.julionxn.cinematiccreeper.core.Interpolation;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -16,13 +17,14 @@ import java.util.Queue;
 public class NotificationManager {
 
     private static final Identifier TEXTURE = new Identifier(CinematicCreeper.MOD_ID, "textures/gui/notification.png");
-    private static final Identifier ERROR = new Identifier(CinematicCreeper.MOD_ID, "textures/gui/error.png");
-    private static final Identifier WARNING = new Identifier(CinematicCreeper.MOD_ID, "textures/gui/warning.png");
-    private static final Identifier OK = new Identifier(CinematicCreeper.MOD_ID, "textures/gui/ok.png");
-
+    private static final ImmutableMap<Notification.Type, Identifier> ICON_TEXTURES = ImmutableMap.of(
+            Notification.Type.ERROR, new Identifier(CinematicCreeper.MOD_ID, "textures/gui/error.png"),
+            Notification.Type.WARNING, new Identifier(CinematicCreeper.MOD_ID, "textures/gui/warning.png"),
+            Notification.Type.OK, new Identifier(CinematicCreeper.MOD_ID, "textures/gui/ok.png")
+    );
     private final Queue<Notification> queue = new LinkedList<>();
     private static final float inDuration = 10;
-    private static final float outDuration = 10;
+    private static final float outDuration = 8;
     private float delta;
 
     private static class SingletonHolder{
@@ -56,9 +58,10 @@ public class NotificationManager {
         float midDuration = (float) (35 * Math.pow(Math.E, -0.3 * queue.size()) + 5);
         if (delta <= inDuration){
             float t = delta / inDuration;
-            y = Easing.EASE_OUT.interpolate(t, startingY, targetY);
+            y = Interpolation.EASE_OUT.interpolate(t, startingY, targetY);
         } else if (delta >= midDuration + inDuration) {
-            y = Easing.NONE.interpolate((delta - midDuration - inDuration) / outDuration, targetY, startingY);
+            float t = (delta - midDuration - inDuration) / outDuration;
+            y = Interpolation.LINEAR.interpolate(t, targetY, startingY);
         }
         context.getMatrices().push();
         context.getMatrices().translate(0, 0, 800f);
@@ -73,10 +76,10 @@ public class NotificationManager {
 
     private void renderNotification(TextRenderer textRenderer, DrawContext context, int y, Notification.Type type, String text){
         int startingX = context.getScaledWindowWidth() - 140;
-        Identifier typeTexture = type == Notification.Type.OK ? OK : type == Notification.Type.ERROR ? ERROR : WARNING;
+        Identifier iconTexture = ICON_TEXTURES.get(type);
         context.drawTexture(TEXTURE, startingX, y, 0, 0, 0, 140, 20, 140, 20);
         drawScrollableText(context, textRenderer, Text.of(text), startingX + 70, startingX + 25, y, startingX + 130, y + 20);
-        context.drawTexture(typeTexture, startingX + 7, y + 4, 0, 0, 0, 12, 12, 12, 12);
+        context.drawTexture(iconTexture, startingX + 7, y + 4, 0, 0, 0, 12, 12, 12, 12);
     }
 
     private void drawScrollableText(DrawContext context, TextRenderer textRenderer, Text text, int centerX, int startX, int startY, int endX, int endY) {

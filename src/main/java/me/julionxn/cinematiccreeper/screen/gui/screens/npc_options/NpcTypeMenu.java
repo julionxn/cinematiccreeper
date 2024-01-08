@@ -53,8 +53,7 @@ public abstract class NpcTypeMenu extends ExtendedScreen {
 
     @Override
     public void addWidgets() {
-        x = (windowWidth / 2) - width / 2;
-        y = (windowHeight / 2) - height / 2;
+
     }
 
     @Override
@@ -157,6 +156,5 @@ public abstract class NpcTypeMenu extends ExtendedScreen {
 
     private record Tab(Text text, BiConsumer<ButtonWidget, MinecraftClient> onClick,
                        BiPredicate<String, MinecraftClient> predicate) {
-
     }
 }

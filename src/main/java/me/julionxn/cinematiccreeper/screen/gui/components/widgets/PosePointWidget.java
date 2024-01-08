@@ -9,8 +9,10 @@ import me.julionxn.cinematiccreeper.screen.gui.components.ExtendedWidget;
 import me.julionxn.cinematiccreeper.util.MathHelper;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.model.EntityModelLayers;
 import net.minecraft.client.render.entity.model.EntityModelLoader;
 import net.minecraft.client.render.entity.model.PlayerEntityModel;
@@ -19,7 +21,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.RotationAxis;
 import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
 public class PosePointWidget extends ExtendedWidget {
 
@@ -29,7 +30,6 @@ public class PosePointWidget extends ExtendedWidget {
     private Part part = Part.HEAD;
     private static final float MAX_VALUE = MathHelper.PI * 2;
     private PlayerEntityModel<NpcEntity> model;
-    private float modelRoll = 0;
     private float modelYaw = 0;
     private float modelPitch = 0;
 
@@ -46,7 +46,6 @@ public class PosePointWidget extends ExtendedWidget {
         if (client != null && model == null){
             EntityModelLoader loader = client.getEntityModelLoader();
             model = new PlayerEntityModel<>(loader.getModelPart(EntityModelLayers.PLAYER), false);
-            model.head.scale(new Vector3f(-0.33f));
         }
         partButtonOf("H", currentX, y, Part.HEAD);
         partButtonOf("LA", currentX + 30, y, Part.RIGHT_ARM);
@@ -99,60 +98,47 @@ public class PosePointWidget extends ExtendedWidget {
         if (client == null) return;
         MatrixStack stack = context.getMatrices();
         stack.push();
-        stack.translate(x, y - 55, 200);
-        stack.multiply(RotationAxis.NEGATIVE_Y.rotation((float) Math.PI));
-        stack.translate(0, 120, 0);
+        stack.translate(x - 5, y + 30, 200);
+        stack.multiply(RotationAxis.NEGATIVE_Y.rotation(MathHelper.PI));
+        stack.translate(0, 35, 0);
         stack.multiply(new Quaternionf().rotationZYX(0, modelYaw, modelPitch));
-        stack.translate(0, -120, 0);
-        stack.scale(120, 120, 120);
+        stack.translate(0, -35, 0);
+        stack.scale(70, 70, 70);
         applyPosePointToRenderer(model);
-        model.render(stack,
-                context.getVertexConsumers().getBuffer(RenderLayer.getEntityAlpha(DefaultSkinHelper.getTexture())),
-                0xffffff, OverlayTexture.DEFAULT_UV, 1f, 1f, 1f, 1f);
+        RenderLayer renderLayer = RenderLayer.getEntityCutoutNoCullZOffset(DefaultSkinHelper.getTexture());
+        VertexConsumer vertexConsumer = context.getVertexConsumers().getBuffer(renderLayer);
+        renderModel(stack, vertexConsumer);
         context.draw();
         stack.pop();
     }
 
-    @Override
-    public void mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-        final float precision = MathHelper.PI / 50;
-        if (mouseX > x - 50 && mouseX < x + 50 && mouseY > y - 30 && mouseY < y + 140){
-            switch (button){
-                case 0 -> {
-                    modelYaw += deltaX > 0 ? precision : -precision;
-                    modelYaw %= MathHelper.PI * 2;
-                }
-                case 1 -> {
-                    modelPitch += deltaY > 0 ? precision : -precision;
-                    modelPitch %= MathHelper.PI * 2;
-                }
-                case 2 -> {
-                    modelRoll += deltaX > 0 ? precision : -precision;
-                    modelRoll %= MathHelper.PI * 2;
-                }
-            }
-        }
-        super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+    private void applyPosePointToRenderer(PlayerEntityModel<NpcEntity> model){
+        applyAnglesToParts(model.head, model.hat, posePoint.head);
+        applyAnglesToParts(model.leftArm, model.leftSleeve, posePoint.leftArm);
+        applyAnglesToParts(model.rightArm, model.rightSleeve, posePoint.rightArm);
+        applyAnglesToParts(model.leftLeg, model.leftPants, posePoint.leftLeg);
+        applyAnglesToParts(model.rightLeg, model.rightPants, posePoint.rightLeg);
     }
 
-    private void applyPosePointToRenderer(PlayerEntityModel<NpcEntity> model){
-        PoseData head = posePoint.head;
-        model.head.setAngles(head.pitch, head.yaw, head.roll);
-        model.hat.setAngles(head.pitch, head.yaw, head.roll);
-        PoseData leftArm = posePoint.leftArm;
-        model.leftArm.setAngles(leftArm.pitch, leftArm.yaw, leftArm.roll);
-        model.leftSleeve.setAngles(leftArm.pitch, leftArm.yaw, leftArm.roll);
-        PoseData rightArm = posePoint.rightArm;
-        model.rightArm.setAngles(rightArm.pitch, rightArm.yaw, rightArm.roll);
-        model.rightSleeve.setAngles(rightArm.pitch, rightArm.yaw, rightArm.roll);
-        PoseData leftLeg = posePoint.leftLeg;
-        model.leftLeg.setAngles(leftLeg.pitch, leftLeg.yaw, leftLeg.roll);
-        model.leftPants.setAngles(leftLeg.pitch, leftLeg.yaw, leftLeg.roll);
-        PoseData rightLeg = posePoint.rightLeg;
-        model.rightLeg.setAngles(rightLeg.pitch, rightLeg.yaw, rightLeg.roll);
-        model.rightPants.setAngles(rightLeg.pitch, rightLeg.yaw, rightLeg.roll);
+    private void applyAnglesToParts(ModelPart modelPart, ModelPart modelPart2, PoseData poseData){
+        modelPart.setAngles(poseData.pitch, poseData.yaw, poseData.roll);
+        modelPart2.setAngles(poseData.pitch, poseData.yaw, poseData.roll);
     }
-    
+
+    private void renderModel(MatrixStack stack, VertexConsumer vertexConsumer){
+        renderPart(Part.HEAD, model.head, model.hat, stack, vertexConsumer);
+        renderPart(Part.LEFT_ARM, model.leftArm, model.leftSleeve, stack, vertexConsumer);
+        renderPart(Part.RIGHT_ARM, model.rightArm, model.rightSleeve, stack, vertexConsumer);
+        renderPart(Part.LEFT_LEG, model.leftLeg, model.leftPants, stack, vertexConsumer);
+        renderPart(Part.RIGHT_LEG, model.rightLeg, model.rightPants, stack, vertexConsumer);
+        model.body.render(stack, vertexConsumer, 0x00f000f0, OverlayTexture.DEFAULT_UV, 0.45f, 0.45f, 0.45f, 1f);
+    }
+
+    private void renderPart(Part part, ModelPart modelPart, ModelPart modelPart2, MatrixStack stack, VertexConsumer vertexConsumer){
+        float alpha = part == this.part ? 1f : 0.45f;
+        modelPart.render(stack, vertexConsumer, 0x00f000f0, OverlayTexture.DEFAULT_UV, alpha, alpha, alpha,1f);
+        modelPart2.render(stack, vertexConsumer, 0x00f000f0, OverlayTexture.DEFAULT_UV, alpha, alpha, alpha, 1f);
+    }
 
     private PoseData getDataFromPart(Part part){
         return switch (part){
@@ -168,4 +154,32 @@ public class PosePointWidget extends ExtendedWidget {
         return value / (MathHelper.PI * 2);
     }
 
+    @Override
+    public void mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+        final float precision = MathHelper.PI / 50;
+        if (mouseX > x - 50 && mouseX < x + 50 && mouseY > y - 30 && mouseY < y + 140){
+            switch (button){
+                case 0 -> {
+                    modelYaw += deltaX > 0 ? precision : -precision;
+                    modelYaw %= MathHelper.PI * 2;
+                }
+                case 1 -> {
+                    modelPitch += deltaY > 0 ? precision : -precision;
+                    modelPitch %= MathHelper.PI * 2;
+                }
+            }
+        }
+        super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+    }
+
+    @Override
+    public void mouseClicked(double mouseX, double mouseY, int button) {
+        if (mouseX > x - 50 && mouseX < x + 50 && mouseY > y - 30 && mouseY < y + 140){
+            if (button == 2){
+                modelPitch = 0;
+                modelYaw = 0;
+            }
+        }
+        super.mouseClicked(mouseX, mouseY, button);
+    }
 }

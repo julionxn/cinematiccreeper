@@ -2,7 +2,9 @@ package me.julionxn.cinematiccreeper.mixin;
 
 import me.julionxn.cinematiccreeper.core.managers.CameraManager;
 import net.minecraft.client.render.Camera;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.BlockView;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -12,16 +14,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Camera.class)
 public abstract class CameraMixin {
 
-    @Inject(method = "setPos(Lnet/minecraft/util/math/Vec3d;)V", at = @At("HEAD"), cancellable = true)
-    private void moveByI(Vec3d pos, CallbackInfo ci){
-        if (CameraManager.getInstance().isActive()) {
-            ci.cancel();
-        }
-    }
 
     @Inject(method = "setRotation", at = @At("HEAD"), cancellable = true)
     private void setRotationI(float yaw, float pitch, CallbackInfo ci){
-        if (CameraManager.getInstance().isActive()) {
+        if (CameraManager.getInstance().getState() == CameraManager.State.STATIC) {
             ci.cancel();
         }
     }
@@ -30,6 +26,16 @@ public abstract class CameraMixin {
     private void thirdI(CallbackInfoReturnable<Boolean> cir){
         if (CameraManager.getInstance().isActive()) {
             cir.setReturnValue(true);
+        }
+    }
+
+    @Inject(method = "update", at = @At("HEAD"), cancellable = true)
+    private void updateI(BlockView area, Entity focusedEntity, boolean thirdPerson, boolean inverseView, float tickDelta, CallbackInfo ci){
+        if (CameraManager.getInstance().isActive()){
+            CameraManager.getInstance().update((Camera) (Object) this);
+            ci.cancel();
+        } else {
+            Vec3d pos = ((Camera)(Object) this).getPos();
         }
     }
 

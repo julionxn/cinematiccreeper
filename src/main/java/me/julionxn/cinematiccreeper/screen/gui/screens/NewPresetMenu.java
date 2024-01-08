@@ -11,6 +11,7 @@ import me.julionxn.cinematiccreeper.entity.NpcEntity;
 import me.julionxn.cinematiccreeper.screen.gui.components.ExtendedScreen;
 import me.julionxn.cinematiccreeper.screen.gui.components.widgets.ScrollWidget;
 import me.julionxn.cinematiccreeper.screen.gui.screens.npc_options.BasicTypeMenu;
+import me.julionxn.cinematiccreeper.util.MathHelper;
 import me.julionxn.cinematiccreeper.util.TextUtils;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -168,7 +169,7 @@ public class NewPresetMenu extends ExtendedScreen {
         MatrixStack stack = context.getMatrices();
         stack.push();
         stack.translate(client.getWindow().getScaledWidth() / 2f + 55, context.getScaledWindowHeight() / 2f, 50);
-        stack.multiply(RotationAxis.NEGATIVE_Z.rotation((float) Math.PI));
+        stack.multiply(RotationAxis.NEGATIVE_Z.rotation(MathHelper.PI));
         stack.scale(40, 40, 1);
         stack.translate(0, -dimensions.height / 2, 0);
         EntityRenderDispatcher dispatcher = client.getEntityRenderDispatcher();

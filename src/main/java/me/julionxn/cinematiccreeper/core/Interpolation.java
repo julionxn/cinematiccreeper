@@ -2,9 +2,9 @@ package me.julionxn.cinematiccreeper.core;
 
 import java.util.function.Function;
 
-public enum Easing {
+public enum Interpolation {
 
-    NONE(t -> t),
+    LINEAR(t -> t),
     EASE_IN(t -> t * t),
     EASE_OUT(t -> {
         float toPow = 1 - t;
@@ -13,12 +13,16 @@ public enum Easing {
 
     private final Function<Float, Float> interpolation;
 
-    Easing(Function<Float, Float> interpolation){
+    Interpolation(Function<Float, Float> interpolation){
         this.interpolation = interpolation;
     }
 
     public float interpolate(float t, float start, float end){
         return start + interpolation.apply(t) * (end - start);
+    }
+
+    public double interpolate(double t, double start, double end){
+        return start + interpolation.apply((float) t) * (end - start);
     }
 
 }
