@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class NpcsManager extends SerializableJsonManager<NpcsManager> {
 
-    private static final float VERSION = 1.0f;
+    private static final float VERSION = 1.1f;
     private final Map<String, EntityType<?>> loadedEntityTypes = new HashMap<>();
     @Expose
     private Map<String, Boolean> cachedMobEntities = new HashMap<>();

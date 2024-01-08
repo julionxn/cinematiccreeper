@@ -13,7 +13,6 @@ import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
-import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public class CameraManager extends SerializableJsonManager<CameraManager> {

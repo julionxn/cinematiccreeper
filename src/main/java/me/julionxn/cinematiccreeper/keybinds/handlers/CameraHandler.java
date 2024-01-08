@@ -2,9 +2,7 @@ package me.julionxn.cinematiccreeper.keybinds.handlers;
 
 import me.julionxn.cinematiccreeper.core.managers.CameraManager;
 import me.julionxn.cinematiccreeper.keybinds.*;
-import me.julionxn.cinematiccreeper.screen.gui.screens.camera.CameraMenu;
 import me.julionxn.cinematiccreeper.screen.gui.screens.camera.OptionsCameraMenu;
-import net.minecraft.client.gui.screen.option.OptionsScreen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.glfw.GLFW;

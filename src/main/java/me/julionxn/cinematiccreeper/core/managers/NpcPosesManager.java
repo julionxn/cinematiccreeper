@@ -11,7 +11,7 @@ import java.util.Optional;
 @Environment(EnvType.CLIENT)
 public class NpcPosesManager extends SerializableJsonManager<NpcPosesManager> {
 
-    private static final float VERSION = 1.0f;
+    private static final float VERSION = 1.1f;
     @Expose
     private final HashMap<String, NpcPose> loadedPoses = new HashMap<>();
 

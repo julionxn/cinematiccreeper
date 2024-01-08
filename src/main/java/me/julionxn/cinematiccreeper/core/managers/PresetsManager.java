@@ -12,7 +12,7 @@ import java.util.Optional;
 @Environment(EnvType.CLIENT)
 public class PresetsManager extends SerializableJsonManager<PresetsManager> {
 
-    private static final float VERSION = 1.0f;
+    private static final float VERSION = 1.1f;
     @Expose
     private List<Preset> presets = new ArrayList<>();
 
