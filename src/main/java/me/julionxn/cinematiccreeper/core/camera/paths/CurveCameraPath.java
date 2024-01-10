@@ -40,13 +40,12 @@ public abstract class CurveCameraPath extends CameraPath{
         int p2Tick = cameraRecording.getHigherTickFrom(tick);
         Integer p3Tick = cameraRecording.getHigherTickFrom(p2Tick);
         if (p3Tick == null) p3Tick = p2Tick;
-        System.out.println("p0: " + p0Tick + "p1: " + p1Tick + "p2: " + p2Tick + "p3: " + p3Tick);
         Snap p0 = cameraRecording.getSnap(p0Tick);
         Snap p1 = cameraRecording.getSnap(p1Tick);
         Snap p2 = cameraRecording.getSnap(p2Tick);
         Snap p3 = cameraRecording.getSnap(p3Tick);
         float t =(tick - p1Tick) / (float) (p2Tick - p1Tick);
-        return interpolateCurve(t, p0, p1, p2, p3);
+        return interpolateCurve(t, p0, p1, p2,p3);
     }
 
     protected abstract Snap interpolateCurve(float t, Snap p0, Snap p1, Snap p2, Snap p3);

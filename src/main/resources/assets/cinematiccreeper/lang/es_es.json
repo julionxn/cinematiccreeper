@@ -48,6 +48,8 @@
   "camera.cinematiccreeper.change_fov": "Cambiar fov",
   "camera.cinematiccreeper.change_tick": "Cambiar tick actual",
   "camera.cinematiccreeper.smoothness": "Suavidad",
+  "camera.cinematiccreeper.movement_sensibility": "Sensibilidad de movimiento",
   "camera.cinematiccreeper.rotation_smoothness": "Suavidad de rotación",
-  "camera.cinematiccreeper.rotation_sensibility": "Sensibilidad de rotación"
+  "camera.cinematiccreeper.rotation_sensibility": "Sensibilidad de rotación",
+  "camera.cinematiccreeper.show_controls": "Mostrar controles"
 }

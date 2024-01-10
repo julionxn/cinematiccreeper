@@ -5,8 +5,10 @@ import com.google.gson.annotations.Expose;
 public class CameraSettings {
 
     @Expose private double smoothness = 0.95;
+    @Expose private double movementSensibility = 1;
     @Expose private float rotationSmoothness = 0.95f;
     @Expose private float rotationSensibility = 0.1f;
+    @Expose private boolean showOptions = true;
 
     public double getSmoothness() {
         return smoothness;
@@ -30,5 +32,21 @@ public class CameraSettings {
 
     public void setRotationSensibility(float rotationSensibility) {
         this.rotationSensibility = rotationSensibility;
+    }
+
+    public double getMovementSensibility() {
+        return movementSensibility;
+    }
+
+    public void setMovementSensibility(double movementSensibility) {
+        this.movementSensibility = movementSensibility;
+    }
+
+    public boolean showOptions() {
+        return showOptions;
+    }
+
+    public void setShowOptions(boolean showOptions) {
+        this.showOptions = showOptions;
     }
 }

@@ -35,6 +35,11 @@ public class CameraOptionsHandler extends InputHandler {
     }
 
     @Override
+    public boolean shouldRender() {
+        return CameraManager.getInstance().getSettings().showOptions();
+    }
+
+    @Override
     public boolean shouldCancelNext() {
         return false;
     }

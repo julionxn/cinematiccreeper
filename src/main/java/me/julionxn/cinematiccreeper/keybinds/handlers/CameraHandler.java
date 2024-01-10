@@ -24,6 +24,11 @@ public class CameraHandler extends InputHandler {
     }
 
     @Override
+    public boolean shouldRender() {
+        return CameraManager.getInstance().getSettings().showOptions() || CameraManager.getInstance().isRecording();
+    }
+
+    @Override
     public boolean shouldCancelNext() {
         return false;
     }

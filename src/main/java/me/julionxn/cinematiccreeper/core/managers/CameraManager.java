@@ -209,10 +209,11 @@ public class CameraManager extends SerializableJsonManager<CameraManager> {
     public void moveByKeyboard(float sideways, float forwards, boolean jumping, boolean sneaking){
         if (blockInputs) return;
         Vec3d direction = getDirection();
-        anchorPos = anchorPos.add(direction.multiply(forwards, 0, forwards));
-        anchorPos = anchorPos.add(direction.rotateY(HALF_PI).multiply(sideways, 0, sideways));
-        if (jumping) anchorPos = anchorPos.add(0, 1, 0);
-        if (sneaking) anchorPos = anchorPos.add(0, -1, 0);
+        double sensibility = settings.getMovementSensibility();
+        anchorPos = anchorPos.add(direction.multiply(forwards, 0, forwards).multiply(sensibility));
+        anchorPos = anchorPos.add(direction.rotateY(HALF_PI).multiply(sideways, 0, sideways).multiply(sensibility));
+        if (jumping) anchorPos = anchorPos.add(0, sensibility, 0);
+        if (sneaking) anchorPos = anchorPos.add(0, -sensibility, 0);
         applyZoomToPos();
     }
 
@@ -261,7 +262,7 @@ public class CameraManager extends SerializableJsonManager<CameraManager> {
 
     }
     private static class SingletonHolder {
-        private static final CameraManager INSTANCE = new CameraManager("cc_camera.json", 2.0f, CameraManager.class);
+        private static final CameraManager INSTANCE = new CameraManager("cc_camera.json", 2.1f, CameraManager.class);
 
     }
 

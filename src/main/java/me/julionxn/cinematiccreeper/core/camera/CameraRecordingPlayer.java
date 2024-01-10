@@ -9,7 +9,6 @@ public class CameraRecordingPlayer {
     private final CameraRecording recording;
     private int tick;
     private boolean playing;
-    private Snap previousSnap;
 
     public CameraRecordingPlayer(CameraManager manager, CameraRecording recording) {
         this.manager = manager;
@@ -17,7 +16,6 @@ public class CameraRecordingPlayer {
     }
 
     public void play(){
-        previousSnap = manager.takeSnap();
         tick = 0;
         playing = true;
         Snap snap = recording.getOrdererTimeline().get(0);
@@ -29,10 +27,6 @@ public class CameraRecordingPlayer {
 
     public void stop(){
         playing = false;
-        manager.setZoom(previousSnap.zoom);
-        manager.setActualFov(previousSnap.fov);
-        manager.setActualAngles(previousSnap.yaw, previousSnap.pitch);
-        manager.setActualPos(previousSnap.getPos());
         manager.setBlockInputs(false);
     }
 
@@ -45,7 +39,7 @@ public class CameraRecordingPlayer {
         manager.updateRotation(snap.yaw, snap.pitch);
         manager.moveTo(snap.getPos());
         tick++;
-        if (tick > recording.getLength()) stop();
+        if (tick >= recording.getLength()) stop();
     }
 
 }
