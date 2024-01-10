@@ -1,5 +1,6 @@
 package me.julionxn.cinematiccreeper.mixin;
 
+import me.julionxn.cinematiccreeper.core.managers.CameraManager;
 import me.julionxn.cinematiccreeper.core.paths.PlayerPathHolder;
 import me.julionxn.cinematiccreeper.util.mixins.PlayerData;
 import net.minecraft.client.MinecraftClient;
@@ -21,9 +22,15 @@ public abstract class MinecraftClientMixin {
     @Inject(method = "openGameMenu", at = @At("HEAD"), cancellable = true)
     public void cancelESC(boolean pauseOnly, CallbackInfo ci) {
         if (player == null) return;
+        boolean cancel = false;
         PlayerData accessor = (PlayerData) player;
-        if (accessor.cinematiccreeper$getPathHolder().state() == PlayerPathHolder.State.NONE) return;
-        ci.cancel();
+        if (accessor.cinematiccreeper$getPathHolder().state() != PlayerPathHolder.State.NONE) {
+            cancel = true;
+        };
+        if (CameraManager.getInstance().isRecording()){
+            cancel = true;
+        }
+        if (cancel) ci.cancel();
     }
 
 }

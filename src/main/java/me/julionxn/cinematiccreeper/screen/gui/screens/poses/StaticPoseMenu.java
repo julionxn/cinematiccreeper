@@ -1,6 +1,8 @@
 package me.julionxn.cinematiccreeper.screen.gui.screens.poses;
 
 import me.julionxn.cinematiccreeper.core.managers.NpcPosesManager;
+import me.julionxn.cinematiccreeper.core.notifications.Notification;
+import me.julionxn.cinematiccreeper.core.notifications.NotificationManager;
 import me.julionxn.cinematiccreeper.core.poses.NpcPose;
 import me.julionxn.cinematiccreeper.core.poses.PosePoint;
 import me.julionxn.cinematiccreeper.screen.gui.components.ExtendedScreen;
@@ -37,10 +39,11 @@ public class StaticPoseMenu extends ExtendedScreen {
         if (client == null) return;
         int windowWidth = client.getWindow().getScaledWidth();
         int windowHeight = client.getWindow().getScaledHeight();
-        ButtonWidget createButton = ButtonWidget.builder(Text.translatable("gui.cinematiccreeper.done"), button -> {
+        ButtonWidget createButton = ButtonWidget.builder(Text.translatable("screen.cinematiccreeper.done"), button -> {
             npcPose.setPose(posePoint);
             NpcPosesManager.getInstance().addNpcPose(id, npcPose);
             client.setScreen(previousScreen);
+            NotificationManager.getInstance().add(Notification.SAVED);
         }).dimensions(windowWidth - 120, windowHeight - 40, 100, 20).build();
         addDrawableChild(createButton);
     }

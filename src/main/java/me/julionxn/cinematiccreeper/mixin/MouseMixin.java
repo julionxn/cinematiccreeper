@@ -29,7 +29,7 @@ public class MouseMixin {
                 player.changeLookDirection(dx, dy);
                 return;
             }
-            manager.changeDirection(dx, dy);
+            manager.changeDirectionByMouse(dx, dy);
         }
     }
 

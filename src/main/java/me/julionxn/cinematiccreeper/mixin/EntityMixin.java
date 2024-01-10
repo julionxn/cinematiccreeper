@@ -50,11 +50,10 @@ public abstract class EntityMixin implements NpcData {
 
     @Override
     public boolean cinematiccreeper$isNpc() {
-        return !cinematiccreeper$getId().isEmpty();
+        return !dataTracker.get(NPC_ID).isEmpty();
     }
 
     @Override
-    @Unique
     public String cinematiccreeper$getId() {
         return dataTracker.get(NPC_ID);
     }

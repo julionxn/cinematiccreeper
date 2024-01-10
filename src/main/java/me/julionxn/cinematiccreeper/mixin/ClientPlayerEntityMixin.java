@@ -23,7 +23,7 @@ public abstract class ClientPlayerEntityMixin {
         if (CameraManager.getInstance().getState() == CameraManager.State.MOVING){
             ci.cancel();
             input.tick(false, 0);
-            CameraManager.getInstance().move(input.movementSideways, input.movementForward, input.jumping, input.sneaking);
+            CameraManager.getInstance().moveByKeyboard(input.movementSideways, input.movementForward, input.jumping, input.sneaking);
         }
     }
 

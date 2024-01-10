@@ -1,20 +1,40 @@
 package me.julionxn.cinematiccreeper.core.camera;
 
 import com.google.gson.annotations.Expose;
+import me.julionxn.cinematiccreeper.core.camera.paths.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeMap;
 
 public class CameraRecording {
 
     @Expose public final String id;
-    @Expose private int tick = 0;
+    private int tick = 0;
     @Expose private int length = 0;
-    @Expose private int displayLength = 60;
-    @Expose private int previousMaxTick = 0;
+    private int displayLength = 60;
+    private int previousMaxTick = 0;
     @Expose private final TreeMap<Integer, Snap> timeline = new TreeMap<>();
+    @Expose private final PathType pathType;
+    private CameraPath path;
 
-    public CameraRecording(String id){
+    public CameraRecording(String id, PathType type){
         this.id = id;
+        this.pathType = type;
+        generatePath();
+    }
+
+    private void generatePath(){
+        switch (pathType){
+            case CATMULL -> path = new CatmullRomPath(this);
+            case BSPLINE -> path = new BSplinePath(this);
+            default -> path = new LinearPath(this);
+        }
+    }
+
+    public CameraPath getPath(){
+        if (path == null) generatePath();
+        return path;
     }
 
     public void addSnap(Snap snap){
@@ -22,29 +42,21 @@ public class CameraRecording {
             previousMaxTick = length;
             length = tick;
         }
-        if (timeline.size() > 2){
-            int snapToAdjustTick = timeline.lowerKey(tick);
-            int previousSnapTick = timeline.lowerKey(snapToAdjustTick);
-            Snap snapToAdjust = timeline.get(snapToAdjustTick);
-            Snap previousSnap = timeline.get(previousSnapTick);
-            snapToAdjust.adjustControlPoint(previousSnap, snap);
-        }
+        snap.tick = tick;
         timeline.put(tick, snap);
+        path.onPointsModified();
     }
 
     public void removeSnap(){
         if (!timeline.containsKey(tick)) return;
         timeline.remove(tick);
-        Integer prevTick = timeline.lowerKey(tick);
-        if (prevTick != null){
-            timeline.get(prevTick).clearSecondControl();
-        }
         if (tick == length){
             length = previousMaxTick;
             if (length > 60){
                 setCurrentTick(length);
             }
         }
+        path.onPointsModified();
     }
 
     public void adjustTick(int in){
@@ -71,6 +83,41 @@ public class CameraRecording {
         if (tick < 0) return;
         displayLength = Math.max(tick, Math.max(60, length));
         this.tick = tick;
+    }
+
+    public TreeMap<Integer, Snap> getTimeline(){
+        return timeline;
+    }
+
+    public Integer getLowerTickFrom(int tick){
+        if (timeline.containsKey(tick)) return tick;
+        return timeline.lowerKey(tick);
+    }
+
+    public Integer getHigherTickFrom(int tick){
+        Integer high = timeline.higherKey(tick);
+        if (high == null) return length;
+        return high;
+    }
+
+    public Snap getSnap(int tick){
+        return timeline.get(tick);
+    }
+
+    public List<Snap> getOrdererTimeline(){
+        return new ArrayList<>(timeline.values());
+    }
+
+    public int getTick(){
+        return tick;
+    }
+
+    public boolean containsSnap(int tick){
+        return timeline.containsKey(tick);
+    }
+
+    public int getLength(){
+        return length;
     }
 
     public int getDisplayLength(){

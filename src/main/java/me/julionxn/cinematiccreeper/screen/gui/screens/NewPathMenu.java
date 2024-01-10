@@ -44,26 +44,26 @@ public class NewPathMenu extends Screen {
                 Text.of("Id")
         );
         addDrawableChild(idTextField);
-        ButtonWidget pingPongButton = ButtonWidget.builder(Text.translatable("gui.cinematiccreeper.ping_pong"), button ->
+        ButtonWidget pingPongButton = ButtonWidget.builder(Text.translatable("screen.cinematiccreeper.ping_pong"), button ->
                         type = Path.Type.PING_PONG
                 )
                 .dimensions(centerX + 20, centerY + 20, 100, 20).build();
-        ButtonWidget loopButton = ButtonWidget.builder(Text.translatable("gui.cinematiccreeper.loop"), button ->
+        ButtonWidget loopButton = ButtonWidget.builder(Text.translatable("screen.cinematiccreeper.loop"), button ->
                         type = Path.Type.LOOP
                 )
                 .dimensions(centerX + 20, centerY, 100, 20).build();
         addDrawableChild(pingPongButton);
         addDrawableChild(loopButton);
-        ButtonWidget addButton = ButtonWidget.builder(Text.translatable("gui.cinematiccreeper.start"), button -> {
+        ButtonWidget addButton = ButtonWidget.builder(Text.translatable("screen.cinematiccreeper.start"), button -> {
             String id = idTextField.getText();
             if (id.replace(" ", "").isEmpty()) {
-                NotificationManager.getInstance().add(Notification.Type.ERROR, Text.translatable("messages.cinematiccreeper.blank_id"));
+                NotificationManager.getInstance().add(Notification.BLANK_ID);
                 return;
             }
             Entity entity = player.getWorld().getEntityById(entityId);
             if (entity == null) return;
             if (((PathAwareData) entity).cinematiccreeper$getPaths().stream().anyMatch(path -> path.getId().equals(id))){
-                NotificationManager.getInstance().add(Notification.Type.ERROR, Text.translatable("messages.cinematiccreeper.already_exists"));
+                NotificationManager.getInstance().add(Notification.ALREADY_EXISTS);
                 return;
             }
             ((PlayerData) player).cinematiccreeper$setPathHolder(new PlayerPathHolder(state,

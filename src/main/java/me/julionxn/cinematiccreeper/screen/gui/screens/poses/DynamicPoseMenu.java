@@ -73,7 +73,7 @@ public class DynamicPoseMenu extends ExtendedScreen {
     @Override
     public void addDrawables() {
         if (client == null) return;
-        Text text = playing ? Text.translatable("gui.cinematiccreeper.stop") : Text.translatable("gui.cinematiccreeper.play");
+        Text text = playing ? Text.translatable("screen.cinematiccreeper.stop") : Text.translatable("screen.cinematiccreeper.play");
         ButtonWidget playButton = ButtonWidget.builder(text, button -> {
             if (playing){
                 playing = false;
@@ -97,21 +97,22 @@ public class DynamicPoseMenu extends ExtendedScreen {
             addEaseTypeButton(Interpolation.LINEAR, windowWidth / 2 - 190, windowHeight / 2 - 30);
             addEaseTypeButton(Interpolation.EASE_IN, windowWidth / 2 - 190, windowHeight / 2 - 10);
             addEaseTypeButton(Interpolation.EASE_OUT, windowWidth / 2 - 190, windowHeight / 2 + 10);
-            ButtonWidget removePose = ButtonWidget.builder(Text.translatable("gui.cinematiccreeper.remove_frame"), button -> removePoint(currentTick))
+            ButtonWidget removePose = ButtonWidget.builder(Text.translatable("screen.cinematiccreeper.remove_frame"), button -> removePoint(currentTick))
                     .dimensions(20, windowHeight - 30, 100, 20).build();
             addDrawableChild(removePose);
         } else {
-            ButtonWidget addPose = ButtonWidget.builder(Text.translatable("gui.cinematiccreeper.add_frame"), button -> addPoint(new PosePoint()))
+            ButtonWidget addPose = ButtonWidget.builder(Text.translatable("screen.cinematiccreeper.add_frame"), button -> addPoint(new PosePoint()))
                     .dimensions(20, windowHeight - 30, 100, 20).build();
             addDrawableChild(addPose);
         }
-        ButtonWidget createButton = ButtonWidget.builder(Text.translatable("gui.cinematiccreeper.done"), button -> {
+        ButtonWidget createButton = ButtonWidget.builder(Text.translatable("screen.cinematiccreeper.done"), button -> {
             if (npcPose.isEmpty()){
-                NotificationManager.getInstance().add(Notification.Type.WARNING, Text.translatable("messages.cinematiccreeper.no_points"));
+                NotificationManager.getInstance().add(Notification.NO_POINTS);
                 return;
             }
             NpcPosesManager.getInstance().addNpcPose(id, npcPose);
             client.setScreen(previousScreen);
+            NotificationManager.getInstance().add(Notification.SAVED);
         }).dimensions(windowWidth - 120, windowHeight - 30, 100, 20).build();
         addDrawableChild(createButton);
     }
@@ -151,7 +152,7 @@ public class DynamicPoseMenu extends ExtendedScreen {
             }
             int y = isSecond ? 22 : 26;
             int height = isSecond ? 16 : 7;
-            int color = i == currentTick ? 0xff3af6eb : npcPose.containsAPose(i) ? 0xffff1717 : 0xff8d697a;
+            int color = npcPose.containsAPose(i) ? 0xffff1717 : i == currentTick ? 0xff3af6eb : 0xff8d697a;
             context.fill(x, y, x + 1, y + height, 100, color);
         }
         if (playing && ticker != null){

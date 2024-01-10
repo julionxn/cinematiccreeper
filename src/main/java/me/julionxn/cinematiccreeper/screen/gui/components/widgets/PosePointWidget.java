@@ -1,6 +1,5 @@
 package me.julionxn.cinematiccreeper.screen.gui.components.widgets;
 
-import me.julionxn.cinematiccreeper.core.poses.Part;
 import me.julionxn.cinematiccreeper.core.poses.PoseData;
 import me.julionxn.cinematiccreeper.core.poses.PosePoint;
 import me.julionxn.cinematiccreeper.entity.NpcEntity;
@@ -87,8 +86,6 @@ public class PosePointWidget extends ExtendedWidget {
     private void partButtonOf(String text, int x, int y, Part part){
         ButtonWidget buttonWidget = ButtonWidget.builder(Text.of(text), button -> {
                     this.part = part;
-                    System.out.println(part);
-                    //clear();
                 }).dimensions(x, y, 30, 20).build();
         addDrawableChild(buttonWidget);
     }
@@ -182,4 +179,9 @@ public class PosePointWidget extends ExtendedWidget {
         }
         super.mouseClicked(mouseX, mouseY, button);
     }
+
+    private enum Part {
+        HEAD, LEFT_ARM, RIGHT_ARM, LEFT_LEG, RIGHT_LEG
+    }
+
 }

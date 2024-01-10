@@ -32,7 +32,7 @@ public class PathAwareNpcTypeMenu extends NpcTypeMenu {
     private void setItems() {
         if (entity == null) return;
         scrollItems.clear();
-        scrollItems.add(new ScrollWidget.ScrollItem(Text.translatable("gui.cinematiccreeper.none").getString(), buttonWidget -> {
+        scrollItems.add(new ScrollWidget.ScrollItem(Text.translatable("screen.cinematiccreeper.none").getString(), buttonWidget -> {
             PacketByteBuf buf = PacketByteBufs.create();
             buf.writeInt(entity.getId());
             ClientPlayNetworking.send(AllPackets.C2S_CLEAR_PATH_OF_ENTITY, buf);
@@ -65,11 +65,11 @@ public class PathAwareNpcTypeMenu extends NpcTypeMenu {
         if (entity == null) return;
         PlayerEntity player = client.player;
         if (player == null) return;
-        ButtonWidget addPath = ButtonWidget.builder(Text.translatable("gui.cinematiccreeper.add_path"), button -> {
+        ButtonWidget addPath = ButtonWidget.builder(Text.translatable("screen.cinematiccreeper.add_path"), button -> {
             client.setScreen(new NewPathMenu(entity.getId(), PlayerPathHolder.State.ADDING));
         }).dimensions(x + 130, y + 20, 150, 20).build();
         addDrawableChild(addPath);
-        ButtonWidget recordPath = ButtonWidget.builder(Text.translatable("gui.cinematiccreeper.record_path"), button -> {
+        ButtonWidget recordPath = ButtonWidget.builder(Text.translatable("screen.cinematiccreeper.record_path"), button -> {
             client.setScreen(new NewPathMenu(entity.getId(), PlayerPathHolder.State.RECORDING));
         }).dimensions(x + 130, y + 40, 150, 20).build();
         addDrawableChild(recordPath);

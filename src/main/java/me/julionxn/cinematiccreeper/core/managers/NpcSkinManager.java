@@ -3,7 +3,6 @@ package me.julionxn.cinematiccreeper.core.managers;
 import me.julionxn.cinematiccreeper.CinematicCreeper;
 import me.julionxn.cinematiccreeper.core.skins.CachedSkin;
 import me.julionxn.cinematiccreeper.entity.NpcEntity;
-import me.julionxn.cinematiccreeper.util.mixins.NpcData;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
@@ -59,14 +58,13 @@ public class NpcSkinManager {
     }
 
     public void updateSkinOf(NpcEntity entity) {
-        String npcId = ((NpcData) entity).cinematiccreeper$getId();
         try {
             URL url = new URL(entity.getSkinUrl());
             String id = getIdFromUrl(url);
             Identifier texture = cachedSkins.computeIfAbsent(id, key -> new CachedSkin(id, url)).loadAndGetTexture();
             entity.setSkin(texture);
         } catch (IOException e) {
-            CinematicCreeper.LOGGER.error("Failed to load skin from Npc with id: " + npcId, e);
+            CinematicCreeper.LOGGER.error("Failed to load skin of Npc with UUID: " + entity.getUuid(), e);
         }
     }
 

@@ -27,7 +27,8 @@ public abstract class CameraMenu extends ExtendedScreen {
 
     @Override
     public void addWidgets() {
-
+        x = (windowWidth / 2) - width / 2;
+        y = (windowHeight / 2) - height / 2;
     }
 
     @Override
@@ -35,13 +36,13 @@ public abstract class CameraMenu extends ExtendedScreen {
         x = (windowWidth / 2) - width / 2;
         y = (windowHeight / 2) - height / 2;
         tabs.clear();
-        addTab(Text.translatable("gui.cinematiccreeper.options"), ((buttonWidget, minecraftClient) -> {
+        addTab(Text.translatable("screen.cinematiccreeper.options"), ((buttonWidget, minecraftClient) -> {
             if (minecraftClient.currentScreen == null) return;
-            if (minecraftClient.currentScreen.getClass() == OptionsCameraMenu.class) return;
-            minecraftClient.setScreen(new OptionsCameraMenu());
+            if (minecraftClient.currentScreen.getClass() == SettingsCameraMenu.class) return;
+            minecraftClient.setScreen(new SettingsCameraMenu());
         }));
 
-        addTab(Text.translatable("gui.cinematiccreeper.recordings"), ((buttonWidget, minecraftClient) -> {
+        addTab(Text.translatable("screen.cinematiccreeper.recordings"), ((buttonWidget, minecraftClient) -> {
             if (minecraftClient.currentScreen == null) return;
             if (minecraftClient.currentScreen.getClass() == RecordingsCameraMenu.class) return;
             minecraftClient.setScreen(new RecordingsCameraMenu());

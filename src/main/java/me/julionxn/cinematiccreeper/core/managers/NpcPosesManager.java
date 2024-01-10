@@ -27,12 +27,12 @@ public class NpcPosesManager extends SerializableJsonManager<NpcPosesManager> {
         return SingletonHolder.INSTANCE;
     }
 
-    public void addNpcPose(String id, NpcPose pose){
-        loadedPoses.put(id, pose);
-    }
-
     public Optional<NpcPose> getNpcPose(String id){
         return Optional.ofNullable(loadedPoses.get(id));
+    }
+
+    public void addNpcPose(String id, NpcPose pose){
+        loadedPoses.put(id, pose);
     }
 
     public HashMap<String, NpcPose> getLoadedPoses(){

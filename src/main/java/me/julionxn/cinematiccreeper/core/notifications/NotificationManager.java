@@ -3,13 +3,12 @@ package me.julionxn.cinematiccreeper.core.notifications;
 import com.google.common.collect.ImmutableMap;
 import me.julionxn.cinematiccreeper.CinematicCreeper;
 import me.julionxn.cinematiccreeper.core.Interpolation;
+import me.julionxn.cinematiccreeper.util.RenderUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.MathHelper;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -78,27 +77,8 @@ public class NotificationManager {
         int startingX = context.getScaledWindowWidth() - 140;
         Identifier iconTexture = ICON_TEXTURES.get(type);
         context.drawTexture(TEXTURE, startingX, y, 0, 0, 0, 140, 20, 140, 20);
-        drawScrollableText(context, textRenderer, Text.of(text), startingX + 70, startingX + 25, y, startingX + 130, y + 20);
+        RenderUtils.drawScrollableText(context, textRenderer, Text.of(text), startingX + 70, startingX + 25, y, startingX + 130, y + 20);
         context.drawTexture(iconTexture, startingX + 7, y + 4, 0, 0, 0, 12, 12, 12, 12);
-    }
-
-    private void drawScrollableText(DrawContext context, TextRenderer textRenderer, Text text, int centerX, int startX, int startY, int endX, int endY) {
-        int i = textRenderer.getWidth(text);
-        int j = (startY + endY - textRenderer.fontHeight) / 2 + 1;
-        int k = endX - startX;
-        if (i > k) {
-            int l = i - k;
-            double d = (double) Util.getMeasuringTimeMs() / 1000.0;
-            double e = Math.max((double)l * 0.5, 3.0);
-            double f = Math.sin(1.57079632 * Math.cos(Math.PI * 2 * d / e)) / 2.0 + 0.5;
-            double g = MathHelper.lerp(f, 0.0, l);
-            context.enableScissor(startX, startY, endX, endY);
-            context.drawTextWithShadow(textRenderer, text, startX - (int)g, j, 16777215);
-            context.disableScissor();
-        } else {
-            int l = MathHelper.clamp(centerX, startX + i / 2, endX - i / 2);
-            context.drawCenteredTextWithShadow(textRenderer, text, l, j, 16777215);
-        }
     }
 
 }

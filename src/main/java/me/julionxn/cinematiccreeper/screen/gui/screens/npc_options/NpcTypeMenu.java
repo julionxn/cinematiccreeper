@@ -3,6 +3,8 @@ package me.julionxn.cinematiccreeper.screen.gui.screens.npc_options;
 import me.julionxn.cinematiccreeper.CinematicCreeper;
 import me.julionxn.cinematiccreeper.core.managers.NpcsManager;
 import me.julionxn.cinematiccreeper.core.managers.PresetsManager;
+import me.julionxn.cinematiccreeper.core.notifications.Notification;
+import me.julionxn.cinematiccreeper.core.notifications.NotificationManager;
 import me.julionxn.cinematiccreeper.core.presets.PresetOptions;
 import me.julionxn.cinematiccreeper.core.presets.PresetOptionsHandlers;
 import me.julionxn.cinematiccreeper.entity.NpcEntity;
@@ -53,7 +55,8 @@ public abstract class NpcTypeMenu extends ExtendedScreen {
 
     @Override
     public void addWidgets() {
-
+        x = (windowWidth / 2) - width / 2;
+        y = (windowHeight / 2) - height / 2;
     }
 
     @Override
@@ -64,20 +67,23 @@ public abstract class NpcTypeMenu extends ExtendedScreen {
     }
 
     private void addBasicButtons(int x, int y) {
-        ButtonWidget cancelButton = ButtonWidget.builder(Text.translatable("gui.cinematiccreeper.cancel"), button -> onCancel.run())
+        ButtonWidget cancelButton = ButtonWidget.builder(Text.translatable("screen.cinematiccreeper.cancel"), button -> onCancel.run())
                 .dimensions(x + 20, y + height, 100, 20).build();
         addDrawableChild(cancelButton);
-        ButtonWidget saveButton = ButtonWidget.builder(Text.translatable("gui.cinematiccreeper.save"), button -> onReady.accept(presetOptions))
+        ButtonWidget saveButton = ButtonWidget.builder(Text.translatable("screen.cinematiccreeper.save"), button -> {
+                    onReady.accept(presetOptions);
+                    NotificationManager.getInstance().add(Notification.SAVED);
+                })
                 .dimensions(x + width - 120, y + height, 100, 20).build();
         addDrawableChild(saveButton);
         tabs.clear();
-        addTab(Text.translatable("gui.cinematiccreeper.basic_tab"), (buttonWidget, minecraftClient) -> {
+        addTab(Text.translatable("screen.cinematiccreeper.basic_tab"), (buttonWidget, minecraftClient) -> {
             if (minecraftClient.currentScreen == null) return;
             if (minecraftClient.currentScreen.getClass() == BasicTypeMenu.class) return;
             minecraftClient.setScreen(new BasicTypeMenu(entityType, onReady, onCancel, presetOptions, entity));
         }, (string, minecraftClient) -> true);
 
-        addTab(Text.translatable("gui.cinematiccreeper.mob_tab"), (buttonWidget, minecraftClient) -> {
+        addTab(Text.translatable("screen.cinematiccreeper.mob_tab"), (buttonWidget, minecraftClient) -> {
             if (minecraftClient.currentScreen == null) return;
             if (minecraftClient.currentScreen.getClass() == MobNpcTypeMenu.class) return;
             minecraftClient.setScreen(new MobNpcTypeMenu(entityType, onReady, onCancel, presetOptions, entity));
@@ -88,7 +94,7 @@ public abstract class NpcTypeMenu extends ExtendedScreen {
             return NpcsManager.getInstance().isMobEntity(world, string);
         });
 
-        addTab(Text.translatable("gui.cinematiccreeper.path_tab"), (buttonWidget, minecraftClient) -> {
+        addTab(Text.translatable("screen.cinematiccreeper.path_tab"), (buttonWidget, minecraftClient) -> {
             if (minecraftClient.currentScreen == null) return;
             if (minecraftClient.currentScreen.getClass() == PathAwareNpcTypeMenu.class) return;
             minecraftClient.setScreen(new PathAwareNpcTypeMenu(entityType, onReady, onCancel, presetOptions, entity));
@@ -98,7 +104,7 @@ public abstract class NpcTypeMenu extends ExtendedScreen {
             World world = player.getWorld();
             return NpcsManager.getInstance().isPathAwareEntity(world, string);
         });
-        addTab(Text.translatable("gui.cinematiccreeper.npc_tab"), (buttonWidget, minecraftClient) -> {
+        addTab(Text.translatable("screen.cinematiccreeper.npc_tab"), (buttonWidget, minecraftClient) -> {
             if (minecraftClient.currentScreen == null) return;
             if (minecraftClient.currentScreen.getClass() == NpcMenu.class) return;
             minecraftClient.setScreen(new NpcMenu(entityType, onReady, onCancel, presetOptions, entity));
@@ -117,13 +123,11 @@ public abstract class NpcTypeMenu extends ExtendedScreen {
 
         if (entity == null) return;
         ButtonWidget removeButton = ButtonWidget.builder(Text.of("E"), button -> {
-            String id = ((NpcData) entity).cinematiccreeper$getId();
-            PresetsManager.getInstance().getPresetWithId(id).ifPresent(preset -> {
-                PacketByteBuf buf = PacketByteBufs.create();
-                buf.writeUuid(entity.getUuid());
-                ClientPlayNetworking.send(AllPackets.C2S_REMOVE_ENTITY, buf);
-                close();
-            });
+            PacketByteBuf buf = PacketByteBufs.create();
+            buf.writeUuid(entity.getUuid());
+            ClientPlayNetworking.send(AllPackets.C2S_REMOVE_ENTITY, buf);
+            NotificationManager.getInstance().add(new Notification(Notification.Type.OK, Text.translatable("messages.cinematiccreeper.deleted_npc")));
+            close();
         }).dimensions(x + width, y + 20, 20, 20).build();
         addDrawableChild(removeButton);
         ButtonWidget resetButton = ButtonWidget.builder(Text.of("R"), button -> {
@@ -135,6 +139,7 @@ public abstract class NpcTypeMenu extends ExtendedScreen {
                 buf.writeBoolean(true);
                 PresetOptionsHandlers.addToBuf(buf, presetOptions1);
                 ClientPlayNetworking.send(AllPackets.C2S_APPLY_PRESET_OPTIONS, buf);
+                NotificationManager.getInstance().add(new Notification(Notification.Type.OK, Text.translatable("messages.cinematiccreeper.npc_reset")));
                 close();
             });
         }).dimensions(x + width, y + 40, 20, 20).build();

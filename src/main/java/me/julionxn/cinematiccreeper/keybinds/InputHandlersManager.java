@@ -1,9 +1,13 @@
 package me.julionxn.cinematiccreeper.keybinds;
 
 import me.julionxn.cinematiccreeper.keybinds.handlers.CameraHandler;
+import me.julionxn.cinematiccreeper.keybinds.handlers.CameraOptionsHandler;
+import me.julionxn.cinematiccreeper.keybinds.handlers.CameraRecordingHandler;
 import me.julionxn.cinematiccreeper.keybinds.handlers.PathsHandler;
-import me.julionxn.cinematiccreeper.keybinds.handlers.RecordingCameraHandler;
+import me.julionxn.cinematiccreeper.util.TextUtils;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
@@ -14,7 +18,7 @@ public class InputHandlersManager {
     private static PressModifier pressModifier;
 
     private static final List<InputHandler> inputHandlers = List.of(
-        new PathsHandler(), new RecordingCameraHandler(), new CameraHandler()
+        new PathsHandler(),  new CameraHandler(), new CameraRecordingHandler(), new CameraOptionsHandler()
     );
 
     public static void handleKeyboard(MinecraftClient client, int key, int action, int modifier){
@@ -26,26 +30,10 @@ public class InputHandlersManager {
         InputHandlersManager.pressModifier = pressState != PressState.RELEASE ? pressModifier : PressModifier.NONE;
         List<InputHandler> toHandle = inputHandlers.stream().filter(inputHandler -> inputHandler.getPredicate().apply(client)).toList();
         for (InputHandler inputHandler : toHandle) {
-            switch (pressState){
-                case PRESS -> {
-                    for (InputAction onPressAction : inputHandler.getOnPressActions()) {
-                        if (onPressAction.key.get() == key && onPressAction.predicate.get()){
-                            onPressAction.action.accept(client, pressModifier);
-                        }
-                    }
-                }
-                case HOLD -> {
-                    for (InputAction onPressAction : inputHandler.getOnHoldActions()) {
-                        if (onPressAction.key.get() == key && onPressAction.predicate.get()){
-                            onPressAction.action.accept(client, pressModifier);
-                        }
-                    }
-                }
-                case RELEASE -> {
-                    for (InputAction onPressAction : inputHandler.getOnReleaseActions()) {
-                        if (onPressAction.key.get() == key && onPressAction.predicate.get()){
-                            onPressAction.action.accept(client, pressModifier);
-                        }
+            if (pressState == PressState.PRESS){
+                for (InputAction onPressAction : inputHandler.getOnPressActions()) {
+                    if (onPressAction.key.get() == key && onPressAction.predicate.get()){
+                        onPressAction.action.accept(client, pressModifier);
                     }
                 }
             }
@@ -62,6 +50,33 @@ public class InputHandlersManager {
                 }
             }
             if(inputHandler.shouldCancelNext()) break;
+        }
+    }
+
+
+    public static void render(MinecraftClient client, DrawContext context){
+        if (client == null) return;
+        List<InputHandler> toHandle = inputHandlers.stream()
+                .filter(inputHandler -> inputHandler.getPredicate().apply(client))
+                .filter(InputHandler::shouldRender)
+                .toList();
+        int startingY = 20;
+        for (InputHandler inputHandler : toHandle) {
+            for (InputAction onPressAction : inputHandler.getOnPressActions()) {
+                int keyCode = onPressAction.key.get();
+                InputUtil.Key key = InputUtil.fromKeyCode(keyCode, keyCode);
+                String keyString = TextUtils.parseKey(key);
+                context.drawTextWithShadow(client.textRenderer,  keyString + ": " + onPressAction.description.getString(), 20, startingY, 0xffffff);
+                startingY += 12;
+            }
+            for (ScrollAndKeyAction scrollAndKeyAction : inputHandler.getScrollAndKeyActions()) {
+                int keyCode = scrollAndKeyAction.key.get();
+                InputUtil.Key key = InputUtil.fromKeyCode(keyCode, keyCode);
+                String keyString = TextUtils.parseKey(key);
+                context.drawTextWithShadow(client.textRenderer,  keyString + " + Scroll" + ": " + scrollAndKeyAction.description.getString(), 20, startingY, 0xffffff);
+                startingY += 12;
+            }
+            inputHandler.render(context);
         }
     }
 

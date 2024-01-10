@@ -63,7 +63,7 @@ public class PresetsMenu extends ExtendedScreen {
 
     @Override
     public void addDrawables() {
-        ButtonWidget addPresetButton = ButtonWidget.builder(Text.translatable("gui.cinematiccreeper.new"), button -> {
+        ButtonWidget addPresetButton = ButtonWidget.builder(Text.translatable("screen.cinematiccreeper.new"), button -> {
             if (client == null) return;
             client.setScreen(new NewPresetMenu(blockPos));
         }).dimensions(windowWidth / 2 - 30, windowHeight / 2 - 60, 60, 20).build();

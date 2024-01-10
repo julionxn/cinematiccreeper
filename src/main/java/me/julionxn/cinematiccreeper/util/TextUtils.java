@@ -1,6 +1,7 @@
 package me.julionxn.cinematiccreeper.util;
 
 import net.minecraft.client.option.KeyBinding;
+import net.minecraft.client.util.InputUtil;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,12 +21,21 @@ public class TextUtils {
 
     public static String parseKeybind(KeyBinding keyBinding) {
         String text = keyBinding.getBoundKeyTranslationKey();
-        Pattern pattern = Pattern.compile("key\\.keyboard\\.(\\w)");
-        Matcher matcher = pattern.matcher(text);
+        return parseTranslationKey(text);
+    }
+
+    public static String parseKey(InputUtil.Key key){
+        String text = key.getTranslationKey();
+        return parseTranslationKey(text);
+    }
+
+    private static String parseTranslationKey(String translation){
+        Pattern pattern = Pattern.compile("key\\.keyboard\\.(\\w+)");
+        Matcher matcher = pattern.matcher(translation);
         if (matcher.matches()) {
             return matcher.group(1).toUpperCase();
         }
-        return text;
+        return translation;
     }
 
 }

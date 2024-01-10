@@ -2,18 +2,17 @@ package me.julionxn.cinematiccreeper.keybinds;
 
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 
 public abstract class InputHandler {
 
     private Function<MinecraftClient, Boolean> predicate = (client) -> true;
-    private final Set<InputAction> onPressActions = new HashSet<>();
-    private final Set<InputAction> onHoldActions = new HashSet<>();
-    private final Set<InputAction> onReleaseActions = new HashSet<>();
-    private final Set<ScrollAndKeyAction> scrollAndKeyActions = new HashSet<>();
+    private final List<InputAction> onPressActions = new ArrayList<>();
+    private final List<ScrollAndKeyAction> scrollAndKeyActions = new ArrayList<>();
 
     public InputHandler(){
         init();
@@ -29,31 +28,15 @@ public abstract class InputHandler {
         onPressActions.add(inputAction);
     }
 
-    protected void addHoldAction(InputAction inputAction){
-        onHoldActions.add(inputAction);
-    }
-
-    protected void addReleaseAction(InputAction inputAction){
-        onReleaseActions.add(inputAction);
-    }
-
     protected void addScrollAndKeyAction(ScrollAndKeyAction action){
         scrollAndKeyActions.add(action);
     }
 
-    public Set<InputAction> getOnPressActions(){
+    public List<InputAction> getOnPressActions(){
         return onPressActions;
     }
 
-    public Set<InputAction> getOnHoldActions(){
-        return onHoldActions;
-    }
-
-    public Set<InputAction> getOnReleaseActions(){
-        return onReleaseActions;
-    }
-
-    public Set<ScrollAndKeyAction> getScrollAndKeyActions(){
+    public List<ScrollAndKeyAction> getScrollAndKeyActions(){
         return scrollAndKeyActions;
     }
 
@@ -62,5 +45,12 @@ public abstract class InputHandler {
     }
 
     public abstract boolean shouldCancelNext();
+
+    public boolean shouldRender(){
+        return true;
+    }
+
+    public void render(DrawContext context){
+    }
 
 }
