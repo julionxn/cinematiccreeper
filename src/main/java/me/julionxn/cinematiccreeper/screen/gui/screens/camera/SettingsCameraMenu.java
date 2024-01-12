@@ -62,6 +62,24 @@ public class SettingsCameraMenu extends CameraMenu {
                 () -> CameraManager.getInstance().getSettings().setShowOptions(false));
         showOptionsToggle.setActive(CameraManager.getInstance().getSettings().showOptions());
         addDrawableChild(showOptionsToggle);
+        ToggleWidget showGridToggle = new ToggleWidget(x + 20, y + 120, 179, 20, Text.translatable("camera.cinematiccreeper.show_grid"),
+                () -> CameraManager.getInstance().getSettings().setShowGrid(true),
+                () -> CameraManager.getInstance().getSettings().setShowGrid(false));
+        showGridToggle.setActive(CameraManager.getInstance().getSettings().showGrid());
+        addDrawableChild(showGridToggle);
+        ButtonWidget clearTargetButton = ButtonWidget.builder(Text.translatable("camera.cinematiccreeper.clear_target"), button -> CameraManager.getInstance().setCameraTarget(null))
+                .dimensions(x + 40, y + 140, 100, 20)
+                .build();
+        addDrawableChild(clearTargetButton);
+        ButtonWidget selectTarget = ButtonWidget.builder(Text.translatable("camera.cinematiccreeper.set_target"), button -> {
+                    CameraManager.getInstance().setState(CameraManager.State.MOVING);
+                    CameraManager.getInstance().setSelectingTarget(true);
+                    close();
+                }).dimensions(x + 159, y + 140, 100, 20)
+                .build();
+        addDrawableChild(selectTarget);
+
+
         ButtonWidget saveButton = ButtonWidget.builder(Text.translatable("screen.cinematiccreeper.save"), button -> {
             if (smoothnessField == null) return;
             Optional<Double> smoothOpt = validNumber(smoothnessField.getTextFieldWidget().getText(), 0d, 1d);

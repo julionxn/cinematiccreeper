@@ -25,4 +25,23 @@ public enum Interpolation {
         return start + interpolation.apply((float) t) * (end - start);
     }
 
+    public static float interpolateCyclic(Interpolation interpolation, float t, float start, float end){
+        float angleDif = end - start;
+        if (Math.abs(angleDif) > 180){
+            angleDif += angleDif > 0 ? -360 : 360;
+        }
+        float interpolated = start + interpolation.interpolation.apply(t) * angleDif;
+        return clamp(interpolated);
+    }
+
+    private static float clamp(float angle){
+        angle = angle % 360;
+        if (angle > 180){
+            angle -= 360;
+        } else if (angle < -180){
+            angle += 360;
+        }
+        return angle;
+    }
+
 }

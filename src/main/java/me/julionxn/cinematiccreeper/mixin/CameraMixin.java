@@ -3,7 +3,6 @@ package me.julionxn.cinematiccreeper.mixin;
 import me.julionxn.cinematiccreeper.core.managers.CameraManager;
 import net.minecraft.client.render.Camera;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BlockView;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -13,14 +12,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Camera.class)
 public abstract class CameraMixin {
-
-
-    @Inject(method = "setRotation", at = @At("HEAD"), cancellable = true)
-    private void setRotationI(float yaw, float pitch, CallbackInfo ci){
-        if (CameraManager.getInstance().getState() == CameraManager.State.STATIC) {
-            ci.cancel();
-        }
-    }
 
     @Inject(method = "isThirdPerson", at = @At("TAIL"), cancellable = true)
     private void thirdI(CallbackInfoReturnable<Boolean> cir){
@@ -34,8 +25,6 @@ public abstract class CameraMixin {
         if (CameraManager.getInstance().isActive()){
             CameraManager.getInstance().update((Camera) (Object) this);
             ci.cancel();
-        } else {
-            Vec3d pos = ((Camera)(Object) this).getPos();
         }
     }
 

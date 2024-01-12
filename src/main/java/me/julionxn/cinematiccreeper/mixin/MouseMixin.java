@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Mouse.class)
-public class MouseMixin {
+public abstract class MouseMixin {
 
     @Shadow @Final private MinecraftClient client;
 
@@ -30,6 +30,15 @@ public class MouseMixin {
                 return;
             }
             manager.changeDirectionByMouse(dx, dy);
+        }
+    }
+
+    @Inject(method = "onMouseButton", at = @At("TAIL"))
+    private void rightClickI(long window, int button, int action, int mods, CallbackInfo ci){
+        if (CameraManager.getInstance().isSelectingTarget()){
+            if (action != 1) return;
+            if (button == 1) CameraManager.getInstance().handleTargetSelection(client);
+            if (button == 2) CameraManager.getInstance().setPlayerAsTarget(client);
         }
     }
 

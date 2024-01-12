@@ -17,13 +17,15 @@ public class SliderWidget extends ClickableWidget {
     private static final Identifier SCROLLBAR_TEXTURE = new Identifier(CinematicCreeper.MOD_ID, "textures/gui/scrollbar.png");
     private static final Identifier BACKGROUND_TEXTURE = new Identifier(CinematicCreeper.MOD_ID, "textures/gui/slider.png");
     private final Supplier<Float> value;
+    private final float minValue;
     private final float maxValue;
     private final Consumer<Float> onChange;
     private final Function<Float, String> text;
 
-    public SliderWidget(int x, int y, Supplier<Float> startingValue, float maxValue, Text message, Function<Float, String> text, Consumer<Float> onChange) {
+    public SliderWidget(int x, int y, Supplier<Float> value, float minValue, float maxValue, Text message, Function<Float, String> text, Consumer<Float> onChange) {
         super(x, y, 140, 30, message);
-        this.value = startingValue;
+        this.value = value;
+        this.minValue = minValue;
         this.maxValue = maxValue;
         this.text = text;
         this.onChange = onChange;
@@ -35,10 +37,10 @@ public class SliderWidget extends ClickableWidget {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client == null) return;
         context.drawCenteredTextWithShadow(client.textRenderer, getMessage(), getX() + 70, getY(), 0xffffff);
-        float tValue = value.get();
-        int x = (int) (getX() + 1 + ((width - 6) * tValue));
-        context.drawCenteredTextWithShadow(client.textRenderer, Text.of(text.apply(tValue * maxValue)),
+        float currentValue = value.get();
+        context.drawCenteredTextWithShadow(client.textRenderer, Text.of(text.apply(currentValue)),
                 getX() + 70, getY() + 16, 0xffffff);
+        int x = (int) (getX() + 1 + ((width - 6) * ((currentValue - minValue) / (maxValue - minValue))));
         context.drawTexture(SCROLLBAR_TEXTURE, x, getY() + 11,
                 0, 0, 0, 4, 18, 4, 18);
     }
@@ -58,7 +60,9 @@ public class SliderWidget extends ClickableWidget {
 
     @Override
     protected void onDrag(double mouseX, double mouseY, double deltaX, double deltaY) {
-        setValue(mouseX);
+        if (mouseX >= getX() - 10 && mouseY >= getY() && mouseX < getX() + 10 + width && mouseY < getY() + height){
+            setValue(mouseX);
+        }
     }
 
     private void setValue(double mouseX){
@@ -68,6 +72,7 @@ public class SliderWidget extends ClickableWidget {
         } else if (newValue < 0){
             newValue += 1;
         }
+        newValue = minValue + newValue * (maxValue - minValue);
         onChange.accept(newValue);
     }
 

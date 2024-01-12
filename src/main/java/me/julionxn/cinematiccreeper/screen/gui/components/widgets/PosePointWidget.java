@@ -27,7 +27,8 @@ public class PosePointWidget extends ExtendedWidget {
     private final int y;
     private final PosePoint posePoint;
     private Part part = Part.HEAD;
-    private static final float MAX_VALUE = MathHelper.PI * 2;
+    private static final float MIN_VALUE = -MathHelper.PI;
+    private static final float MAX_VALUE = MathHelper.PI;
     private PlayerEntityModel<NpcEntity> model;
     private float modelYaw = 0;
     private float modelPitch = 0;
@@ -47,46 +48,49 @@ public class PosePointWidget extends ExtendedWidget {
             model = new PlayerEntityModel<>(loader.getModelPart(EntityModelLayers.PLAYER), false);
         }
         partButtonOf("H", currentX, y, Part.HEAD);
-        partButtonOf("LA", currentX + 30, y, Part.RIGHT_ARM);
-        partButtonOf("RA", currentX + 60, y, Part.LEFT_ARM);
-        partButtonOf("LL", currentX + 90, y, Part.RIGHT_LEG);
-        partButtonOf("RL", currentX + 120, y, Part.LEFT_LEG);
-        SliderWidget yawWidget = new SliderWidget(currentX + 5, y + 30, () -> floatFromAngle(getDataFromPart(part).yaw),
+        partButtonOf("LA", currentX + 30, y, Part.LEFT_ARM);
+        partButtonOf("RA", currentX + 60, y, Part.RIGHT_ARM);
+        partButtonOf("LL", currentX + 90, y, Part.LEFT_LEG);
+        partButtonOf("RL", currentX + 120, y, Part.RIGHT_LEG);
+        SliderWidget yawWidget = new SliderWidget(currentX + 5, y + 30, () -> getDataFromPart(part).yaw,
+                MIN_VALUE,
                 MAX_VALUE,
                 Text.of("Yaw"),
-                aFloat -> String.valueOf(MathHelper.toDegrees(aFloat)),
-                aFloat -> {
+                value -> String.valueOf(value * 57.29577951308232f),
+                newValue -> {
                     PoseData data = getDataFromPart(part);
-                    data.yaw = aFloat * MAX_VALUE;
+                    data.yaw = newValue;
                 }
         );
         addDrawableChild(yawWidget);
-        SliderWidget pitchWidget = new SliderWidget(currentX + 5, y + 65, () -> floatFromAngle(getDataFromPart(part).pitch),
+        SliderWidget pitchWidget = new SliderWidget(currentX + 5, y + 65, () -> getDataFromPart(part).pitch,
+                MIN_VALUE,
                 MAX_VALUE,
                 Text.of("Pitch"),
-                aFloat -> String.valueOf(MathHelper.toDegrees(aFloat)),
-                aFloat -> {
+                value -> String.valueOf(value * 57.29577951308232f),
+                newValue -> {
                     PoseData data = getDataFromPart(part);
-                    data.pitch = aFloat * MAX_VALUE;
+                    data.pitch = newValue;
                 }
         );
         addDrawableChild(pitchWidget);
-        SliderWidget rollWidget = new SliderWidget(currentX + 5, y + 100, () -> floatFromAngle(getDataFromPart(part).roll),
+        SliderWidget rollWidget = new SliderWidget(currentX + 5, y + 100, () -> getDataFromPart(part).roll,
+                MIN_VALUE,
                 MAX_VALUE,
                 Text.of("Roll"),
-                aFloat -> String.valueOf(MathHelper.toDegrees(aFloat)),
-                aFloat -> {
+                value -> String.valueOf(value * 57.29577951308232f),
+                newValue -> {
                     PoseData data = getDataFromPart(part);
-                    data.roll = aFloat * MAX_VALUE;
+                    data.roll = newValue;
                 }
         );
         addDrawableChild(rollWidget);
     }
 
     private void partButtonOf(String text, int x, int y, Part part){
-        ButtonWidget buttonWidget = ButtonWidget.builder(Text.of(text), button -> {
-                    this.part = part;
-                }).dimensions(x, y, 30, 20).build();
+        ButtonWidget buttonWidget = ButtonWidget.builder(Text.of(text), button -> this.part = part)
+                .dimensions(x, y, 30, 20)
+                .build();
         addDrawableChild(buttonWidget);
     }
 
@@ -96,11 +100,11 @@ public class PosePointWidget extends ExtendedWidget {
         MatrixStack stack = context.getMatrices();
         stack.push();
         stack.translate(x - 5, y + 30, 200);
-        stack.multiply(RotationAxis.NEGATIVE_Y.rotation(MathHelper.PI));
+        stack.multiply(RotationAxis.NEGATIVE_X.rotation(MathHelper.PI));
         stack.translate(0, 35, 0);
-        stack.multiply(new Quaternionf().rotationZYX(0, modelYaw, modelPitch));
+        stack.multiply(new Quaternionf().rotationZYX(0, modelYaw + MathHelper.PI, modelPitch));
         stack.translate(0, -35, 0);
-        stack.scale(70, 70, 70);
+        stack.scale(-70, -70, -70);
         applyPosePointToRenderer(model);
         RenderLayer renderLayer = RenderLayer.getEntityCutoutNoCullZOffset(DefaultSkinHelper.getTexture());
         VertexConsumer vertexConsumer = context.getVertexConsumers().getBuffer(renderLayer);
@@ -145,10 +149,6 @@ public class PosePointWidget extends ExtendedWidget {
             case LEFT_LEG -> posePoint.leftLeg;
             case RIGHT_LEG -> posePoint.rightLeg;
         };
-    }
-
-    private float floatFromAngle(float value){
-        return value / (MathHelper.PI * 2);
     }
 
     @Override

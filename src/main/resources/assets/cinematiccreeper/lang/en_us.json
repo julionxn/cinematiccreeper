@@ -51,5 +51,9 @@
   "camera.cinematiccreeper.movement_sensibility": "Movement Sensibility",
   "camera.cinematiccreeper.rotation_smoothness": "Rotation Smoothness",
   "camera.cinematiccreeper.rotation_sensibility": "Rotation Sensibility",
-  "camera.cinematiccreeper.show_controls": "Show controls"
+  "camera.cinematiccreeper.show_controls": "Show controls",
+  "camera.cinematiccreeper.reset": "Reset zoom and fov",
+  "camera.cinematiccreeper.show_grid": "Show grid",
+  "camera.cinematiccreeper.clear_target": "Clear target",
+  "camera.cinematiccreeper.set_target": "Set target"
 }

@@ -18,12 +18,17 @@ public abstract class InGameHudMixin {
 
     @Shadow @Final private MinecraftClient client;
 
+    @Shadow protected abstract void renderCrosshair(DrawContext context);
+
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
     private void renderI(DrawContext context, float tickDelta, CallbackInfo ci){
         if (CameraManager.getInstance().isActive()) {
             ci.cancel();
             if (CameraManager.getInstance().isRecording()){
                 RecordingHud.onHudRender(context, tickDelta);
+            }
+            if (CameraManager.getInstance().isSelectingTarget()){
+                renderCrosshair(context);
             }
             InputHandlersManager.render(client, context);
         }

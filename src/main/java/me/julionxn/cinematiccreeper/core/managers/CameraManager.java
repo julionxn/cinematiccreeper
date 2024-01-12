@@ -7,12 +7,25 @@ import me.julionxn.cinematiccreeper.core.camera.CameraRecordingPlayer;
 import me.julionxn.cinematiccreeper.core.camera.CameraSettings;
 import me.julionxn.cinematiccreeper.core.camera.Snap;
 import me.julionxn.cinematiccreeper.core.camera.paths.PathType;
+import me.julionxn.cinematiccreeper.core.camera.targets.BlockPosTarget;
+import me.julionxn.cinematiccreeper.core.camera.targets.CameraTarget;
+import me.julionxn.cinematiccreeper.core.camera.targets.EntityTarget;
+import me.julionxn.cinematiccreeper.core.notifications.Notification;
+import me.julionxn.cinematiccreeper.core.notifications.NotificationManager;
 import me.julionxn.cinematiccreeper.util.MathHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.ProjectileUtil;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.RaycastContext;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -37,13 +50,16 @@ public class CameraManager extends SerializableJsonManager<CameraManager> {
     private double targetFov;
     private boolean recording;
     @Nullable
+    private CameraTarget cameraTarget;
+    private boolean selectingTarget;
+    @Nullable
     private CameraRecording currentCameraRecording;
     @Expose
     private final CameraSettings settings = new CameraSettings();
     @Expose
     private List<CameraRecording> cameraRecordings = new ArrayList<>();
     private CameraRecordingPlayer recordingPlayer;
-    private boolean blockInputs = false;
+    private boolean playingRecording = false;
 
     protected CameraManager(String path, float version, Class<CameraManager> clazz) {
         super(path, version, clazz);
@@ -63,10 +79,66 @@ public class CameraManager extends SerializableJsonManager<CameraManager> {
         //Interpolate extra fov
         deltaFov = Interpolation.LINEAR.interpolate(t, deltaFov, targetDeltaFov);
         //Interpolate angles
+        interpolateAngles(deltaFrame);
+    }
+
+    private void interpolateAngles(float deltaFrame){
         float tRotation = deltaFrame * (1 - settings.getRotationSmoothness());
-        float interpolatedYaw = Interpolation.LINEAR.interpolate(tRotation, camera.getYaw(), targetYaw);
-        float interpolatedPitch = Interpolation.LINEAR.interpolate(tRotation, camera.getPitch(), targetPitch);
+        if (cameraTarget == null){
+            float interpolatedYaw = Interpolation.LINEAR.interpolate(tRotation, camera.getYaw(), targetYaw);
+            float interpolatedPitch = Interpolation.LINEAR.interpolate(tRotation, camera.getPitch(), targetPitch);
+            camera.setRotation(interpolatedYaw, interpolatedPitch);
+            System.out.println(clampDegAngle(camera.getYaw()));
+            return;
+        }
+        Vec3d targetPos = cameraTarget.getPos();
+        Vec3d direction = targetPos.subtract(camera.getPos()).normalize().rotateY(1.570796326f);
+        double yaw = clampRadAngle(Math.atan2(direction.z, direction.x));
+        double pitch = clampRadAngle(Math.asin(-direction.y));
+        float cameraYaw = clampDegAngle(camera.getYaw());
+        float cameraPitch = clampDegAngle(camera.getPitch());
+        float interpolatedYaw  = Interpolation.interpolateCyclic(Interpolation.LINEAR, tRotation, cameraYaw, (float) Math.toDegrees(yaw));
+        float interpolatedPitch = Interpolation.interpolateCyclic(Interpolation.LINEAR, tRotation, cameraPitch, (float) Math.toDegrees(pitch));
         camera.setRotation(interpolatedYaw, interpolatedPitch);
+    }
+
+    public void setPlayerAsTarget(MinecraftClient client){
+        PlayerEntity player = client.player;
+        if (player == null) return;
+        cameraTarget = new EntityTarget(player);
+        setSelectingTarget(false);
+    }
+
+    public void handleTargetSelection(MinecraftClient client){
+        PlayerEntity player = client.player;
+        if (player == null) return;
+        World world = player.getWorld();
+        if (world == null) return;
+        EntityHitResult entityHitResult = raycastEntitiesInDirection(player);
+        if (entityHitResult == null){
+            BlockHitResult blockHitResult = raycastInDirection(world, player);
+            if (blockHitResult != null){
+                setCameraTarget(new BlockPosTarget(blockHitResult.getBlockPos()));
+                NotificationManager.getInstance().add(Notification.SAVED);
+            }
+        } else {
+            Entity entity = entityHitResult.getEntity();
+            setCameraTarget(new EntityTarget(entity));
+            NotificationManager.getInstance().add(Notification.SAVED);
+        }
+        setSelectingTarget(false);
+    }
+
+    public void setCameraTarget(@Nullable CameraTarget target){
+        cameraTarget = target;
+    }
+
+    public void setSelectingTarget(boolean state){
+        selectingTarget = state;
+    }
+
+    public boolean isSelectingTarget(){
+        return selectingTarget;
     }
 
     public State getState(){
@@ -74,6 +146,7 @@ public class CameraManager extends SerializableJsonManager<CameraManager> {
     }
 
     public void setState(State newState){
+        if (selectingTarget) return;
         state = newState;
     }
 
@@ -121,14 +194,14 @@ public class CameraManager extends SerializableJsonManager<CameraManager> {
     }
 
     public void playRecording(CameraRecording recording){
-        blockInputs = true;
+        playingRecording = true;
         state = State.MOVING;
         recordingPlayer = new CameraRecordingPlayer(this, recording);
         recordingPlayer.play();
     }
 
-    public void setBlockInputs(boolean state){
-        blockInputs = state;
+    public void setPlayingRecording(boolean state){
+        playingRecording = state;
     }
 
     public void setAnchorValues(double x, double y, double z, float yaw, float pitch){
@@ -142,10 +215,20 @@ public class CameraManager extends SerializableJsonManager<CameraManager> {
         camera.setRotation(yaw, pitch);
         anchorFov = MinecraftClient.getInstance().options.getFov().getValue().doubleValue();
         fov = anchorFov;
-        targetFov = fov;
+        targetFov = anchorFov;
         deltaFov = 0;
         targetDeltaFov = 0;
         applyZoomToPos();
+    }
+
+    public void resetToAnchor(){
+        zoom = 0;
+        targetFov = anchorFov;
+        fov = anchorFov;
+        targetDeltaFov = 0;
+        deltaFov = 0;
+        actualPos = anchorPos;
+        camera.setPos(anchorPos.x, anchorPos.y, actualPos.z);
     }
 
     public double getFov(){
@@ -166,7 +249,7 @@ public class CameraManager extends SerializableJsonManager<CameraManager> {
     }
 
     public void changeDirectionByMouse(double dx, double dy){
-        if (blockInputs) return;
+        if (playingRecording || cameraTarget != null) return;
         if (dx == 0 && dy == 0) return;
         if (camera == null) return;
         float sensibility = settings.getRotationSensibility();
@@ -175,6 +258,7 @@ public class CameraManager extends SerializableJsonManager<CameraManager> {
     }
 
     public void updateRotation(float yaw, float pitch){
+        if (cameraTarget != null) return;
         this.targetYaw = yaw;
         this.targetPitch = pitch;
         applyZoomToPos();
@@ -199,15 +283,27 @@ public class CameraManager extends SerializableJsonManager<CameraManager> {
     }
 
     private Vec3d getDirection(){
-        double standardPitch = -clampAngle(Math.toRadians(camera.getPitch()));
-        double standardYaw = -clampAngle(Math.toRadians(camera.getYaw()));
+        double standardPitch = -clampRadAngle(Math.toRadians(camera.getPitch()));
+        double standardYaw = -clampRadAngle(Math.toRadians(camera.getYaw()));
         return new Vec3d(Math.sin(standardYaw) * Math.cos(standardPitch),
                 Math.sin(standardPitch), Math.cos(standardYaw) * Math.cos(standardPitch))
                 .normalize();
     }
 
+    public EntityHitResult raycastEntitiesInDirection(PlayerEntity player){
+        return ProjectileUtil.raycast(player, camera.getPos(), camera.getPos().add(getDirection().multiply(10)),
+                new Box(camera.getPos().subtract(0.5, 0.5, 0.5), camera.getPos().add(0.5, 0.5 ,0.5)).stretch(getDirection().multiply(10)),
+                entity -> true, 40);
+    }
+
+    public BlockHitResult raycastInDirection(World world, PlayerEntity player){
+        return world.raycast(new RaycastContext(camera.getPos(),
+                camera.getPos().add(getDirection().multiply(10)),
+                RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, player));
+    }
+
     public void moveByKeyboard(float sideways, float forwards, boolean jumping, boolean sneaking){
-        if (blockInputs) return;
+        if (playingRecording) return;
         Vec3d direction = getDirection();
         double sensibility = settings.getMovementSensibility();
         anchorPos = anchorPos.add(direction.multiply(forwards, 0, forwards).multiply(sensibility));
@@ -229,6 +325,7 @@ public class CameraManager extends SerializableJsonManager<CameraManager> {
     }
 
     public void setActualAngles(float yaw, float pitch){
+        if (cameraTarget != null) return;
         targetYaw = yaw;
         targetPitch = pitch;
         camera.setRotation(yaw, pitch);
@@ -238,7 +335,17 @@ public class CameraManager extends SerializableJsonManager<CameraManager> {
         actualPos = anchorPos.add(getDirection().multiply(zoom));
     }
 
-    private double clampAngle(double angle) {
+    private float clampDegAngle(float angle){
+        angle = angle % 360;
+        if (angle > 180){
+            angle -= 360;
+        } else if (angle < -180){
+            angle += 360;
+        }
+        return angle;
+    }
+
+    private double clampRadAngle(double angle) {
         angle = angle % (TWO_PI);
         if (angle > Math.PI) {
             angle -= TWO_PI;
@@ -262,7 +369,7 @@ public class CameraManager extends SerializableJsonManager<CameraManager> {
 
     }
     private static class SingletonHolder {
-        private static final CameraManager INSTANCE = new CameraManager("cc_camera.json", 2.1f, CameraManager.class);
+        private static final CameraManager INSTANCE = new CameraManager("cc_camera.json", 2.2f, CameraManager.class);
 
     }
 

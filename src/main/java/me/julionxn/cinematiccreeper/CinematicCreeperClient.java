@@ -11,6 +11,7 @@ import me.julionxn.cinematiccreeper.entity.AllEntities;
 import me.julionxn.cinematiccreeper.entity.NpcEntityRenderer;
 import me.julionxn.cinematiccreeper.keybinds.Keybindings;
 import me.julionxn.cinematiccreeper.networking.AllPackets;
+import me.julionxn.cinematiccreeper.util.RenderUtils;
 import me.julionxn.cinematiccreeper.util.mixins.PlayerData;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
@@ -19,7 +20,15 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 
 public class CinematicCreeperClient implements ClientModInitializer {
 
@@ -40,6 +49,23 @@ public class CinematicCreeperClient implements ClientModInitializer {
             PlayerPathHolder holder = ((PlayerData) player).cinematiccreeper$getPathHolder();
             if (holder.state() != PlayerPathHolder.State.NONE) {
                 PathRenderer.render(client, context, holder);
+            }
+            if (CameraManager.getInstance().isSelectingTarget()){
+                World world = player.getWorld();
+                EntityHitResult hitResult = CameraManager.getInstance().raycastEntitiesInDirection(player);
+                if (hitResult == null){
+                    BlockHitResult blockHitResult = CameraManager.getInstance().raycastInDirection(world, player);
+                    if (blockHitResult == null) return;
+                    BlockPos blockPos = blockHitResult.getBlockPos();
+                    RenderUtils.renderBlockOutline(client, context.matrixStack(), blockPos, 0xffffff);
+                } else {
+                    Entity entity = hitResult.getEntity();
+                    Vec3d pos = entity.getPos();
+                    RenderUtils.renderBillboardTexture(client,
+                            pos.add(0, entity.getEyeHeight(EntityPose.STANDING) + 0.75, 0),
+                            new Identifier("cinematiccreeper", "point.png"),
+                            1f, 1f, 1f);
+                }
             }
             CameraRecording recording = CameraManager.getInstance().getCurrentCameraRecording();
             if (recording == null) return;

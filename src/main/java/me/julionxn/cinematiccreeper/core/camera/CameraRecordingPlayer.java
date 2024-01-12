@@ -27,7 +27,7 @@ public class CameraRecordingPlayer {
 
     public void stop(){
         playing = false;
-        manager.setBlockInputs(false);
+        manager.setPlayingRecording(false);
     }
 
     public void tick(){

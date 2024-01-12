@@ -1,6 +1,7 @@
 package me.julionxn.cinematiccreeper.keybinds.handlers;
 
 import me.julionxn.cinematiccreeper.core.managers.CameraManager;
+import me.julionxn.cinematiccreeper.keybinds.InputAction;
 import me.julionxn.cinematiccreeper.keybinds.InputHandler;
 import me.julionxn.cinematiccreeper.keybinds.PressModifier;
 import me.julionxn.cinematiccreeper.keybinds.ScrollAndKeyAction;
@@ -15,12 +16,14 @@ public class CameraHandler extends InputHandler {
                 (client, modifier, vertical) -> {
                     double zoomA = modifier == PressModifier.NONE ? 0.5 : 0.1;
                     CameraManager.getInstance().incrementZoom(vertical * zoomA);
-                }, () -> CameraManager.getInstance().isActive()));
+                }));
         addScrollAndKeyAction(new ScrollAndKeyAction(GLFW.GLFW_KEY_X, Text.translatable("camera.cinematiccreeper.change_fov"),
                 (client, modifier, vertical) -> {
                     double fovA = modifier == PressModifier.NONE ? 1 : 0.5;
                     CameraManager.getInstance().incrementFov(vertical * fovA);
-                }, () -> CameraManager.getInstance().isActive()));
+                }));
+        addPressAction(new InputAction(GLFW.GLFW_KEY_R, Text.translatable("camera.cinematiccreeper.reset"),
+                (client, modifier) -> CameraManager.getInstance().resetToAnchor()));
     }
 
     @Override

@@ -1,16 +1,23 @@
 package me.julionxn.cinematiccreeper.keybinds.handlers;
 
+import me.julionxn.cinematiccreeper.CinematicCreeper;
 import me.julionxn.cinematiccreeper.core.managers.CameraManager;
 import me.julionxn.cinematiccreeper.keybinds.InputAction;
 import me.julionxn.cinematiccreeper.keybinds.InputHandler;
 import me.julionxn.cinematiccreeper.keybinds.Keybindings;
 import me.julionxn.cinematiccreeper.screen.gui.screens.camera.SettingsCameraMenu;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.glfw.GLFW;
 
 public class CameraOptionsHandler extends InputHandler {
+
+    private static final Identifier CAMERA_MODE_ICON = new Identifier(CinematicCreeper.MOD_ID, "textures/hud/camera_mode_icon.png");
+    private static final Identifier PLAYER_MODE_ICON = new Identifier(CinematicCreeper.MOD_ID, "textures/hud/player_mode_icon.png");
+
     @Override
     public void init() {
         setPredicate(client -> !CameraManager.getInstance().isRecording());
@@ -31,12 +38,22 @@ public class CameraOptionsHandler extends InputHandler {
                     CameraManager.getInstance().setState(newState);
                 }, () -> CameraManager.getInstance().isActive()));
         addPressAction(new InputAction(GLFW.GLFW_KEY_O, Text.translatable("camera.cinematiccreeper.camera_settings"),
-                (client, pressModifier) -> client.setScreen(new SettingsCameraMenu())));
+                (client, pressModifier) -> client.setScreen(new SettingsCameraMenu()),
+                () -> CameraManager.getInstance().isActive()));
     }
 
     @Override
     public boolean shouldRender() {
         return CameraManager.getInstance().getSettings().showOptions();
+    }
+
+    @Override
+    public void render(DrawContext context) {
+        int width = context.getScaledWindowWidth();
+        CameraManager.State state = CameraManager.getInstance().getState();
+        if (state == CameraManager.State.NONE) return;
+        Identifier texture = state == CameraManager.State.STATIC ? PLAYER_MODE_ICON : CAMERA_MODE_ICON;
+        context.drawTexture(texture, width - 72, 8, 0, 0, 0, 64, 64, 64, 64);
     }
 
     @Override

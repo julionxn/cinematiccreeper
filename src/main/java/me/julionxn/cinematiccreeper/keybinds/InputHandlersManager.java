@@ -1,5 +1,6 @@
 package me.julionxn.cinematiccreeper.keybinds;
 
+import me.julionxn.cinematiccreeper.core.managers.CameraManager;
 import me.julionxn.cinematiccreeper.keybinds.handlers.CameraHandler;
 import me.julionxn.cinematiccreeper.keybinds.handlers.CameraOptionsHandler;
 import me.julionxn.cinematiccreeper.keybinds.handlers.CameraRecordingHandler;
@@ -77,6 +78,14 @@ public class InputHandlersManager {
                 startingY += 12;
             }
             inputHandler.render(context);
+        }
+        if (CameraManager.getInstance().getSettings().showGrid()){
+            int width = context.getScaledWindowWidth();
+            int height = context.getScaledWindowHeight();
+            context.drawHorizontalLine(0, width, height / 3, 0x66000000);
+            context.drawHorizontalLine(0, width, 2 * height / 3, 0x66000000);
+            context.drawVerticalLine(width / 3, 0, height, 0x66000000);
+            context.drawVerticalLine(2 * width / 3, 0, height, 0x66000000);
         }
     }
 

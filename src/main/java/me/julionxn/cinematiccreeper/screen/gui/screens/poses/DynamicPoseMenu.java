@@ -56,6 +56,7 @@ public class DynamicPoseMenu extends ExtendedScreen {
             PlayerEntityModel<NpcEntity> model = new PlayerEntityModel<>(loader.getModelPart(EntityModelLayers.PLAYER), false);
             model.head.scale(new Vector3f(-0.33f));
             ticker = new PoseAnimator(model);
+            this.model = model;
         }
     }
 
@@ -159,9 +160,9 @@ public class DynamicPoseMenu extends ExtendedScreen {
             ticker.delta(npcPose, delta);
             MatrixStack stack = context.getMatrices();
             stack.push();
-            stack.translate(centerX, windowHeight / 2f - 120, 200);
-            stack.multiply(RotationAxis.NEGATIVE_Y.rotation(MathHelper.PI));
-            stack.scale(120, 120, 120);
+            stack.translate(windowWidth / 2f, windowHeight / 2f - 150, 200);
+            stack.scale(-170, -170, -170);
+            stack.multiply(RotationAxis.NEGATIVE_Z.rotation(MathHelper.PI));
             ticker.render(stack, context.getVertexConsumers().getBuffer(RenderLayer.getEntityAlpha(DefaultSkinHelper.getTexture())), 0xffffff);
             stack.pop();
             currentTick = ticker.getTick();

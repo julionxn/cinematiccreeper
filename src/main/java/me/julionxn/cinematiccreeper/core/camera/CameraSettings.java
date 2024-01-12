@@ -9,6 +9,7 @@ public class CameraSettings {
     @Expose private float rotationSmoothness = 0.95f;
     @Expose private float rotationSensibility = 0.1f;
     @Expose private boolean showOptions = true;
+    @Expose private boolean showGrid = false;
 
     public double getSmoothness() {
         return smoothness;
@@ -48,5 +49,13 @@ public class CameraSettings {
 
     public void setShowOptions(boolean showOptions) {
         this.showOptions = showOptions;
+    }
+
+    public boolean showGrid() {
+        return showGrid;
+    }
+
+    public void setShowGrid(boolean showGrid) {
+        this.showGrid = showGrid;
     }
 }

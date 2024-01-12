@@ -10,12 +10,39 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Matrix4f;
 
 public class RenderUtils {
+
+    public static void renderBlockOutline(MinecraftClient client, MatrixStack stack, BlockPos blockPos, int color){
+        System.out.println("HOLA");
+        color = 0xffffffff;
+        Vec3d a = new Vec3d(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+        Vec3d b = a.add(0, 0, 1);
+        Vec3d c = a.add(1, 0, 0);
+        Vec3d d = a.add(1, 0, 1);
+        Vec3d e = a.add(0, 1, 0);
+        Vec3d f = b.add(0, 1, 0);
+        Vec3d g = c.add(0, 1, 0);
+        Vec3d h = d.add(0, 1, 0);
+        renderLine(client, stack, a, c, color);
+        renderLine(client, stack, a, b, color);
+        renderLine(client, stack, c, d, color);
+        renderLine(client, stack, b, d, color);
+        renderLine(client, stack, a, e, color);
+        renderLine(client, stack, c, g, color);
+        renderLine(client, stack, d, h, color);
+        renderLine(client, stack, b, f, color);
+        renderLine(client, stack, e, f, color);
+        renderLine(client, stack, e, g, color);
+        renderLine(client, stack, h, f, color);
+        renderLine(client, stack, h, g, color);
+    }
+
 
     public static void renderLine(MinecraftClient client, MatrixStack stack, Vec3d start, Vec3d end, int color){
         Tessellator tessellator = Tessellator.getInstance();
