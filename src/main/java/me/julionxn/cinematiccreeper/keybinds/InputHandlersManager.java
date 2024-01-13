@@ -23,6 +23,7 @@ public class InputHandlersManager {
     );
 
     public static void handleKeyboard(MinecraftClient client, int key, int action, int modifier){
+        if (client.currentScreen != null) return;
         PressState pressState = PressState.get(action);
         if (key != GLFW.GLFW_KEY_LEFT_SHIFT && key != GLFW.GLFW_KEY_LEFT_CONTROL){
             InputHandlersManager.key = pressState != PressState.RELEASE ? key : -1;
