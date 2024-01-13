@@ -1,6 +1,7 @@
 package me.julionxn.cinematiccreeper;
 
 import me.julionxn.cinematiccreeper.core.camera.CameraRecording;
+import me.julionxn.cinematiccreeper.core.camera.CameraRecordingPlayer;
 import me.julionxn.cinematiccreeper.core.managers.CameraManager;
 import me.julionxn.cinematiccreeper.core.managers.NpcPosesManager;
 import me.julionxn.cinematiccreeper.core.managers.NpcSkinManager;
@@ -18,6 +19,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;

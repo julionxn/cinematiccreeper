@@ -19,7 +19,6 @@ import org.joml.Matrix4f;
 public class RenderUtils {
 
     public static void renderBlockOutline(MinecraftClient client, MatrixStack stack, BlockPos blockPos, int color){
-        System.out.println("HOLA");
         color = 0xffffffff;
         Vec3d a = new Vec3d(blockPos.getX(), blockPos.getY(), blockPos.getZ());
         Vec3d b = a.add(0, 0, 1);

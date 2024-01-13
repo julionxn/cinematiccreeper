@@ -88,7 +88,6 @@ public class CameraManager extends SerializableJsonManager<CameraManager> {
             float interpolatedYaw = Interpolation.LINEAR.interpolate(tRotation, camera.getYaw(), targetYaw);
             float interpolatedPitch = Interpolation.LINEAR.interpolate(tRotation, camera.getPitch(), targetPitch);
             camera.setRotation(interpolatedYaw, interpolatedPitch);
-            System.out.println(clampDegAngle(camera.getYaw()));
             return;
         }
         Vec3d targetPos = cameraTarget.getPos();
@@ -195,9 +194,8 @@ public class CameraManager extends SerializableJsonManager<CameraManager> {
 
     public void playRecording(CameraRecording recording){
         playingRecording = true;
-        state = State.MOVING;
         recordingPlayer = new CameraRecordingPlayer(this, recording);
-        recordingPlayer.play();
+        CameraRecordingPlayer.startCameraRecording(recordingPlayer);
     }
 
     public void setPlayingRecording(boolean state){
@@ -325,7 +323,16 @@ public class CameraManager extends SerializableJsonManager<CameraManager> {
     }
 
     public void setActualAngles(float yaw, float pitch){
-        if (cameraTarget != null) return;
+        if (cameraTarget != null) {
+            Vec3d targetPos = cameraTarget.getPos();
+            Vec3d direction = targetPos.subtract(camera.getPos()).normalize().rotateY(1.570796326f);
+            double Nyaw = clampRadAngle(Math.atan2(direction.z, direction.x));
+            double Npitch = clampRadAngle(Math.asin(-direction.y));
+            Nyaw = Math.toDegrees(Nyaw);
+            Npitch = Math.toDegrees(Npitch);
+            camera.setRotation((float) Nyaw, (float) Npitch);
+            return;
+        }
         targetYaw = yaw;
         targetPitch = pitch;
         camera.setRotation(yaw, pitch);

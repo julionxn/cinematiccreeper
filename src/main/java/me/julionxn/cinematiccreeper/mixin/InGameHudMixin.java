@@ -1,5 +1,6 @@
 package me.julionxn.cinematiccreeper.mixin;
 
+import me.julionxn.cinematiccreeper.core.camera.CameraRecordingPlayer;
 import me.julionxn.cinematiccreeper.core.managers.CameraManager;
 import me.julionxn.cinematiccreeper.keybinds.InputHandlersManager;
 import me.julionxn.cinematiccreeper.screen.hud.RecordingHud;
@@ -30,8 +31,9 @@ public abstract class InGameHudMixin {
             if (CameraManager.getInstance().isSelectingTarget()){
                 renderCrosshair(context);
             }
-            InputHandlersManager.render(client, context);
+            CameraRecordingPlayer.hud.onHudRender(context);
         }
+        InputHandlersManager.render(client, context);
     }
 
 }
