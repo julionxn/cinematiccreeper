@@ -54,10 +54,9 @@ public class PresetsMenu extends ExtendedScreen {
 
     @Override
     public void addWidgets() {
-        RemovableItemsScrollWidget scrollWidget = new RemovableItemsScrollWidget(this,
-                windowWidth / 2 - 95, windowHeight / 2 - 40,
-                150, 20, 5,
-                () -> this.scrollItems);
+        RemovableItemsScrollWidget scrollWidget = RemovableItemsScrollWidget.builder(this, () -> this.scrollItems)
+                .pos(windowWidth / 2 - 95, windowHeight / 2 - 40)
+                .build();
         addWidget(scrollWidget);
     }
 

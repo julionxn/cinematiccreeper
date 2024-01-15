@@ -12,18 +12,22 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class SliderWidget extends ClickableWidget {
+public class SliderWidget<T extends Number> extends ClickableWidget {
 
     private static final Identifier SCROLLBAR_TEXTURE = new Identifier(CinematicCreeper.MOD_ID, "textures/gui/scrollbar.png");
     private static final Identifier BACKGROUND_TEXTURE = new Identifier(CinematicCreeper.MOD_ID, "textures/gui/slider.png");
-    private final Supplier<Float> value;
-    private final float minValue;
-    private final float maxValue;
-    private final Consumer<Float> onChange;
-    private final Function<Float, String> text;
+    private final boolean wrap;
+    private final Supplier<T> value;
+    private final double minValue;
+    private final double maxValue;
+    private final Consumer<T> onChange;
+    private final Function<T, String> text;
+    private final Class<T> tClass;
 
-    public SliderWidget(int x, int y, Supplier<Float> value, float minValue, float maxValue, Text message, Function<Float, String> text, Consumer<Float> onChange) {
+    public SliderWidget(Class<T> clazz, boolean wrap, int x, int y, Supplier<T> value, double minValue, double maxValue, Text message, Function<T, String> text, Consumer<T> onChange) {
         super(x, y, 140, 30, message);
+        this.tClass = clazz;
+        this.wrap = wrap;
         this.value = value;
         this.minValue = minValue;
         this.maxValue = maxValue;
@@ -37,10 +41,10 @@ public class SliderWidget extends ClickableWidget {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client == null) return;
         context.drawCenteredTextWithShadow(client.textRenderer, getMessage(), getX() + 70, getY(), 0xffffff);
-        float currentValue = value.get();
+        T currentValue = value.get();
         context.drawCenteredTextWithShadow(client.textRenderer, Text.of(text.apply(currentValue)),
                 getX() + 70, getY() + 16, 0xffffff);
-        int x = (int) (getX() + 1 + ((width - 6) * ((currentValue - minValue) / (maxValue - minValue))));
+        int x = (int) (getX() + 1 + ((width - 6) * ((currentValue.doubleValue() - minValue) / (maxValue - minValue))));
         context.drawTexture(SCROLLBAR_TEXTURE, x, getY() + 11,
                 0, 0, 0, 4, 18, 4, 18);
     }
@@ -65,19 +69,87 @@ public class SliderWidget extends ClickableWidget {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void setValue(double mouseX){
-        float newValue = (float) (mouseX - getX()) / width;
+        double newValue = (mouseX - getX()) / width;
         if (newValue > 1){
-            newValue %= 1;
+            newValue = wrap ? newValue % 1 : 1;
         } else if (newValue < 0){
-            newValue += 1;
+            newValue = wrap ? newValue + 1 : 0;
         }
         newValue = minValue + newValue * (maxValue - minValue);
-        onChange.accept(newValue);
+        Number value = convertToType(newValue);
+        onChange.accept((T) value);
+    }
+
+    private Number convertToType(double value) {
+        if (tClass == Integer.class){
+            return (int) value;
+        }
+        if (tClass == Float.class){
+            return (float) value;
+        }
+        return value;
     }
 
     @Override
     protected void appendClickableNarrations(NarrationMessageBuilder builder) {
+    }
+
+    public static <T extends Number> Builder<T> builder(Class<T> clazz, Supplier<T> value, Consumer<T> onChange){
+        return new Builder<>(clazz, value, onChange);
+    }
+
+    public static class Builder<T extends Number> {
+
+        private final Class<T> clazz;
+        private final Supplier<T> value;
+        private final Consumer<T> onChange;
+        private int x;
+        private int y;
+        private double minValue = 0;
+        private double maxValue = 1;
+        private Text message = Text.of("Value");
+        private Function<T, String> overlayText = String::valueOf;
+        private boolean wrap = false;
+
+        public Builder(Class<T> clazz, Supplier<T> value, Consumer<T> onChange) {
+            this.clazz = clazz;
+            this.value = value;
+            this.onChange = onChange;
+        }
+
+        public Builder<T> pos(int x, int y){
+            this.x = x;
+            this.y = y;
+            return this;
+        }
+
+        public Builder<T> range(double min, double max){
+            this.minValue = min;
+            this.maxValue = max;
+            return this;
+        }
+
+        public Builder<T> message(Text message){
+            this.message = message;
+            return this;
+        }
+
+        public Builder<T> overlayText(Function<T, String> function){
+            this.overlayText = function;
+            return this;
+        }
+
+        public Builder<T> wrap(){
+            wrap = true;
+            return this;
+        }
+
+        public SliderWidget<T> build(){
+            return new SliderWidget<>(clazz, wrap, x, y, value, minValue, maxValue, message, overlayText, onChange);
+        }
+
     }
 
 }

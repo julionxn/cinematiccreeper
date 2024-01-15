@@ -151,4 +151,47 @@ public class RemovableItemsScrollWidget extends ExtendedWidget {
 
     public record RemovableScrollItem(String text, Consumer<ButtonWidget> runnable, Consumer<ButtonWidget> onRemove) {
     }
+
+    public static Builder builder(ExtendedScreen extendedScreen, Supplier<List<RemovableScrollItem>> itemsSupplier){
+        return new Builder(extendedScreen, itemsSupplier);
+    }
+
+    public static class Builder {
+
+        private final ExtendedScreen extendedScreen;
+        private final Supplier<List<RemovableScrollItem>> itemsSupplier;
+        private int x;
+        private int y;
+        private int itemsWidth = 150;
+        private int itemsHeight = 20;
+        private int itemsPerPage = 5;
+
+        public Builder(ExtendedScreen extendedScreen, Supplier<List<RemovableScrollItem>> itemsSupplier) {
+            this.extendedScreen = extendedScreen;
+            this.itemsSupplier = itemsSupplier;
+        }
+
+        public Builder pos(int x, int y) {
+            this.x = x;
+            this.y = y;
+            return this;
+        }
+
+        public Builder itemsDimensions(int width, int height) {
+            this.itemsWidth = width;
+            this.itemsHeight = height;
+            return this;
+        }
+
+        public Builder itemsPerPage(int amount) {
+            this.itemsPerPage = amount;
+            return this;
+        }
+
+        public RemovableItemsScrollWidget build(){
+            return new RemovableItemsScrollWidget(extendedScreen, x, y, itemsWidth, itemsHeight, itemsPerPage, itemsSupplier);
+        }
+
+    }
+
 }

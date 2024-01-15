@@ -23,12 +23,12 @@ import org.joml.Quaternionf;
 
 public class PosePointWidget extends ExtendedWidget {
 
+    private static final float MIN_VALUE = -MathHelper.PI;
+    private static final float MAX_VALUE = MathHelper.PI;
     private final int x;
     private final int y;
     private final PosePoint posePoint;
     private Part part = Part.HEAD;
-    private static final float MIN_VALUE = -MathHelper.PI;
-    private static final float MAX_VALUE = MathHelper.PI;
     private PlayerEntityModel<NpcEntity> model;
     private float modelYaw = 0;
     private float modelPitch = 0;
@@ -43,7 +43,7 @@ public class PosePointWidget extends ExtendedWidget {
     @Override
     public void init() {
         int currentX = x + 70;
-        if (client != null && model == null){
+        if (client != null && model == null) {
             EntityModelLoader loader = client.getEntityModelLoader();
             model = new PlayerEntityModel<>(loader.getModelPart(EntityModelLayers.PLAYER), false);
         }
@@ -52,42 +52,39 @@ public class PosePointWidget extends ExtendedWidget {
         partButtonOf("RA", currentX + 60, y, Part.RIGHT_ARM);
         partButtonOf("LL", currentX + 90, y, Part.LEFT_LEG);
         partButtonOf("RL", currentX + 120, y, Part.RIGHT_LEG);
-        SliderWidget yawWidget = new SliderWidget(currentX + 5, y + 30, () -> getDataFromPart(part).yaw,
-                MIN_VALUE,
-                MAX_VALUE,
-                Text.of("Yaw"),
-                value -> String.valueOf(value * 57.29577951308232f),
+        SliderWidget<Float> yawWidget = SliderWidget.builder(Float.class,
+                () -> getDataFromPart(part).yaw,
                 newValue -> {
                     PoseData data = getDataFromPart(part);
                     data.yaw = newValue;
-                }
-        );
+                }).pos(currentX + 5, y + 30)
+                .range(MIN_VALUE, MAX_VALUE).wrap()
+                .message(Text.of("Yaw"))
+                .overlayText(value -> String.valueOf(value * 57.29577951308232f)).build();
         addDrawableChild(yawWidget);
-        SliderWidget pitchWidget = new SliderWidget(currentX + 5, y + 65, () -> getDataFromPart(part).pitch,
-                MIN_VALUE,
-                MAX_VALUE,
-                Text.of("Pitch"),
-                value -> String.valueOf(value * 57.29577951308232f),
+        SliderWidget<Float> pitchWidget = SliderWidget.builder(Float.class,
+                () -> getDataFromPart(part).pitch,
                 newValue -> {
                     PoseData data = getDataFromPart(part);
                     data.pitch = newValue;
-                }
-        );
+                }).pos(currentX + 5, y + 65)
+                .range(MIN_VALUE, MAX_VALUE).wrap()
+                .message(Text.of("Pitch"))
+                .overlayText(value -> String.valueOf(value * 57.29577951308232f)).build();
         addDrawableChild(pitchWidget);
-        SliderWidget rollWidget = new SliderWidget(currentX + 5, y + 100, () -> getDataFromPart(part).roll,
-                MIN_VALUE,
-                MAX_VALUE,
-                Text.of("Roll"),
-                value -> String.valueOf(value * 57.29577951308232f),
+        SliderWidget<Float> rollWidget = SliderWidget.builder(Float.class,
+                () -> getDataFromPart(part).roll,
                 newValue -> {
                     PoseData data = getDataFromPart(part);
                     data.roll = newValue;
-                }
-        );
+                }).pos(currentX + 5, y + 100)
+                .range(MIN_VALUE, MAX_VALUE).wrap()
+                .message(Text.of("Roll"))
+                .overlayText(value -> String.valueOf(value * 57.29577951308232f)).build();
         addDrawableChild(rollWidget);
     }
 
-    private void partButtonOf(String text, int x, int y, Part part){
+    private void partButtonOf(String text, int x, int y, Part part) {
         ButtonWidget buttonWidget = ButtonWidget.builder(Text.of(text), button -> this.part = part)
                 .dimensions(x, y, 30, 20)
                 .build();
@@ -113,7 +110,7 @@ public class PosePointWidget extends ExtendedWidget {
         stack.pop();
     }
 
-    private void applyPosePointToRenderer(PlayerEntityModel<NpcEntity> model){
+    private void applyPosePointToRenderer(PlayerEntityModel<NpcEntity> model) {
         applyAnglesToParts(model.head, model.hat, posePoint.head);
         applyAnglesToParts(model.leftArm, model.leftSleeve, posePoint.leftArm);
         applyAnglesToParts(model.rightArm, model.rightSleeve, posePoint.rightArm);
@@ -121,12 +118,12 @@ public class PosePointWidget extends ExtendedWidget {
         applyAnglesToParts(model.rightLeg, model.rightPants, posePoint.rightLeg);
     }
 
-    private void applyAnglesToParts(ModelPart modelPart, ModelPart modelPart2, PoseData poseData){
+    private void applyAnglesToParts(ModelPart modelPart, ModelPart modelPart2, PoseData poseData) {
         modelPart.setAngles(poseData.pitch, poseData.yaw, poseData.roll);
         modelPart2.setAngles(poseData.pitch, poseData.yaw, poseData.roll);
     }
 
-    private void renderModel(MatrixStack stack, VertexConsumer vertexConsumer){
+    private void renderModel(MatrixStack stack, VertexConsumer vertexConsumer) {
         renderPart(Part.HEAD, model.head, model.hat, stack, vertexConsumer);
         renderPart(Part.LEFT_ARM, model.leftArm, model.leftSleeve, stack, vertexConsumer);
         renderPart(Part.RIGHT_ARM, model.rightArm, model.rightSleeve, stack, vertexConsumer);
@@ -135,14 +132,14 @@ public class PosePointWidget extends ExtendedWidget {
         model.body.render(stack, vertexConsumer, 0x00f000f0, OverlayTexture.DEFAULT_UV, 0.45f, 0.45f, 0.45f, 1f);
     }
 
-    private void renderPart(Part part, ModelPart modelPart, ModelPart modelPart2, MatrixStack stack, VertexConsumer vertexConsumer){
+    private void renderPart(Part part, ModelPart modelPart, ModelPart modelPart2, MatrixStack stack, VertexConsumer vertexConsumer) {
         float alpha = part == this.part ? 1f : 0.45f;
-        modelPart.render(stack, vertexConsumer, 0x00f000f0, OverlayTexture.DEFAULT_UV, alpha, alpha, alpha,1f);
+        modelPart.render(stack, vertexConsumer, 0x00f000f0, OverlayTexture.DEFAULT_UV, alpha, alpha, alpha, 1f);
         modelPart2.render(stack, vertexConsumer, 0x00f000f0, OverlayTexture.DEFAULT_UV, alpha, alpha, alpha, 1f);
     }
 
-    private PoseData getDataFromPart(Part part){
-        return switch (part){
+    private PoseData getDataFromPart(Part part) {
+        return switch (part) {
             case HEAD -> posePoint.head;
             case LEFT_ARM -> posePoint.leftArm;
             case RIGHT_ARM -> posePoint.rightArm;
@@ -154,8 +151,8 @@ public class PosePointWidget extends ExtendedWidget {
     @Override
     public void mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
         final float precision = MathHelper.PI / 50;
-        if (mouseX > x - 50 && mouseX < x + 50 && mouseY > y - 30 && mouseY < y + 140){
-            switch (button){
+        if (mouseX > x - 50 && mouseX < x + 50 && mouseY > y - 30 && mouseY < y + 140) {
+            switch (button) {
                 case 0 -> {
                     modelYaw += deltaX > 0 ? precision : -precision;
                     modelYaw %= MathHelper.PI * 2;
@@ -171,8 +168,8 @@ public class PosePointWidget extends ExtendedWidget {
 
     @Override
     public void mouseClicked(double mouseX, double mouseY, int button) {
-        if (mouseX > x - 50 && mouseX < x + 50 && mouseY > y - 30 && mouseY < y + 140){
-            if (button == 2){
+        if (mouseX > x - 50 && mouseX < x + 50 && mouseY > y - 30 && mouseY < y + 140) {
+            if (button == 2) {
                 modelPitch = 0;
                 modelYaw = 0;
             }

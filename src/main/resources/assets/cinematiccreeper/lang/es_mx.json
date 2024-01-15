@@ -1,5 +1,8 @@
 {
-  "item.cinematiccreeper.debug_item": "Debug Stick",
+  "cinematiccreeper.item_group": "Cinematic Creeper",
+  "item.cinematiccreeper.npc_stick": "NPC Stick",
+  "block.cinematiccreeper.green_screen": "Pantalla Verde",
+  "tooltip.cinematiccreeper.green_screen": "Clic Derecho para cambiar el color.",
   "entity.cinematiccreeper.npc_entity": "Npc",
   "messages.cinematiccreeper.blank_id": "Id vacío.",
   "messages.cinematiccreeper.already_exists": "Ya existe.",
@@ -54,5 +57,6 @@
   "camera.cinematiccreeper.show_controls": "Mostrar controles",
   "camera.cinematiccreeper.show_grid": "Mostrar cuadricula",
   "camera.cinematiccreeper.clear_target": "Limpiar objetivo",
-  "camera.cinematiccreeper.set_target": "Establecer objetivo"
+  "camera.cinematiccreeper.set_target": "Establecer objetivo",
+  "camera.cinematiccreeper.reset": "Reset zoom and fov"
 }

@@ -133,4 +133,47 @@ public class ScrollWidget extends ExtendedWidget {
 
     public record ScrollItem(String text, Consumer<ButtonWidget> runnable) {
     }
+
+    public static Builder builder(ExtendedScreen extendedScreen, List<ScrollItem> items){
+        return new Builder(extendedScreen, items);
+    }
+
+    public static class Builder {
+
+        private final ExtendedScreen extendedScreen;
+        private final List<ScrollItem> itemsSupplier;
+        private int x;
+        private int y;
+        private int itemsWidth = 150;
+        private int itemsHeight = 20;
+        private int itemsPerPage = 5;
+
+        public Builder(ExtendedScreen extendedScreen, List<ScrollItem> itemsSupplier) {
+            this.extendedScreen = extendedScreen;
+            this.itemsSupplier = itemsSupplier;
+        }
+
+        public Builder pos(int x, int y){
+            this.x = x;
+            this.y = y;
+            return this;
+        }
+
+        public Builder itemsDimensions(int width, int height){
+            this.itemsHeight = height;
+            this.itemsWidth = width;
+            return this;
+        }
+
+        public Builder itemsPerPage(int amount){
+            this.itemsPerPage = amount;
+            return this;
+        }
+
+        public ScrollWidget build(){
+            return new ScrollWidget(extendedScreen, x, y, itemsWidth, itemsHeight, itemsPerPage, itemsSupplier);
+        }
+
+    }
+
 }

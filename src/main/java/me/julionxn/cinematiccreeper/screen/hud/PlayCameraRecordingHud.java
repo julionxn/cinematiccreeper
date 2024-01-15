@@ -1,9 +1,7 @@
 package me.julionxn.cinematiccreeper.screen.hud;
 
 import me.julionxn.cinematiccreeper.CinematicCreeper;
-import me.julionxn.cinematiccreeper.core.camera.CameraRecording;
 import me.julionxn.cinematiccreeper.core.camera.CameraRecordingPlayer;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;
@@ -27,7 +25,7 @@ public class PlayCameraRecordingHud {
         if (timeElapsed >= 3) {
             timeElapsed = -1;
             cameraRecording.play();
-        };
+        }
     }
 
     public void setCameraRecording(CameraRecordingPlayer cameraRecording){

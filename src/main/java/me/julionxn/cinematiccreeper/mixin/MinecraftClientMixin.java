@@ -26,7 +26,7 @@ public abstract class MinecraftClientMixin {
         PlayerData accessor = (PlayerData) player;
         if (accessor.cinematiccreeper$getPathHolder().state() != PlayerPathHolder.State.NONE) {
             cancel = true;
-        };
+        }
         if (CameraManager.getInstance().isRecording()){
             cancel = true;
         }

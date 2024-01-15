@@ -56,7 +56,10 @@ public class NewPresetMenu extends ExtendedScreen {
         if (client == null) return;
         int startingX = (client.getWindow().getScaledWidth() / 2) - 200;
         int startingY = (client.getWindow().getScaledHeight() / 2) - ((buttonsPerPage + 1) * 10) + 25;
-        ScrollWidget scrollWidget = new ScrollWidget(this, startingX, startingY, 150, 20, 10, items);
+        ScrollWidget scrollWidget = ScrollWidget.builder(this, items)
+                .pos(startingX, startingY)
+                .itemsDimensions(150, 20)
+                .itemsPerPage(10).build();
         addWidget(scrollWidget);
     }
 

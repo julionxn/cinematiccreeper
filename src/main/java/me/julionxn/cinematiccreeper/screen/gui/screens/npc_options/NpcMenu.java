@@ -32,11 +32,14 @@ public class NpcMenu extends NpcTypeMenu {
         if (entity == null) return;
         NpcEntity npcEntity = (NpcEntity) entity;
         setPoses(npcEntity);
-        RemovableItemsScrollWidget scrollWidget = new RemovableItemsScrollWidget(this,
-                x + 80, y + 40, 100, 20, 7, () -> {
-            setPoses(npcEntity);
-            return poses;
-        });
+        RemovableItemsScrollWidget scrollWidget = RemovableItemsScrollWidget.builder(this, () -> {
+                    setPoses(npcEntity);
+                    return poses;
+                })
+                .pos(x + 80, y + 40)
+                .itemsDimensions(100, 20)
+                .itemsPerPage(7)
+                .build();
         addWidget(scrollWidget);
     }
 

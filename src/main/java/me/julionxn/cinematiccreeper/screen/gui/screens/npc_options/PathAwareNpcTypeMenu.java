@@ -52,9 +52,10 @@ public class PathAwareNpcTypeMenu extends NpcTypeMenu {
     @Override
     public void addWidgets() {
         super.addWidgets();
-        ScrollWidget scrollWidget = new ScrollWidget(this, x + 20, y + 20,
-                80, 20,
-                8, scrollItems);
+        ScrollWidget scrollWidget = ScrollWidget.builder(this, scrollItems)
+                .pos(x + 20, y + 20)
+                .itemsDimensions(80, 20)
+                .itemsPerPage(8).build();
         addWidget(scrollWidget);
     }
 

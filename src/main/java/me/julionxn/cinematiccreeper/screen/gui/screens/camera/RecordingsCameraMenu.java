@@ -32,12 +32,13 @@ public class RecordingsCameraMenu extends CameraMenu {
     @Override
     public void addWidgets() {
         super.addWidgets();
-        RemovableItemsScrollWidget scrollWidget = new RemovableItemsScrollWidget(this,
-                x + 80, y + 40, 100, 20, 7,
-                () -> {
+        RemovableItemsScrollWidget scrollWidget = RemovableItemsScrollWidget.builder(this, () -> {
                     setItems();
                     return scrollItems;
-                });
+                })
+                .pos(x + 80, y + 40)
+                .itemsDimensions(100, 20)
+                .itemsPerPage(7).build();
         addWidget(scrollWidget);
     }
 

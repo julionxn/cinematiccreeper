@@ -1,5 +1,7 @@
 package me.julionxn.cinematiccreeper;
 
+import me.julionxn.cinematiccreeper.blockentities.AllBlockEntities;
+import me.julionxn.cinematiccreeper.blocks.AllBlocks;
 import me.julionxn.cinematiccreeper.core.managers.NpcsManager;
 import me.julionxn.cinematiccreeper.entity.AllEntities;
 import me.julionxn.cinematiccreeper.entity.NpcEntity;
@@ -21,6 +23,8 @@ public class CinematicCreeper implements ModInitializer {
         NpcsManager.getInstance().load();
         AllPackets.registerC2SPackets();
         AllItems.register();
+        AllBlocks.register();
+        AllBlockEntities.register();
         AllEntities.register();
         FabricDefaultAttributeRegistry.register(AllEntities.NPC_ENTITY, NpcEntity.createPlayerAttributes());
         ServerWorldEvents.UNLOAD.register((server, world) -> NpcsManager.getInstance().save());

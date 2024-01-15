@@ -1,5 +1,8 @@
 {
-  "item.cinematiccreeper.debug_item": "Debug Stick",
+  "cinematiccreeper.item_group": "Cinematic Creeper",
+  "item.cinematiccreeper.npc_stick": "NPC Stick",
+  "block.cinematiccreeper.green_screen": "Green Screen",
+  "tooltip.cinematiccreeper.green_screen": "Right Click to change the color.",
   "entity.cinematiccreeper.npc_entity": "Npc",
   "messages.cinematiccreeper.blank_id": "Blank id.",
   "messages.cinematiccreeper.already_exists": "Already exists.",

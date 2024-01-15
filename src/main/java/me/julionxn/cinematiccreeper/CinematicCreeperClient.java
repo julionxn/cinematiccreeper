@@ -1,7 +1,8 @@
 package me.julionxn.cinematiccreeper;
 
+import me.julionxn.cinematiccreeper.blockentities.AllBlockEntities;
+import me.julionxn.cinematiccreeper.blockentities.renderers.GreenScreenBlockEntityRenderer;
 import me.julionxn.cinematiccreeper.core.camera.CameraRecording;
-import me.julionxn.cinematiccreeper.core.camera.CameraRecordingPlayer;
 import me.julionxn.cinematiccreeper.core.managers.CameraManager;
 import me.julionxn.cinematiccreeper.core.managers.NpcPosesManager;
 import me.julionxn.cinematiccreeper.core.managers.NpcSkinManager;
@@ -19,9 +20,9 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.player.PlayerEntity;
@@ -40,6 +41,7 @@ public class CinematicCreeperClient implements ClientModInitializer {
         NpcSkinManager.getInstance().load();
         NpcPosesManager.getInstance().load();
         CameraManager.getInstance().load();
+        BlockEntityRendererFactories.register(AllBlockEntities.GREEN_SCREEN_BLOCK_ENTITY, GreenScreenBlockEntityRenderer::new);
         EntityRendererRegistry.register(AllEntities.NPC_ENTITY, NpcEntityRenderer::new);
         AllPackets.registerS2CPackets();
         Keybindings.register();

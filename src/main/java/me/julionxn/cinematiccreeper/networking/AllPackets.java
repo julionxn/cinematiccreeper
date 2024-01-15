@@ -14,6 +14,7 @@ public class AllPackets {
     public static final Identifier C2S_REMOVE_ENTITY = of("remove_entity");
     public static final Identifier C2S_SET_PATH_TO_ENTITY = of("set_path_to_entity");
     public static final Identifier C2S_CLEAR_PATH_OF_ENTITY = of("clear_path_of_entity");
+    public static final Identifier C2S_CHANGE_GREEN_SCREEN_COLOR = of("change_green_screen_color");
 
     private static Identifier of(String packetName) {
         return new Identifier(CinematicCreeper.MOD_ID, packetName);
@@ -30,6 +31,7 @@ public class AllPackets {
         c2s(C2S_REMOVE_ENTITY, C2S_RemoveEntity::onServer);
         c2s(C2S_SET_PATH_TO_ENTITY, C2S_SetPathToEntity::onServer);
         c2s(C2S_CLEAR_PATH_OF_ENTITY, C2S_ClearPathOfEntity::onServer);
+        c2s(C2S_CHANGE_GREEN_SCREEN_COLOR, C2S_ChangeGreenScreenColor::onServer);
     }
 
     private static void c2s(Identifier identifier, ServerPlayNetworking.PlayChannelHandler handler) {

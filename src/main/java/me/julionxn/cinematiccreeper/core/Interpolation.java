@@ -9,7 +9,8 @@ public enum Interpolation {
     EASE_OUT(t -> {
         float toPow = 1 - t;
         return 1 - toPow * toPow;
-    });
+    }),
+    EASE_IN_OUT(t -> 3 * t * t - 2 * t * t * t);
 
     private final Function<Float, Float> interpolation;
 

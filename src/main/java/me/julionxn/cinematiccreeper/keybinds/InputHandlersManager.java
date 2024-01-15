@@ -44,6 +44,7 @@ public class InputHandlersManager {
     }
 
     public static void handleScroll(MinecraftClient client, double vertical){
+        if (client.currentScreen != null) return;
         List<InputHandler> toHandle = inputHandlers.stream().filter(inputHandler -> inputHandler.getPredicate().apply(client)).toList();
         for (InputHandler inputHandler : toHandle) {
             for (ScrollAndKeyAction scrollAndKeyAction : inputHandler.getScrollAndKeyActions()) {
