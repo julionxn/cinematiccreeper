@@ -11,7 +11,7 @@
     "homepage": "https://julionxn.me",
     "sources": "https://github.com/julionxn/cinematiccreeper"
   },
-  "license": "CC0-1.0",
+  "license": "MIT License",
   "icon": "assets/cinematiccreeper/icon.png",
   "environment": "*",
   "entrypoints": {
