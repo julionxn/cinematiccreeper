@@ -48,7 +48,7 @@ public class ChangeGreenScreenColor extends Screen {
                     color.setRed(newValue);
                     hexColorField.setText(String.format("#%06X", color.getColor() & 0xFFFFFF));
                 })
-                .pos(x, y).range(0, 255).message(Text.of("Red")).build();
+                .pos(x, y).range(() -> 0, () -> 255).message(() -> Text.of("Red")).build();
         addDrawableChild(redSlider);
         SliderWidget<Integer> greenSlider = SliderWidget.builder(Integer.class,
                 () -> color.toInt(color.getGreen()),
@@ -56,7 +56,7 @@ public class ChangeGreenScreenColor extends Screen {
                     color.setGreen(newValue);
                     hexColorField.setText(String.format("#%06X", color.getColor() & 0xFFFFFF));
                 })
-                .pos(x, y + 40).range(0, 255).message(Text.of("Green")).build();
+                .pos(x, y + 40).range(() -> 0, () ->  255).message(() -> Text.of("Green")).build();
         addDrawableChild(greenSlider);
         SliderWidget<Integer> blueSlider = SliderWidget.builder(Integer.class,
                         () -> color.toInt(color.getBlue()),
@@ -64,7 +64,7 @@ public class ChangeGreenScreenColor extends Screen {
                             color.setBlue(newValue);
                             hexColorField.setText(String.format("#%06X", color.getColor() & 0xFFFFFF));
                         })
-                .pos(x, y + 80).range(0, 255).message(Text.of("Blue")).build();
+                .pos(x, y + 80).range(() -> 0, () ->  255).message(() -> Text.of("Blue")).build();
         addDrawableChild(blueSlider);
         ButtonWidget acceptButton = ButtonWidget.builder(Text.of("Done"), button -> {
             PacketByteBuf buf = PacketByteBufs.create();

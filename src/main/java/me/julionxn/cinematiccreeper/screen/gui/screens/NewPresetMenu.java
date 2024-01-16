@@ -1,6 +1,7 @@
 package me.julionxn.cinematiccreeper.screen.gui.screens;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import me.julionxn.cinematiccreeper.CinematicCreeper;
 import me.julionxn.cinematiccreeper.core.managers.NpcsManager;
 import me.julionxn.cinematiccreeper.core.managers.PresetsManager;
 import me.julionxn.cinematiccreeper.core.notifications.Notification;
@@ -10,10 +11,12 @@ import me.julionxn.cinematiccreeper.core.presets.PresetOptions;
 import me.julionxn.cinematiccreeper.entity.NpcEntity;
 import me.julionxn.cinematiccreeper.screen.gui.components.ExtendedScreen;
 import me.julionxn.cinematiccreeper.screen.gui.components.widgets.ScrollWidget;
+import me.julionxn.cinematiccreeper.screen.gui.components.widgets.TexturedButtonWidget;
 import me.julionxn.cinematiccreeper.screen.gui.screens.npc_options.BasicTypeMenu;
 import me.julionxn.cinematiccreeper.util.MathHelper;
 import me.julionxn.cinematiccreeper.util.TextUtils;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.screen.ButtonTextures;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
@@ -21,14 +24,17 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RotationAxis;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class NewPresetMenu extends ExtendedScreen {
 
+    private static final Identifier SEARCH_ICON = new Identifier(CinematicCreeper.MOD_ID, "textures/gui/search.png");
     private final List<String> types;
     private final List<ScrollWidget.ScrollItem> items = new ArrayList<>();
     private final int buttonsPerPage = 10;
@@ -70,15 +76,15 @@ public class NewPresetMenu extends ExtendedScreen {
         int startingY = (windowHeight / 2) - ((buttonsPerPage + 1) * 10) - 5;
         TextFieldWidget searchField = new TextFieldWidget(client.textRenderer, startingX, startingY, 150, 20, Text.of("Buscar"));
         addDrawableChild(searchField);
-        ButtonWidget searchButton = ButtonWidget.builder(Text.of("S"), button -> {
+        TexturedButtonWidget search = new TexturedButtonWidget(SEARCH_ICON, startingX + 150, startingY, button -> {
             String searchText = searchField.getText();
             if (types.contains(searchText)) {
                 selectedEntity = searchText;
             } else {
                 NotificationManager.getInstance().add(Notification.ID_NOT_FOUND);
             }
-        }).dimensions(startingX + 150, startingY, 20, 20).build();
-        addDrawableChild(searchButton);
+        });
+        addDrawableChild(search);
         if (selectedEntity == null) return;
         addPresetOptions(startingX);
     }

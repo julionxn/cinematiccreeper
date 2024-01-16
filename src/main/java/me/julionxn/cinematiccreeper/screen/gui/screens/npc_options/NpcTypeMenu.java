@@ -10,6 +10,7 @@ import me.julionxn.cinematiccreeper.core.presets.PresetOptionsHandlers;
 import me.julionxn.cinematiccreeper.entity.NpcEntity;
 import me.julionxn.cinematiccreeper.networking.AllPackets;
 import me.julionxn.cinematiccreeper.screen.gui.components.ExtendedScreen;
+import me.julionxn.cinematiccreeper.screen.gui.components.widgets.TexturedButtonWidget;
 import me.julionxn.cinematiccreeper.util.mixins.NpcData;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -33,6 +34,8 @@ import java.util.function.Consumer;
 public abstract class NpcTypeMenu extends ExtendedScreen {
 
     private static final Identifier BACKGROUND = new Identifier(CinematicCreeper.MOD_ID, "textures/gui/npc_type_bg.png");
+    private static final Identifier RESET_ICON = new Identifier(CinematicCreeper.MOD_ID, "textures/gui/reset.png");
+    private static final Identifier DELETE_ICON = new Identifier(CinematicCreeper.MOD_ID, "textures/gui/delete.png");
     protected final PresetOptions presetOptions;
     protected final Entity entity;
     protected final String entityType;
@@ -122,15 +125,15 @@ public abstract class NpcTypeMenu extends ExtendedScreen {
         }
 
         if (entity == null) return;
-        ButtonWidget removeButton = ButtonWidget.builder(Text.of("E"), button -> {
+        TexturedButtonWidget removeButton = new TexturedButtonWidget(DELETE_ICON, x + width, y + 20, button -> {
             PacketByteBuf buf = PacketByteBufs.create();
             buf.writeUuid(entity.getUuid());
             ClientPlayNetworking.send(AllPackets.C2S_REMOVE_ENTITY, buf);
             NotificationManager.getInstance().add(new Notification(Notification.Type.OK, Text.translatable("messages.cinematiccreeper.deleted_npc")));
             close();
-        }).dimensions(x + width, y + 20, 20, 20).build();
+        });
         addDrawableChild(removeButton);
-        ButtonWidget resetButton = ButtonWidget.builder(Text.of("R"), button -> {
+        TexturedButtonWidget resetButton = new TexturedButtonWidget(RESET_ICON, x + width, y + 40, button -> {
             String id = ((NpcData) entity).cinematiccreeper$getId();
             PresetsManager.getInstance().getPresetWithId(id).ifPresent(preset -> {
                 PresetOptions presetOptions1 = preset.getOptions();
@@ -142,7 +145,7 @@ public abstract class NpcTypeMenu extends ExtendedScreen {
                 NotificationManager.getInstance().add(new Notification(Notification.Type.OK, Text.translatable("messages.cinematiccreeper.npc_reset")));
                 close();
             });
-        }).dimensions(x + width, y + 40, 20, 20).build();
+        });
         addDrawableChild(resetButton);
     }
 

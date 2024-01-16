@@ -16,6 +16,7 @@ import java.util.function.Supplier;
 public class RemovableItemsScrollWidget extends ExtendedWidget {
 
     protected static final Identifier SCROLLBAR_TEXTURE = new Identifier(CinematicCreeper.MOD_ID, "textures/gui/scrollbar.png");
+    private static final Identifier DELETE_ICON = new Identifier(CinematicCreeper.MOD_ID, "textures/gui/delete.png");
     protected final int x;
     protected final int y;
     protected final int itemsWidth;
@@ -66,15 +67,14 @@ public class RemovableItemsScrollWidget extends ExtendedWidget {
                     )
                     .dimensions(x, y + (current * itemsHeight), itemsWidth, itemsHeight).build();
             addDrawableChild(option);
-            ButtonWidget remove = ButtonWidget.builder(
-                    Text.of("E"),
+            TexturedButtonWidget removeButton = new TexturedButtonWidget(DELETE_ICON,
+                    x + itemsWidth, y + (current * itemsHeight),
                     button -> {
                         scrollItem.onRemove.accept(button);
                         retrieveItems();
                         clear();
-                    }
-            ).dimensions(x + itemsWidth, y + (current * itemsHeight), 20, 20).build();
-            addDrawableChild(remove);
+            });
+            addDrawableChild(removeButton);
             current++;
         }
     }

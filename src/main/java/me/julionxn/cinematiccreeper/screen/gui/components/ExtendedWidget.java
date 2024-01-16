@@ -22,6 +22,10 @@ public abstract class ExtendedWidget {
 
     public abstract void render(DrawContext context, int mouseX, int mouseY, float delta);
 
+    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta){
+
+    }
+
     protected <T extends Drawable & Element & Selectable> void addDrawableChild(T drawable) {
         screen.addItemDrawable(drawable);
     }

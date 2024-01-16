@@ -66,7 +66,7 @@ public class DynamicPoseMenu extends ExtendedScreen {
         int windowWidth = client.getWindow().getScaledWidth();
         int windowHeight = client.getWindow().getScaledHeight();
         if (npcPose.containsAPose(currentTick) && !playing){
-            PosePointWidget widget = new PosePointWidget(this, windowWidth / 2 - 30, windowHeight / 2 - 60, npcPose.getPoseOfTick(currentTick));
+            PosePointWidget widget = new PosePointWidget(this, windowWidth / 2 - 155, windowHeight / 2 - 80, npcPose.getPoseOfTick(currentTick));
             addWidget(widget);
         }
     }
@@ -95,10 +95,10 @@ public class DynamicPoseMenu extends ExtendedScreen {
         addChangeTickButton(">>", windowWidth / 2 + 170, 20);
 
         if (npcPose.containsAPose(currentTick)){
-            addEaseTypeButton(Interpolation.LINEAR, windowWidth / 2 - 190, windowHeight / 2 - 30);
-            addEaseTypeButton(Interpolation.EASE_IN, windowWidth / 2 - 190, windowHeight / 2 - 10);
-            addEaseTypeButton(Interpolation.EASE_OUT, windowWidth / 2 - 190, windowHeight / 2 + 10);
-            addEaseTypeButton(Interpolation.EASE_IN_OUT, windowWidth / 2 - 190, windowHeight / 2 + 30);
+            addEaseTypeButton(Interpolation.LINEAR, windowWidth / 2 - 260, windowHeight / 2 - 38);
+            addEaseTypeButton(Interpolation.EASE_IN, windowWidth / 2 - 260, windowHeight / 2 - 18);
+            addEaseTypeButton(Interpolation.EASE_OUT, windowWidth / 2 - 260, windowHeight / 2 + 2);
+            addEaseTypeButton(Interpolation.EASE_IN_OUT, windowWidth / 2 - 260, windowHeight / 2 + 22);
             ButtonWidget removePose = ButtonWidget.builder(Text.translatable("screen.cinematiccreeper.remove_frame"), button -> removePoint(currentTick))
                     .dimensions(20, windowHeight - 30, 100, 20).build();
             addDrawableChild(removePose);
@@ -174,8 +174,7 @@ public class DynamicPoseMenu extends ExtendedScreen {
                 y += interpolation == Interpolation.EASE_IN ? 20 : 0;
                 y += interpolation == Interpolation.EASE_OUT ? 40 : 0;
                 y += interpolation == Interpolation.EASE_IN_OUT ? 60 : 0;
-                //int y = interpolation == Interpolation.LINEAR ? 0 : interpolation == Interpolation.EASE_IN ? 20 : 40;
-                context.drawTexture(POINT_TEXTURE, windowWidth / 2 - 210, windowHeight / 2 - 30 + y, 0, 0, 0, 20, 20, 20, 20);
+                context.drawTexture(POINT_TEXTURE, windowWidth / 2 - 280, windowHeight / 2 - 38 + y, 0, 0, 0, 20, 20, 20, 20);
             }
         }
     }

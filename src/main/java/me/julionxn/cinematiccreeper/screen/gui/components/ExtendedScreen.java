@@ -9,8 +9,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.Window;
 import net.minecraft.text.Text;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public abstract class ExtendedScreen extends Screen {
 
@@ -52,6 +51,14 @@ public abstract class ExtendedScreen extends Screen {
             widget.render(context, mouseX, mouseY, delta);
         }
         super.render(context, mouseX, mouseY, delta);
+    }
+
+    @Override
+    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
+        super.renderBackground(context, mouseX, mouseY, delta);
+        for (ExtendedWidget widget : widgets) {
+            widget.renderBackground(context, mouseX, mouseY, delta);
+        }
     }
 
     @Override

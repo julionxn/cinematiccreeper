@@ -30,7 +30,7 @@ public class StaticPoseMenu extends ExtendedScreen {
         if (client == null) return;
         int windowWidth = client.getWindow().getScaledWidth();
         int windowHeight = client.getWindow().getScaledHeight();
-        PosePointWidget widget = new PosePointWidget(this, windowWidth / 2 - 70, windowHeight / 2 - 80, posePoint);
+        PosePointWidget widget = new PosePointWidget(this, windowWidth / 2 - 220, windowHeight / 2 - 80, posePoint);
         addWidget(widget);
     }
 

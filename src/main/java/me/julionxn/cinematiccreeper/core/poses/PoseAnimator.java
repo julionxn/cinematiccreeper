@@ -46,30 +46,47 @@ public class PoseAnimator {
         if (currentPoseTick == null) return;
         PosePoint currentPose = npcPose.getPoseOfTick(currentPoseTick);
         if (nextPoseTick == null) {
-            applyTransformations(model.head, null, Interpolation.LINEAR, 0, currentPose.head, currentPose.head);
-            applyTransformations(model.leftArm, model.leftSleeve, Interpolation.LINEAR, 0, currentPose.leftArm, currentPose.leftArm);
-            applyTransformations(model.rightArm, model.rightSleeve, Interpolation.LINEAR, 0, currentPose.rightArm, currentPose.rightArm);
-            applyTransformations(model.leftLeg, model.leftPants, Interpolation.LINEAR, 0, currentPose.leftLeg, currentPose.leftLeg);
-            applyTransformations(model.rightLeg, model.rightPants, Interpolation.LINEAR, 0, currentPose.rightLeg, currentPose.rightLeg);
+            applyTransformations(model.body, model.jacket, Interpolation.LINEAR, 0, currentPose.torso, currentPose.torso, 1f);
+            applyTransformations(model.head, model.hat, Interpolation.LINEAR, 0, currentPose.head, currentPose.head, 0.666666f);
+            applyTransformations(model.leftArm, model.leftSleeve, Interpolation.LINEAR, 0, currentPose.leftArm, currentPose.leftArm, 1);
+            applyTransformations(model.rightArm, model.rightSleeve, Interpolation.LINEAR, 0, currentPose.rightArm, currentPose.rightArm, 1);
+            applyTransformations(model.leftLeg, model.leftPants, Interpolation.LINEAR, 0, currentPose.leftLeg, currentPose.leftLeg, 1);
+            applyTransformations(model.rightLeg, model.rightPants, Interpolation.LINEAR, 0, currentPose.rightLeg, currentPose.rightLeg, 1);
             return;
         }
         float t = (tick - currentPoseTick) / (nextPoseTick - currentPoseTick);
         t = MathHelper.clamp(t, 0, 1);
         PosePoint nextPose = npcPose.getPoseOfTick(nextPoseTick);
         Interpolation interpolation = nextPose.interpolation;
-        applyTransformations(model.head, model.hat, interpolation, t, currentPose.head, nextPose.head);
-        applyTransformations(model.leftArm, model.leftSleeve, interpolation, t, currentPose.leftArm, nextPose.leftArm);
-        applyTransformations(model.rightArm, model.rightSleeve, interpolation, t, currentPose.rightArm, nextPose.rightArm);
-        applyTransformations(model.leftLeg, model.leftPants, interpolation, t, currentPose.leftLeg, nextPose.leftLeg);
-        applyTransformations(model.rightLeg, model.rightPants, interpolation, t, currentPose.rightLeg, nextPose.rightLeg);
+        applyTransformations(model.body, model.jacket, interpolation, t, currentPose.torso, nextPose.torso, 1);
+        applyTransformations(model.head, model.hat, interpolation, t, currentPose.head, nextPose.head,  0.6666666f);
+        applyTransformations(model.leftArm, model.leftSleeve, interpolation, t, currentPose.leftArm, nextPose.leftArm, 1);
+        applyTransformations(model.rightArm, model.rightSleeve, interpolation, t, currentPose.rightArm, nextPose.rightArm, 1);
+        applyTransformations(model.leftLeg, model.leftPants, interpolation, t, currentPose.leftLeg, nextPose.leftLeg, 1);
+        applyTransformations(model.rightLeg, model.rightPants, interpolation, t, currentPose.rightLeg, nextPose.rightLeg, 1);
     }
 
-    private void applyTransformations(ModelPart part, @Nullable ModelPart part2, Interpolation interpolation, float t, PoseData current, PoseData next){
+    private void applyTransformations(ModelPart part, ModelPart part2, Interpolation interpolation, float t, PoseData current, PoseData next, float headCorrection){
         float yaw = interpolation.interpolate(t, current.yaw, next.yaw);
         float pitch = interpolation.interpolate(t, current.pitch, next.pitch);
         float roll = interpolation.interpolate(t, current.roll, next.roll);
         part.setAngles(pitch, yaw, roll);
-        if (part2 != null) part2.setAngles(pitch, yaw, roll);
+        part2.setAngles(pitch, yaw, roll);
+        float tX = interpolation.interpolate(t, current.translationX, next.translationX);
+        float tY = interpolation.interpolate(t, current.translationY, next.translationY);
+        float tZ = interpolation.interpolate(t, current.translationZ, next.translationZ);
+        part.setPivot(tX, tY, tZ);
+        part2.setPivot(tX, tY, tZ);
+        float sX = interpolation.interpolate(t, current.scaleX, next.scaleX) * headCorrection;
+        float sY = interpolation.interpolate(t, current.scaleY, next.scaleY) * headCorrection;
+        float sZ = interpolation.interpolate(t, current.scaleZ, next.scaleZ) * headCorrection;
+        setScale(part, sX, sY, sZ);
+        setScale(part2, sX, sY, sZ);
+    }
+    private void setScale(ModelPart modelPart, float x, float y, float z){
+        modelPart.xScale = x;
+        modelPart.yScale = y;
+        modelPart.zScale = z;
     }
 
     public void render(MatrixStack matrixStack, VertexConsumer vertexConsumer, int light){

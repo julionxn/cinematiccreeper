@@ -8,6 +8,7 @@ import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -18,14 +19,15 @@ public class SliderWidget<T extends Number> extends ClickableWidget {
     private static final Identifier BACKGROUND_TEXTURE = new Identifier(CinematicCreeper.MOD_ID, "textures/gui/slider.png");
     private final boolean wrap;
     private final Supplier<T> value;
-    private final double minValue;
-    private final double maxValue;
+    private final Supplier<T> minValue;
+    private final Supplier<T> maxValue;
     private final Consumer<T> onChange;
     private final Function<T, String> text;
     private final Class<T> tClass;
+    private final Supplier<Text> message;
 
-    public SliderWidget(Class<T> clazz, boolean wrap, int x, int y, Supplier<T> value, double minValue, double maxValue, Text message, Function<T, String> text, Consumer<T> onChange) {
-        super(x, y, 140, 30, message);
+    public SliderWidget(Class<T> clazz, boolean wrap, int x, int y, Supplier<T> value, Supplier<T> minValue, Supplier<T> maxValue, Supplier<Text> message, Function<T, String> text, Consumer<T> onChange) {
+        super(x, y, 140, 30, message.get());
         this.tClass = clazz;
         this.wrap = wrap;
         this.value = value;
@@ -33,6 +35,7 @@ public class SliderWidget<T extends Number> extends ClickableWidget {
         this.maxValue = maxValue;
         this.text = text;
         this.onChange = onChange;
+        this.message = message;
     }
 
     @Override
@@ -40,11 +43,11 @@ public class SliderWidget<T extends Number> extends ClickableWidget {
         super.render(context, mouseX, mouseY, delta);
         MinecraftClient client = MinecraftClient.getInstance();
         if (client == null) return;
-        context.drawCenteredTextWithShadow(client.textRenderer, getMessage(), getX() + 70, getY(), 0xffffff);
+        context.drawCenteredTextWithShadow(client.textRenderer, message.get(), getX() + 70, getY(), 0xffffff);
         T currentValue = value.get();
         context.drawCenteredTextWithShadow(client.textRenderer, Text.of(text.apply(currentValue)),
                 getX() + 70, getY() + 16, 0xffffff);
-        int x = (int) (getX() + 1 + ((width - 6) * ((currentValue.doubleValue() - minValue) / (maxValue - minValue))));
+        int x = (int) (getX() + 1 + ((width - 6) * ((currentValue.doubleValue() - minValue.get().doubleValue()) / (maxValue.get().doubleValue() - minValue.get().doubleValue()))));
         context.drawTexture(SCROLLBAR_TEXTURE, x, getY() + 11,
                 0, 0, 0, 4, 18, 4, 18);
     }
@@ -77,7 +80,7 @@ public class SliderWidget<T extends Number> extends ClickableWidget {
         } else if (newValue < 0){
             newValue = wrap ? newValue + 1 : 0;
         }
-        newValue = minValue + newValue * (maxValue - minValue);
+        newValue = minValue.get().doubleValue() + newValue * (maxValue.get().doubleValue() - minValue.get().doubleValue());
         Number value = convertToType(newValue);
         onChange.accept((T) value);
     }
@@ -107,9 +110,9 @@ public class SliderWidget<T extends Number> extends ClickableWidget {
         private final Consumer<T> onChange;
         private int x;
         private int y;
-        private double minValue = 0;
-        private double maxValue = 1;
-        private Text message = Text.of("Value");
+        private Supplier<T> minValue;
+        private Supplier<T> maxValue;
+        private Supplier<Text> message = () -> Text.of("Value");
         private Function<T, String> overlayText = String::valueOf;
         private boolean wrap = false;
 
@@ -125,13 +128,13 @@ public class SliderWidget<T extends Number> extends ClickableWidget {
             return this;
         }
 
-        public Builder<T> range(double min, double max){
+        public Builder<T> range(Supplier<T> min, Supplier<T> max){
             this.minValue = min;
             this.maxValue = max;
             return this;
         }
 
-        public Builder<T> message(Text message){
+        public Builder<T> message(Supplier<Text> message){
             this.message = message;
             return this;
         }
@@ -147,6 +150,8 @@ public class SliderWidget<T extends Number> extends ClickableWidget {
         }
 
         public SliderWidget<T> build(){
+            Objects.requireNonNull(minValue);
+            Objects.requireNonNull(maxValue);
             return new SliderWidget<>(clazz, wrap, x, y, value, minValue, maxValue, message, overlayText, onChange);
         }
 
