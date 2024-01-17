@@ -1,11 +1,10 @@
 package me.julionxn.cinematiccreeper.blocks;
 
 import me.julionxn.cinematiccreeper.blockentities.GreenScreenBlockEntity;
-import me.julionxn.cinematiccreeper.screen.gui.screens.ChangeGreenScreenColor;
+import me.julionxn.cinematiccreeper.screen.ScreenWrappers;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -25,7 +24,7 @@ public class GreenScreenBlock extends BlockWithEntity {
         if (world.isClient){
             GreenScreenBlockEntity be = (GreenScreenBlockEntity) world.getBlockEntity(pos);
             if (be != null){
-                MinecraftClient.getInstance().setScreen(new ChangeGreenScreenColor(pos, be.getColor().getColor()));
+                ScreenWrappers.openGreenScreenMenu(pos, be.getColor().getColor());
                 return ActionResult.SUCCESS;
             }
         }

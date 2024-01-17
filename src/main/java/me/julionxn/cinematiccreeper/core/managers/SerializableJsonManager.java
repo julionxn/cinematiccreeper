@@ -54,10 +54,10 @@ public abstract class SerializableJsonManager<T extends SerializableJsonManager<
                 CinematicCreeper.LOGGER.info("Loading " + configFile.getPath());
                 setValues(data);
             }
-            afterLoad();
         } catch (IOException | IllegalAccessException e) {
             CinematicCreeper.LOGGER.error("Something went wrong while loading the config.", e);
         }
+        afterLoad();
     }
 
     private void setValues(T data) throws IllegalAccessException {

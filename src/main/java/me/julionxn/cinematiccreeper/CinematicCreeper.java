@@ -28,6 +28,6 @@ public class CinematicCreeper implements ModInitializer {
         AllEntities.register();
         FabricDefaultAttributeRegistry.register(AllEntities.NPC_ENTITY, NpcEntity.createPlayerAttributes());
         ServerWorldEvents.UNLOAD.register((server, world) -> NpcsManager.getInstance().save());
-        LOGGER.info("Hello Fabric world!");
+        LOGGER.info("CinematicCreeper loaded!");
     }
 }
