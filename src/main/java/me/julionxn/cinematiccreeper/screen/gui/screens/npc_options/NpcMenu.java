@@ -1,6 +1,8 @@
 package me.julionxn.cinematiccreeper.screen.gui.screens.npc_options;
 
 import me.julionxn.cinematiccreeper.core.managers.NpcPosesManager;
+import me.julionxn.cinematiccreeper.core.notifications.Notification;
+import me.julionxn.cinematiccreeper.core.notifications.NotificationManager;
 import me.julionxn.cinematiccreeper.core.poses.NpcPose;
 import me.julionxn.cinematiccreeper.core.poses.PoseAnimator;
 import me.julionxn.cinematiccreeper.core.presets.PresetOptions;
@@ -58,6 +60,7 @@ public class NpcMenu extends NpcTypeMenu {
                 if (poseAnimator == null) return;
                 poseAnimator.reset();
                 poseAnimator.play();
+                NotificationManager.getInstance().add(Notification.SAVED);
             }, buttonWidget -> {
                 NpcPosesManager.getInstance().removeNpcPose(entry.getKey());
                 NpcPose npcPose = npcEntity.getNpcPose();

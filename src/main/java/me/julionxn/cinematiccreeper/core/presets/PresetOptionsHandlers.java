@@ -2,6 +2,7 @@ package me.julionxn.cinematiccreeper.core.presets;
 
 import me.julionxn.cinematiccreeper.CinematicCreeper;
 import me.julionxn.cinematiccreeper.entity.NpcEntity;
+import me.julionxn.cinematiccreeper.util.mixins.NpcData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.Item;
@@ -71,6 +72,8 @@ public class PresetOptionsHandlers {
         presetOptions.displayName = entity.getDisplayName().getString();
         presetOptions.showDisplayName = entity.isCustomNameVisible();
         presetOptions.sneaking = entity.isSneaking();
+        presetOptions.onFire = ((NpcData) entity).cinematiccreeper$isOnFire();
+        presetOptions.silent = entity.isSilent();
         if (entity instanceof MobEntity mobEntity) {
             presetOptions.holdingItem = Registries.ITEM.getId(mobEntity.getMainHandStack().getItem()).toString();
         }
@@ -84,6 +87,8 @@ public class PresetOptionsHandlers {
         entity.setCustomNameVisible(presetOptions.showDisplayName);
         entity.setCustomName(Text.of(presetOptions.displayName));
         entity.setSneaking(presetOptions.sneaking);
+        entity.setSilent(presetOptions.silent);
+        ((NpcData) entity).cinematiccreeper$setOnFire(presetOptions.onFire);
         if (entity instanceof MobEntity mobEntity) {
             setStackInHand(mobEntity, presetOptions.holdingItem);
         }

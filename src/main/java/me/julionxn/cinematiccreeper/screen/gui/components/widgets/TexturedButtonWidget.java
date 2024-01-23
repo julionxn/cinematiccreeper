@@ -21,9 +21,10 @@ public class TexturedButtonWidget extends ButtonWidget {
     }
 
     @Override
-    protected void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
+    protected void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
         Identifier bgTexture = isHovered() ? BACKGROUND_TEXTURE_HOVERED : BACKGROUND_TEXTURE;
         context.drawTexture(bgTexture, getX(), getY(), 5, 0, 0, getWidth(), getHeight(), getWidth(), getHeight());
         context.drawTexture(texture, getX(), getY(), 5, 0, 0, getWidth(), getHeight(), getWidth(), getHeight());
     }
+
 }

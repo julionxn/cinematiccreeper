@@ -8,6 +8,7 @@ import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
+import net.minecraft.client.render.entity.feature.HeldItemFeatureRenderer;
 import net.minecraft.client.render.entity.model.EntityModelLayers;
 import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.client.util.DefaultSkinHelper;
@@ -26,6 +27,7 @@ public class NpcEntityRenderer extends MobEntityRenderer<NpcEntity, PlayerEntity
 
     public NpcEntityRenderer(EntityRendererFactory.Context ctx) {
         super(ctx, new PlayerEntityModel<>(ctx.getPart(EntityModelLayers.PLAYER), false), 0.5f);
+        this.addFeature(new HeldItemFeatureRenderer<>(this, ctx.getHeldItemRenderer()));
         this.ctx = ctx;
     }
 
@@ -60,7 +62,7 @@ public class NpcEntityRenderer extends MobEntityRenderer<NpcEntity, PlayerEntity
         matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180 + yaw));
         matrixStack.translate(0, -1.5, 0);
         VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(getRenderLayer(livingEntity, true, false, true));
-        ticker.render(matrixStack, vertexConsumer, i);
+        ticker.render(matrixStack,vertexConsumerProvider, vertexConsumer, i, features, livingEntity);
         matrixStack.pop();
     }
 

@@ -1,4 +1,4 @@
-package me.julionxn.cinematiccreeper.keybinds;
+package me.julionxn.cinematiccreeper.inputs;
 
 public enum PressModifier {
     NONE, SHIFT, CTRL;

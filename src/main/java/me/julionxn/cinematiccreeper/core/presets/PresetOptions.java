@@ -15,6 +15,10 @@ public class PresetOptions implements Serializable {
     @Expose
     boolean sneaking; //basic
     @Expose
+    boolean onFire;
+    @Expose
+    boolean silent;
+    @Expose
     String holdingItem = ""; //mob
 
     public String getDisplayName() {
@@ -38,7 +42,6 @@ public class PresetOptions implements Serializable {
     public void setShowDisplayName(boolean showDisplayName) {
         this.showDisplayName = showDisplayName;
     }
-
     public boolean showDisplayName() {
         return showDisplayName;
     }
@@ -46,7 +49,6 @@ public class PresetOptions implements Serializable {
     public boolean isSneaking() {
         return sneaking;
     }
-
     public void setSneaking(boolean sneaking) {
         this.sneaking = sneaking;
     }
@@ -54,10 +56,15 @@ public class PresetOptions implements Serializable {
     public String getHoldingItem() {
         return holdingItem;
     }
-
     public void setHoldingItem(String holdingItem) {
         this.holdingItem = holdingItem;
     }
+
+    public boolean isOnFire() { return onFire; }
+    public void setOnFire(boolean state) { onFire = state; }
+
+    public boolean isSilent() { return silent; }
+    public void setSilent(boolean state) { silent = state; }
 
     @Override
     public String toString() {

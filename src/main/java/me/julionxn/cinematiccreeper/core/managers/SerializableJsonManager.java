@@ -43,10 +43,14 @@ public abstract class SerializableJsonManager<T extends SerializableJsonManager<
         try {
             if (!configFile.exists()) {
                 save();
+                afterLoad();
                 return;
             }
             T data = GSON.fromJson(new FileReader(configFile), clazz);
-            if (data == null) return;
+            if (data == null) {
+                afterLoad();
+                return;
+            }
             if (data.version != version) {
                 CinematicCreeper.LOGGER.error("Mismatching version with current version of file " + configFile.getPath() + ". Restarting file.");
                 save();

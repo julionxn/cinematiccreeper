@@ -1,10 +1,7 @@
-package me.julionxn.cinematiccreeper.keybinds;
+package me.julionxn.cinematiccreeper.inputs;
 
 import me.julionxn.cinematiccreeper.core.managers.CameraManager;
-import me.julionxn.cinematiccreeper.keybinds.handlers.CameraHandler;
-import me.julionxn.cinematiccreeper.keybinds.handlers.CameraOptionsHandler;
-import me.julionxn.cinematiccreeper.keybinds.handlers.CameraRecordingHandler;
-import me.julionxn.cinematiccreeper.keybinds.handlers.PathsHandler;
+import me.julionxn.cinematiccreeper.inputs.handlers.*;
 import me.julionxn.cinematiccreeper.util.TextUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -19,7 +16,11 @@ public class InputHandlersManager {
     private static PressModifier pressModifier;
 
     private static final List<InputHandler> inputHandlers = List.of(
-        new PathsHandler(),  new CameraHandler(), new CameraRecordingHandler(), new CameraOptionsHandler()
+            new ChangeSkinHandler(),
+            new PathsHandler(),
+            new CameraHandler(),
+            new CameraRecordingHandler(),
+            new CameraOptionsHandler()
     );
 
     public static void handleKeyboard(MinecraftClient client, int key, int action, int modifier){

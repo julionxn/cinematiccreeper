@@ -11,7 +11,7 @@ import me.julionxn.cinematiccreeper.core.paths.PathRenderer;
 import me.julionxn.cinematiccreeper.core.paths.PlayerPathHolder;
 import me.julionxn.cinematiccreeper.entity.AllEntities;
 import me.julionxn.cinematiccreeper.entity.NpcEntityRenderer;
-import me.julionxn.cinematiccreeper.keybinds.Keybindings;
+import me.julionxn.cinematiccreeper.inputs.Keybindings;
 import me.julionxn.cinematiccreeper.networking.AllPackets;
 import me.julionxn.cinematiccreeper.util.RenderUtils;
 import me.julionxn.cinematiccreeper.util.mixins.PlayerData;

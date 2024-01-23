@@ -11,6 +11,7 @@ public record Notification(Type type, Text text) {
     public static final Notification CREATED_SUCCESSFULLY = new Notification(Type.OK, Text.translatable("messages.cinematiccreeper.created_successfully"));
     public static final Notification INVALID_NUMBER = new Notification(Type.ERROR, Text.translatable("messages.cinematiccreeper.invalid_number"));
     public static final Notification SAVED = new Notification(Type.OK, Text.translatable("messages.cinematiccreeper.saved"));
+    public static final Notification BLANK_FIELD = new Notification(Type.ERROR, Text.translatable("messages.cinematiccreeper.blank_field"));
 
     public enum Type {
         WARNING, ERROR, OK

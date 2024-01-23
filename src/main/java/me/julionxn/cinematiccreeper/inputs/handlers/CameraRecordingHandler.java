@@ -1,10 +1,10 @@
-package me.julionxn.cinematiccreeper.keybinds.handlers;
+package me.julionxn.cinematiccreeper.inputs.handlers;
 
 import me.julionxn.cinematiccreeper.core.camera.CameraRecording;
 import me.julionxn.cinematiccreeper.core.managers.CameraManager;
 import me.julionxn.cinematiccreeper.core.notifications.Notification;
 import me.julionxn.cinematiccreeper.core.notifications.NotificationManager;
-import me.julionxn.cinematiccreeper.keybinds.*;
+import me.julionxn.cinematiccreeper.inputs.*;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 

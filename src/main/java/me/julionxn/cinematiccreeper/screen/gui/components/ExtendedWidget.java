@@ -11,7 +11,7 @@ public abstract class ExtendedWidget {
 
     @Nullable
     protected final MinecraftClient client;
-    private final ExtendedScreen screen;
+    protected final ExtendedScreen screen;
 
     public ExtendedWidget(ExtendedScreen screen) {
         this.screen = screen;

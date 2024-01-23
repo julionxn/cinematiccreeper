@@ -24,7 +24,7 @@ public class ToggleWidget extends ClickableWidget {
     }
 
     @Override
-    protected void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
+    protected void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client == null) return;
         drawText(context, client.textRenderer);
@@ -41,6 +41,7 @@ public class ToggleWidget extends ClickableWidget {
                 j, this.getY() + this.getHeight(),
                 0xffffff);
     }
+
 
     @Override
     public void onClick(double mouseX, double mouseY) {

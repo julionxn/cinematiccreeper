@@ -6,9 +6,12 @@ import me.julionxn.cinematiccreeper.util.MathHelper;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
-import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class PoseAnimator {
 
@@ -91,6 +94,13 @@ public class PoseAnimator {
 
     public void render(MatrixStack matrixStack, VertexConsumer vertexConsumer, int light){
         model.render(matrixStack, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1f, 1f, 1f, 1f);
+    }
+
+    public void render(MatrixStack matrixStack, VertexConsumerProvider provider,
+                       VertexConsumer vertexConsumer, int light,
+                       List<FeatureRenderer<NpcEntity, PlayerEntityModel<NpcEntity>>> features,
+                       NpcEntity entity){
+        render(matrixStack, vertexConsumer, light);
     }
 
     public int getTick(){

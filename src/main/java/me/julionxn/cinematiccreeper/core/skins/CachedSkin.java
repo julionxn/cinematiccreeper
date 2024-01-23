@@ -8,6 +8,7 @@ import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.client.util.DefaultSkinHelper;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.BufferUtils;
 
 import javax.imageio.ImageIO;
@@ -18,16 +19,17 @@ import java.nio.ByteBuffer;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 @Environment(EnvType.CLIENT)
 public class CachedSkin implements Serializable {
 
-    private final String id;
+    private final int id;
     private final URL url;
     private transient boolean loaded;
-    private transient Identifier texture;
+    private transient Identifier texture = DefaultSkinHelper.getTexture();
 
-    public CachedSkin(String id, URL url) {
+    public CachedSkin(int id, URL url) {
         this.id = id;
         this.url = url;
     }
@@ -40,7 +42,7 @@ public class CachedSkin implements Serializable {
         }
     }
 
-    public static Optional<CachedSkin> load(File file) {
+    public static Optional<CachedSkin> read(File file) {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
             CachedSkin cachedSkin = (CachedSkin) ois.readObject();
             return Optional.of(cachedSkin);
@@ -50,12 +52,20 @@ public class CachedSkin implements Serializable {
         }
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public Identifier loadAndGetTexture() {
-        if (loaded) return texture;
+    public URL getUrl(){
+        return url;
+    }
+
+    public @Nullable Identifier getTexture(){
+        if (!loaded) return null;
+        return texture;
+    }
+
+    public void register(@Nullable Consumer<Identifier> afterRegister) {
         getSkinTextureFromUrlAsync(url)
                 .orTimeout(10, TimeUnit.SECONDS)
                 .handle((identifier, throwable) -> {
@@ -69,9 +79,11 @@ public class CachedSkin implements Serializable {
                 .thenAccept(idText -> {
                     loaded = true;
                     texture = idText;
+                    if (afterRegister != null){
+                        afterRegister.accept(idText);
+                    }
                     CinematicCreeper.LOGGER.info("Skin " + url + " cached successfully.");
                 });
-        return texture;
     }
 
     private CompletableFuture<Identifier> getSkinTextureFromUrlAsync(URL url) {
@@ -85,7 +97,7 @@ public class CachedSkin implements Serializable {
                 ByteBuffer data = BufferUtils.createByteBuffer(bytes.length).put(bytes);
                 data.flip();
                 NativeImageBackedTexture tex = new NativeImageBackedTexture(NativeImage.read(data));
-                Identifier identifier = new Identifier(CinematicCreeper.MOD_ID, id);
+                Identifier identifier = new Identifier(CinematicCreeper.MOD_ID, String.valueOf(id));
                 client.execute(() -> client.getTextureManager().registerTexture(identifier, tex));
                 out.close();
                 return identifier;

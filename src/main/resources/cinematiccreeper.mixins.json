@@ -19,6 +19,7 @@
     "KeyboardMixin",
     "MinecraftClientMixin",
     "MouseMixin",
+    "PlayerEntityRendererMixin",
     "ToastManagerMixin"
   ]
 }

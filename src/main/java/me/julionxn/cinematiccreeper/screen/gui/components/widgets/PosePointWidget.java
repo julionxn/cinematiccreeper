@@ -10,7 +10,6 @@ import me.julionxn.cinematiccreeper.screen.gui.components.ExtendedScreen;
 import me.julionxn.cinematiccreeper.screen.gui.components.ExtendedWidget;
 import me.julionxn.cinematiccreeper.util.MathHelper;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
@@ -25,9 +24,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.RotationAxis;
 import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class PosePointWidget extends ExtendedWidget {
@@ -193,7 +190,6 @@ public class PosePointWidget extends ExtendedWidget {
     public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
         context.drawTexture(BACKGROUND, x + 20, y, 0, 0, 0, 200, 165, 200, 165);
         context.fill(x + 23, y + 3, x + 220 - 3, y + 165 - 3, 0, 0x1fffffff);
-        //context.fill(x + 250, y - 20, x + 430, y + 185, 100, 0xff00ff00);
     }
 
     private void applyPosePointToRenderer(PlayerEntityModel<NpcEntity> model) {

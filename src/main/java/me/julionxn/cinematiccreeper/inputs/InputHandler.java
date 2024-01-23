@@ -1,4 +1,4 @@
-package me.julionxn.cinematiccreeper.keybinds;
+package me.julionxn.cinematiccreeper.inputs;
 
 
 import net.minecraft.client.MinecraftClient;

@@ -1,10 +1,10 @@
-package me.julionxn.cinematiccreeper.keybinds.handlers;
+package me.julionxn.cinematiccreeper.inputs.handlers;
 
 import me.julionxn.cinematiccreeper.core.managers.CameraManager;
-import me.julionxn.cinematiccreeper.keybinds.InputAction;
-import me.julionxn.cinematiccreeper.keybinds.InputHandler;
-import me.julionxn.cinematiccreeper.keybinds.PressModifier;
-import me.julionxn.cinematiccreeper.keybinds.ScrollAndKeyAction;
+import me.julionxn.cinematiccreeper.inputs.InputAction;
+import me.julionxn.cinematiccreeper.inputs.InputHandler;
+import me.julionxn.cinematiccreeper.inputs.PressModifier;
+import me.julionxn.cinematiccreeper.inputs.ScrollAndKeyAction;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 

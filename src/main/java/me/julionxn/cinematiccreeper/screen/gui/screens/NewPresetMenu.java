@@ -1,59 +1,58 @@
 package me.julionxn.cinematiccreeper.screen.gui.screens;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import me.julionxn.cinematiccreeper.CinematicCreeper;
 import me.julionxn.cinematiccreeper.core.managers.NpcsManager;
 import me.julionxn.cinematiccreeper.core.managers.PresetsManager;
 import me.julionxn.cinematiccreeper.core.notifications.Notification;
 import me.julionxn.cinematiccreeper.core.notifications.NotificationManager;
 import me.julionxn.cinematiccreeper.core.presets.Preset;
 import me.julionxn.cinematiccreeper.core.presets.PresetOptions;
+import me.julionxn.cinematiccreeper.core.skins.CachedSkin;
 import me.julionxn.cinematiccreeper.entity.NpcEntity;
 import me.julionxn.cinematiccreeper.screen.gui.components.ExtendedScreen;
+import me.julionxn.cinematiccreeper.screen.gui.components.widgets.DefaultedTextField;
 import me.julionxn.cinematiccreeper.screen.gui.components.widgets.ScrollWidget;
-import me.julionxn.cinematiccreeper.screen.gui.components.widgets.TexturedButtonWidget;
 import me.julionxn.cinematiccreeper.screen.gui.screens.npc_options.BasicTypeMenu;
+import me.julionxn.cinematiccreeper.screen.gui.screens.skins.SkinClosetMenu;
 import me.julionxn.cinematiccreeper.util.MathHelper;
 import me.julionxn.cinematiccreeper.util.TextUtils;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ButtonTextures;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
+import net.minecraft.client.util.DefaultSkinHelper;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RotationAxis;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 public class NewPresetMenu extends ExtendedScreen {
 
-    private static final Identifier SEARCH_ICON = new Identifier(CinematicCreeper.MOD_ID, "textures/gui/search.png");
-    private final List<String> types;
     private final List<ScrollWidget.ScrollItem> items = new ArrayList<>();
+    private List<ScrollWidget.ScrollItem> displayedItems;
     private final int buttonsPerPage = 10;
     private final BlockPos blockPos;
     private PresetOptions presetOptions;
     private String selectedEntity;
     private String textName = "";
-    private String urlLink = "";
+    private CachedSkin skin;
+    private String prevFilter = "";
 
     public NewPresetMenu(BlockPos blockPos) {
         super(Text.of("NewPresetMenu"));
-        types = NpcsManager.getInstance().getLoadedEntityTypes();
-        for (String type : types) {
-            ScrollWidget.ScrollItem scrollItem = new ScrollWidget.ScrollItem(TextUtils.idToLegibleText(type), buttonWidget -> {
+        for (String type : NpcsManager.getInstance().getLoadedEntityTypes()) {
+            ScrollWidget.ScrollItem scrollItem = new ScrollWidget.ScrollItem(type, TextUtils.idToLegibleText(type), buttonWidget -> {
                 selectedEntity = type;
                 clear();
             });
             items.add(scrollItem);
         }
+        this.displayedItems = items;
         this.blockPos = blockPos;
     }
 
@@ -62,7 +61,7 @@ public class NewPresetMenu extends ExtendedScreen {
         if (client == null) return;
         int startingX = (client.getWindow().getScaledWidth() / 2) - 200;
         int startingY = (client.getWindow().getScaledHeight() / 2) - ((buttonsPerPage + 1) * 10) + 25;
-        ScrollWidget scrollWidget = ScrollWidget.builder(this, items)
+        ScrollWidget scrollWidget = ScrollWidget.builder(this, () -> displayedItems)
                 .pos(startingX, startingY)
                 .itemsDimensions(150, 20)
                 .itemsPerPage(10).build();
@@ -74,41 +73,54 @@ public class NewPresetMenu extends ExtendedScreen {
         if (client == null) return;
         int startingX = (windowWidth / 2) - 200;
         int startingY = (windowHeight / 2) - ((buttonsPerPage + 1) * 10) - 5;
-        TextFieldWidget searchField = new TextFieldWidget(client.textRenderer, startingX, startingY, 150, 20, Text.of("Buscar"));
+        DefaultedTextField searchField = new DefaultedTextField(client.textRenderer,
+                Text.translatable("screen.cinematiccreeper.search"),
+                startingX, startingY,
+                150, 20);
         addDrawableChild(searchField);
-        TexturedButtonWidget search = new TexturedButtonWidget(SEARCH_ICON, startingX + 150, startingY, button -> {
-            String searchText = searchField.getText();
-            if (types.contains(searchText)) {
-                selectedEntity = searchText;
-            } else {
-                NotificationManager.getInstance().add(Notification.ID_NOT_FOUND);
-            }
+        searchField.setChangedListener(text -> {
+            if (text.equals(prevFilter)) return;
+            filterDisplayedItems(text.replace(" ", "_"));
         });
-        addDrawableChild(search);
+        searchField.setText(prevFilter);
+        searchField.setFocused(true);
         if (selectedEntity == null) return;
         addPresetOptions(startingX);
+    }
+
+    private void filterDisplayedItems(String filter){
+        if (filter.contains(prevFilter)){
+            filterAlreadyFiltered(filter);
+        } else if (filter.isEmpty()) {
+            displayedItems = items;
+        } else {
+            filterAll(filter);
+        }
+        prevFilter = filter;
+        clear();
+    }
+
+    private void filterAlreadyFiltered(String filter){
+        displayedItems = displayedItems.stream().filter(item -> item.id().contains(filter)).toList();
+    }
+
+    private void filterAll(String filter){
+        displayedItems = items.stream().filter(item -> item.id().contains(filter)).toList();
     }
 
     private void addPresetOptions(int startingX) {
         if (client == null) return;
 
-
-        final TextFieldWidget nameTextField = new TextFieldWidget(client.textRenderer,
+        final DefaultedTextField nameTextField = new DefaultedTextField(client.textRenderer,
+                Text.translatable("screen.cinematiccreeper.preset_id"),
                 startingX + 180, client.getWindow().getScaledHeight() / 2 - 85,
-                150, 20, Text.of("Nombre"));
+                150, 20);
         nameTextField.setChangedListener(text -> textName = text);
         addDrawableChild(nameTextField);
-        final TextFieldWidget skinUrlField = new TextFieldWidget(client.textRenderer,
-                startingX + 180, client.getWindow().getScaledHeight() / 2 + 55,
-                150, 20, Text.of("Skin"));
-        skinUrlField.setChangedListener(text -> urlLink = text);
         nameTextField.setText(textName);
-        skinUrlField.setText(urlLink);
-
 
         ButtonWidget optionsButton = ButtonWidget.builder(Text.translatable("screen.cinematiccreeper.options"), button -> {
             textName = nameTextField.getText();
-            urlLink = skinUrlField.getText();
             client.setScreen(new BasicTypeMenu(selectedEntity, presetOptions1 -> {
                 presetOptions = presetOptions1;
                 client.setScreen(this);
@@ -116,15 +128,22 @@ public class NewPresetMenu extends ExtendedScreen {
         }).dimensions(startingX + 180, client.getWindow().getScaledHeight() / 2 + 75, 150, 20).build();
         addDrawableChild(optionsButton);
 
-
         if (selectedEntity.equals(NpcEntity.ENTITY_ID)) {
-            addDrawableChild(skinUrlField);
+            ButtonWidget changeSkin = ButtonWidget.builder(Text.of("Skin"), button -> {
+                client.setScreen(new SkinClosetMenu(this,
+                        (name, skin) -> this.skin = skin,
+                        skin == null ? null : skin.getTexture(), DefaultSkinHelper.getTexture()));
+            }).dimensions(startingX + 180, client.getWindow().getScaledHeight() / 2 + 55,
+                    150, 20).build();
+            addDrawableChild(changeSkin);
+
             ButtonWidget createPreset = ButtonWidget.builder(Text.translatable("screen.cinematiccreeper.create"), button -> {
                 if (invalidInput(nameTextField)) return;
+                String skinUrl = skin == null ? "" : skin.getUrl().toString();
                 Preset preset = new Preset(selectedEntity, nameTextField.getText(),
                         presetOptions == null ? new PresetOptions()
                                 .setDisplayName(nameTextField.getText())
-                                .setSkinUrl(skinUrlField.getText()) : presetOptions.setSkinUrl(skinUrlField.getText()));
+                                .setSkinUrl(skinUrl) : presetOptions.setSkinUrl(skinUrl));
                 PresetsManager.getInstance().addPreset(preset);
                 client.setScreen(new PresetsMenu(blockPos));
                 NotificationManager.getInstance().add(Notification.CREATED_SUCCESSFULLY);

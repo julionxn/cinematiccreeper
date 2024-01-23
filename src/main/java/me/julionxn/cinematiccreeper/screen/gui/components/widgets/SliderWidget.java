@@ -39,10 +39,11 @@ public class SliderWidget<T extends Number> extends ClickableWidget {
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        super.render(context, mouseX, mouseY, delta);
+    protected void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client == null) return;
+        context.drawTexture(BACKGROUND_TEXTURE, getX(), getY() + 10,
+                0, 0, 0, 140, 20, 140, 20);
         context.drawCenteredTextWithShadow(client.textRenderer, message.get(), getX() + 70, getY(), 0xffffff);
         T currentValue = value.get();
         context.drawCenteredTextWithShadow(client.textRenderer, Text.of(text.apply(currentValue)),
@@ -50,14 +51,6 @@ public class SliderWidget<T extends Number> extends ClickableWidget {
         int x = (int) (getX() + 1 + ((width - 6) * ((currentValue.doubleValue() - minValue.get().doubleValue()) / (maxValue.get().doubleValue() - minValue.get().doubleValue()))));
         context.drawTexture(SCROLLBAR_TEXTURE, x, getY() + 11,
                 0, 0, 0, 4, 18, 4, 18);
-    }
-
-    @Override
-    protected void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client == null) return;
-        context.drawTexture(BACKGROUND_TEXTURE, getX(), getY() + 10,
-                0, 0, 0, 140, 20, 140, 20);
     }
 
     @Override

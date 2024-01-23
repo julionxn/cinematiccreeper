@@ -11,6 +11,7 @@ import net.minecraft.util.Identifier;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class ScrollWidget extends ExtendedWidget {
 
@@ -20,12 +21,10 @@ public class ScrollWidget extends ExtendedWidget {
     protected final int itemsWidth;
     protected final int itemsHeight;
     protected final int itemsPerPage;
-    protected final List<ScrollItem> scrollItems;
-    protected final int size;
-    protected final boolean isScroll;
+    protected final Supplier<List<ScrollItem>> scrollItems;
     protected int showingFrom = 0;
 
-    public ScrollWidget(ExtendedScreen screen, int x, int y, int itemsWidth, int itemsHeight, int itemsPerPage, List<ScrollItem> scrollItems) {
+    public ScrollWidget(ExtendedScreen screen, int x, int y, int itemsWidth, int itemsHeight, int itemsPerPage, Supplier<List<ScrollItem>> scrollItems) {
         super(screen);
         this.x = x;
         this.y = y;
@@ -33,14 +32,12 @@ public class ScrollWidget extends ExtendedWidget {
         this.itemsHeight = itemsHeight;
         this.itemsPerPage = itemsPerPage;
         this.scrollItems = scrollItems;
-        this.size = scrollItems.size();
-        this.isScroll = size > itemsPerPage;
     }
 
     @Override
     public void init() {
         addItems();
-        if (!isScroll) return;
+        if (withoutScroll()) return;
         ButtonWidget upList = ButtonWidget.builder(Text.of("⮝"), button -> changePage(-1))
                 .dimensions(x + itemsWidth, y, 20, 20).build();
         ButtonWidget downList = ButtonWidget.builder(Text.of("⮟"), button -> changePage(1))
@@ -49,10 +46,16 @@ public class ScrollWidget extends ExtendedWidget {
         addDrawableChild(downList);
     }
 
+    private boolean withoutScroll(){
+        return scrollItems.get().size() <= itemsPerPage;
+    }
+
     protected void addItems() {
         int current = 0;
+        List<ScrollItem> items = scrollItems.get();
+        int size = items.size();
         for (int i = showingFrom; i - showingFrom < Math.min(itemsPerPage, size); i++) {
-            ScrollItem scrollItem = scrollItems.get(i);
+            ScrollItem scrollItem = items.get(i);
             ButtonWidget option = ButtonWidget.builder(
                             Text.of(scrollItem.text()),
                             button -> scrollItem.runnable().accept(button))
@@ -64,7 +67,7 @@ public class ScrollWidget extends ExtendedWidget {
     protected void changePage(int in) {
         if (in == 0) return;
         if (showingFrom + in < 0) return;
-        if (showingFrom + itemsPerPage + in > scrollItems.size()) return;
+        if (showingFrom + itemsPerPage + in > scrollItems.get().size()) return;
         showingFrom += in;
         clear();
     }
@@ -72,15 +75,16 @@ public class ScrollWidget extends ExtendedWidget {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        if (!isScroll) return;
+        if (withoutScroll()) return;
         renderBar(context);
     }
 
     protected void renderBar(DrawContext context) {
         int totalHeight = 20 * (itemsPerPage - 2);
-        int barHeight = (int) ((itemsPerPage / (float) scrollItems.size()) * totalHeight);
+        int size = scrollItems.get().size();
+        int barHeight = (int) ((itemsPerPage / (float) size) * totalHeight);
         totalHeight -= barHeight;
-        float dif = ((float) showingFrom / (scrollItems.size() - itemsPerPage));
+        float dif = ((float) showingFrom / (size - itemsPerPage));
         int actualY = (int) (y + 20 + (totalHeight * dif));
         context.drawTexture(SCROLLBAR_TEXTURE, x + itemsWidth, actualY,
                 0, 0, 0, 20, barHeight, 20, barHeight);
@@ -100,7 +104,7 @@ public class ScrollWidget extends ExtendedWidget {
 
     @Override
     public void mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-        if (!isScroll) return;
+        if (withoutScroll()) return;
         if (mouseX > x && mouseX < x + itemsWidth && mouseY > y && mouseY < y + (itemsPerPage * itemsHeight)) {
             changePage((int) -verticalAmount);
         }
@@ -108,12 +112,13 @@ public class ScrollWidget extends ExtendedWidget {
     }
 
     private void handleMouse(double mouseX, double mouseY) {
-        if (!isScroll) return;
+        if (withoutScroll()) return;
         int scrollY = y + 20;
-        if (mouseX > x + itemsWidth && mouseX < x + itemsWidth + 20 && mouseY > scrollY - 5 && mouseY < scrollY + ((scrollItems.size() - 2) * itemsHeight) + 5) {
+        int size = scrollItems.get().size();
+        if (mouseX > x + itemsWidth && mouseX < x + itemsWidth + 20 && mouseY > scrollY - 5 && mouseY < scrollY + ((size - 2) * itemsHeight) + 5) {
             int totalHeight = 20 * (itemsPerPage - 2) - 10;
             float dif = (float) (mouseY - scrollY) / totalHeight;
-            showingFrom = Math.max(0, Math.min((int) (scrollItems.size() * dif), scrollItems.size() - itemsPerPage));
+            showingFrom = Math.max(0, Math.min((int) (size * dif), size - itemsPerPage));
             clear();
         }
     }
@@ -131,24 +136,24 @@ public class ScrollWidget extends ExtendedWidget {
         return Objects.hash(x, y, itemsPerPage, itemsWidth, itemsHeight, scrollItems);
     }
 
-    public record ScrollItem(String text, Consumer<ButtonWidget> runnable) {
+    public record ScrollItem(String id, String text, Consumer<ButtonWidget> runnable) {
     }
 
-    public static Builder builder(ExtendedScreen extendedScreen, List<ScrollItem> items){
+    public static Builder builder(ExtendedScreen extendedScreen, Supplier<List<ScrollItem>> items){
         return new Builder(extendedScreen, items);
     }
 
     public static class Builder {
 
         private final ExtendedScreen extendedScreen;
-        private final List<ScrollItem> itemsSupplier;
+        private final Supplier<List<ScrollItem>> itemsSupplier;
         private int x;
         private int y;
         private int itemsWidth = 150;
         private int itemsHeight = 20;
         private int itemsPerPage = 5;
 
-        public Builder(ExtendedScreen extendedScreen, List<ScrollItem> itemsSupplier) {
+        public Builder(ExtendedScreen extendedScreen, Supplier<List<ScrollItem>> itemsSupplier) {
             this.extendedScreen = extendedScreen;
             this.itemsSupplier = itemsSupplier;
         }

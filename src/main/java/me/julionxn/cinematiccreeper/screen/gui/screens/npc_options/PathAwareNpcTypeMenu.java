@@ -32,7 +32,7 @@ public class PathAwareNpcTypeMenu extends NpcTypeMenu {
     private void setItems() {
         if (entity == null) return;
         scrollItems.clear();
-        scrollItems.add(new ScrollWidget.ScrollItem(Text.translatable("screen.cinematiccreeper.none").getString(), buttonWidget -> {
+        scrollItems.add(new ScrollWidget.ScrollItem("", Text.translatable("screen.cinematiccreeper.none").getString(), buttonWidget -> {
             PacketByteBuf buf = PacketByteBufs.create();
             buf.writeInt(entity.getId());
             ClientPlayNetworking.send(AllPackets.C2S_CLEAR_PATH_OF_ENTITY, buf);
@@ -40,7 +40,7 @@ public class PathAwareNpcTypeMenu extends NpcTypeMenu {
         PathAwareData data = (PathAwareData) entity;
         List<Path> paths = data.cinematiccreeper$getPaths();
         for (Path path : paths) {
-            scrollItems.add(new ScrollWidget.ScrollItem(path.getId(), buttonWidget -> {
+            scrollItems.add(new ScrollWidget.ScrollItem(path.getId(), path.getId(), buttonWidget -> {
                 PacketByteBuf buf = PacketByteBufs.create();
                 Path.addToBuf(buf, path);
                 ClientPlayNetworking.send(AllPackets.C2S_SET_PATH_TO_ENTITY, buf);
@@ -52,7 +52,7 @@ public class PathAwareNpcTypeMenu extends NpcTypeMenu {
     @Override
     public void addWidgets() {
         super.addWidgets();
-        ScrollWidget scrollWidget = ScrollWidget.builder(this, scrollItems)
+        ScrollWidget scrollWidget = ScrollWidget.builder(this, () -> scrollItems)
                 .pos(x + 20, y + 20)
                 .itemsDimensions(80, 20)
                 .itemsPerPage(8).build();

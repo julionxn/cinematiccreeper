@@ -45,5 +45,18 @@ public class BasicTypeMenu extends NpcTypeMenu {
                 () -> presetOptions.setSneaking(false));
         sneakingWidget.setActive(presetOptions.isSneaking());
         addDrawableChild(sneakingWidget);
+
+        ToggleWidget onFireWidget = new ToggleWidget(x + 145, y + 65, 120, 20, Text.translatable("screen.cinematiccreeper.on_fire"),
+                () -> presetOptions.setOnFire(true),
+                () -> presetOptions.setOnFire(false));
+        onFireWidget.setActive(presetOptions.isOnFire());
+        addDrawableChild(onFireWidget);
+
+        ToggleWidget silentWidget = new ToggleWidget(x + 15, y + 65, 120, 20, Text.translatable("screen.cinematiccreeper.silent"),
+                () -> presetOptions.setSilent(true),
+                () -> presetOptions.setSilent(false));
+        silentWidget.setActive(presetOptions.isSilent());
+        addDrawableChild(silentWidget);
+
     }
 }

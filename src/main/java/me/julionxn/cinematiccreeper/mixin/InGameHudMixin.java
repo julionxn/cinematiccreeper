@@ -2,7 +2,7 @@ package me.julionxn.cinematiccreeper.mixin;
 
 import me.julionxn.cinematiccreeper.core.camera.CameraRecordingPlayer;
 import me.julionxn.cinematiccreeper.core.managers.CameraManager;
-import me.julionxn.cinematiccreeper.keybinds.InputHandlersManager;
+import me.julionxn.cinematiccreeper.inputs.InputHandlersManager;
 import me.julionxn.cinematiccreeper.screen.hud.RecordingHud;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;

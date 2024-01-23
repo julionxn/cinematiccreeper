@@ -1,13 +1,13 @@
-package me.julionxn.cinematiccreeper.keybinds.handlers;
+package me.julionxn.cinematiccreeper.inputs.handlers;
 
 import me.julionxn.cinematiccreeper.core.notifications.Notification;
 import me.julionxn.cinematiccreeper.core.notifications.NotificationManager;
 import me.julionxn.cinematiccreeper.core.paths.Path;
 import me.julionxn.cinematiccreeper.core.paths.PathAction;
 import me.julionxn.cinematiccreeper.core.paths.PlayerPathHolder;
-import me.julionxn.cinematiccreeper.keybinds.InputAction;
-import me.julionxn.cinematiccreeper.keybinds.InputHandler;
-import me.julionxn.cinematiccreeper.keybinds.Keybindings;
+import me.julionxn.cinematiccreeper.inputs.InputAction;
+import me.julionxn.cinematiccreeper.inputs.InputHandler;
+import me.julionxn.cinematiccreeper.inputs.Keybindings;
 import me.julionxn.cinematiccreeper.util.mixins.PathAwareData;
 import me.julionxn.cinematiccreeper.util.mixins.PlayerData;
 import net.minecraft.client.MinecraftClient;
